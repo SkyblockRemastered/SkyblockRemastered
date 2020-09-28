@@ -1,0 +1,18 @@
+name: SkyblockRemastered
+version: 1.0-SNAPSHOT
+main: xyz.apollo30.skyblockremastered.SkyblockRemastered
+load: STARTUP
+
+commands:
+  skyblockremastered:
+    description: SkyblockRemasted Main Command
+    aliases: [sr]
+  visit:
+    description: Visit a player's island
+  hub:
+    description: Warps you to the Skyblock Hub
+  tps:
+    description: Displays the server's Ticks Per Second
+    aliases: [TPS]
+  items:
+    description: Provides a list of items currently in the game.
