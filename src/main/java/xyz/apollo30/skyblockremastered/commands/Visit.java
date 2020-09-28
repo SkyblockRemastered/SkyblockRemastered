@@ -40,7 +40,6 @@ public class Visit implements CommandExecutor {
         Utils.broadCast(plr.getUniqueId().toString());
         String name = Utils.getName(uuid);
 
-
         if (name == null || Bukkit.getServer().getWorld("islands/" + uuid) == null) {
             plr.sendMessage(Utils.chat("&cCouldn't find that player/island! Maybe a typo?"));
             return true;

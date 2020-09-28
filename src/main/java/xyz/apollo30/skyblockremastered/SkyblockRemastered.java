@@ -13,8 +13,13 @@ import xyz.apollo30.skyblockremastered.commands.Tps;
 import xyz.apollo30.skyblockremastered.commands.Visit;
 import xyz.apollo30.skyblockremastered.listeners.*;
 import xyz.apollo30.skyblockremastered.managers.*;
+import xyz.apollo30.skyblockremastered.tasks.ActionBarTask;
+import xyz.apollo30.skyblockremastered.tasks.ScoreboardTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SkyblockRemastered extends JavaPlugin {
 
@@ -24,7 +29,6 @@ public class SkyblockRemastered extends JavaPlugin {
     public PlayerManager playerManager;
     public MobManager mobManager;
     public LagManager lagManager;
-    public BoardManager boardManager;
 
     @Override
     public void onEnable() {
@@ -79,10 +83,6 @@ public class SkyblockRemastered extends JavaPlugin {
         this.playerManager = new PlayerManager(this);
         this.mobManager = new MobManager(this);
         this.lagManager = new LagManager(this);
-        this.boardManager = new BoardManager(this);
-
-        // LagManager (TPS)
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, this.lagManager, 100L, 1L);
 
         // When reloaded and the players still exist, it just recreates their database again.
         for (Player plr : Bukkit.getOnlinePlayers()) {
@@ -102,7 +102,8 @@ public class SkyblockRemastered extends JavaPlugin {
         // mobManager.initBloccCheck();
         mobManager.initTimer();
         lagManager.lagManager();
-        boardManager.rePlayerScoreboard();
+        startScoreboardTask();
+        startActionBarTask();
     }
 
     @Override
@@ -113,6 +114,14 @@ public class SkyblockRemastered extends JavaPlugin {
             playerManager.savePlayerData(plr);
         }
 
+    }
+
+    public void startActionBarTask() {
+        new ActionBarTask(this).runTaskTimer(this, 20, 20);
+    }
+
+    public void startScoreboardTask() {
+        new ScoreboardTask(this).runTaskTimer(this, 1200, 1200);
     }
 
     // Skeletor:
