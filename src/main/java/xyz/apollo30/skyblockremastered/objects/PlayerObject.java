@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -40,8 +41,8 @@ public class PlayerObject {
     int pet_luck = 0;
 
     // Island
-    List<Player> coop = new ArrayList<>();
-    List<Player> builders = new ArrayList<>();
+    List<UUID> coop = new ArrayList<>();
+    List<UUID> builders = new ArrayList<>();
 
     // Database
     int zealot_kills = 0;

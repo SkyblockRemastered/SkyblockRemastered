@@ -15,11 +15,9 @@ import xyz.apollo30.skyblockremastered.listeners.*;
 import xyz.apollo30.skyblockremastered.managers.*;
 import xyz.apollo30.skyblockremastered.tasks.ActionBarTask;
 import xyz.apollo30.skyblockremastered.tasks.ScoreboardTask;
+import xyz.apollo30.skyblockremastered.tasks.FarmOrb;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class SkyblockRemastered extends JavaPlugin {
 
@@ -104,6 +102,7 @@ public class SkyblockRemastered extends JavaPlugin {
         lagManager.lagManager();
         startScoreboardTask();
         startActionBarTask();
+        startFarmOrb();
     }
 
     @Override
@@ -122,6 +121,10 @@ public class SkyblockRemastered extends JavaPlugin {
 
     public void startScoreboardTask() {
         new ScoreboardTask(this).runTaskTimer(this, 1200, 1200);
+    }
+
+    public void startFarmOrb() {
+        new FarmOrb(this).runTaskTimer(this, 60, 1);
     }
 
     // Skeletor:

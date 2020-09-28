@@ -47,8 +47,6 @@ public class BlockManager {
     }
 
     public void initTimer() {
-        Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            checkBlock();
-        }, 1L, 1L);
+        Bukkit.getScheduler().runTaskTimer(plugin, this::checkBlock, 1L, 1L);
     }
 }
