@@ -45,13 +45,15 @@ public class ScoreboardTask extends BukkitRunnable {
 
             String[] names = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
+            String coins_gained = po.getCoins_gained() > 0 ? "&e(+" + po.getCoins_gained() + ")" : "";
+
             List<String> contents = new ArrayList<>();
             contents.add("&7" + dtf.format(now));
             contents.add("&f&7 ");
             contents.add(" &f" + names[dayOfWeek - 1] + " " + d.format(now) + Utils.getDayOfMonthSuffix(Integer.parseInt(d.format(now))));
             contents.add(" &7⋄ " + Utils.getLocation(plr));
             contents.add("&2&8 ");
-            contents.add("&fPurse: &6" + String.format("%,.0f", po.getPurse()));
+            contents.add("&fPurse: &6" + String.format("%,.0f", po.getPurse()) + coins_gained);
             contents.add("&fGems: &a" + String.format("%,.0f", po.getGems()));
             contents.add("&2&5");
             contents.add("&eplay.apollo30.xyz");
@@ -62,6 +64,9 @@ public class ScoreboardTask extends BukkitRunnable {
                 cycle--;
             }
             plr.setScoreboard(sb);
+
+            po.setCoins_gained(0);
+
         }
 
 

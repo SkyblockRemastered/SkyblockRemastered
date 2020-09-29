@@ -21,16 +21,21 @@ public class PlayerBucketFill implements Listener {
     @EventHandler
     public void onPlayerBucketFill(PlayerBucketFillEvent e) {
 
+        // Fetching the player's data
         Player plr = e.getPlayer();
         PlayerObject po = plugin.playerManager.playerObjects.get(plr);
 
+        // Check if the player is in the hub or not.
         if (plr.getWorld().getName().equals("hub")) {
+            // Checking if their settings is allowed.
             if (!po.isBlockBreak()) {
                 e.setCancelled(true);
                 return;
             }
-            return;
-        } else if (!plr.getWorld().getName().replace("islands/", "").equals(plr.getUniqueId().toString())) {
+        }
+
+        // If the player is in their island
+        if (!plr.getWorld().getName().replace("islands/", "").equals(plr.getUniqueId().toString())) {
             if (!po.isBlockBreak()) {
                 e.setCancelled(true);
                 return;

@@ -40,7 +40,6 @@ public class ActionBarTask extends BukkitRunnable {
 
             String actionbar = "&c" + hp + "/" + maxhp + InventoryManager.getUnicode("heart") + " HP" + "     &a" + defense + InventoryManager.getUnicode("defense") + " Defense" + "     &b" + intell + "/" + maxIntell + InventoryManager.getUnicode("intel") + " Intelligence";
             PacketManager.sendMessage(plr, Utils.chat(actionbar));
-
         }
     }
 

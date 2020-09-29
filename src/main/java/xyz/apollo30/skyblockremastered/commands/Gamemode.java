@@ -30,7 +30,7 @@ public class Gamemode implements CommandExecutor {
         Player target = (Player) sender;
         String prefix = "&6Skyblock &8» &7";
 
-        if (!target.isOp() && !target.hasPermission("aessentials.gamemode")) {
+        if (!target.isOp() && !target.hasPermission("sbr.gamemode")) {
             og_plr.sendMessage(Utils.chat(prefix + "&cMissing Permission: &aaessentials.gamemode"));
             return true;
         } else {

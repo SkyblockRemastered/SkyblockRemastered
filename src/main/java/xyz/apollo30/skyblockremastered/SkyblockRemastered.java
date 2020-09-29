@@ -8,18 +8,15 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.apollo30.skyblockremastered.commands.Hub;
-import xyz.apollo30.skyblockremastered.commands.Items;
 import xyz.apollo30.skyblockremastered.commands.Tps;
 import xyz.apollo30.skyblockremastered.commands.Visit;
 import xyz.apollo30.skyblockremastered.listeners.*;
 import xyz.apollo30.skyblockremastered.managers.*;
 import xyz.apollo30.skyblockremastered.tasks.ActionBarTask;
+import xyz.apollo30.skyblockremastered.tasks.RegenerationTask;
 import xyz.apollo30.skyblockremastered.tasks.ScoreboardTask;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class SkyblockRemastered extends JavaPlugin {
 
@@ -69,6 +66,8 @@ public class SkyblockRemastered extends JavaPlugin {
         new BlockPlace(this);
         new EntityExplode(this);
         new WeatherChange(this);
+        new PlayerBucketEmpty(this);
+        new PlayerBucketFill(this);
 
         // Command
         // new Gamemode(this);
@@ -76,7 +75,6 @@ public class SkyblockRemastered extends JavaPlugin {
         new Visit(this);
         new Hub(this);
         new Tps(this);
-        new Items(this);
 
         // Managers
         this.blockManager = new BlockManager(this);
@@ -98,12 +96,13 @@ public class SkyblockRemastered extends JavaPlugin {
 
         // Inits the timer for all managers.
         blockManager.initTimer();
-        playerManager.initTimer();
         // mobManager.initBloccCheck();
         mobManager.initTimer();
         lagManager.lagManager();
-        startScoreboardTask();
-        startActionBarTask();
+        new ScoreboardTask(this).runTaskTimer(this, 40, 40);
+        new ActionBarTask(this).runTaskTimer(this, 20, 20);
+        new RegenerationTask(this).runTaskTimer(this, 40, 40);
+
     }
 
     @Override
@@ -114,14 +113,6 @@ public class SkyblockRemastered extends JavaPlugin {
             playerManager.savePlayerData(plr);
         }
 
-    }
-
-    public void startActionBarTask() {
-        new ActionBarTask(this).runTaskTimer(this, 20, 20);
-    }
-
-    public void startScoreboardTask() {
-        new ScoreboardTask(this).runTaskTimer(this, 1200, 1200);
     }
 
     // Skeletor:

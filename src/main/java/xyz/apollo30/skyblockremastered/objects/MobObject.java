@@ -17,6 +17,7 @@ public class MobObject {
     String name = "";
 
     int xpGain = 10;
+    int coinGain = 10;
 
     ItemStack helmet;
     ItemStack chestplate;

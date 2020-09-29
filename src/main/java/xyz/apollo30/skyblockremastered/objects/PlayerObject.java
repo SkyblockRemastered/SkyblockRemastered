@@ -39,12 +39,15 @@ public class PlayerObject {
     int magic_find = 0;
     int pet_luck = 0;
 
+
+
     // Island
     List<Player> coop = new ArrayList<>();
     List<Player> builders = new ArrayList<>();
 
     // Database
     int zealot_kills = 0;
+    double coins_gained = 0;
 
     // Skills
     int farmingLevel = 0;
