@@ -1,6 +1,7 @@
 package xyz.apollo30.skyblockremastered.tasks;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -45,7 +46,15 @@ public class ScoreboardTask extends BukkitRunnable {
 
             String[] names = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
-            String coins_gained = po.getCoins_gained() > 0 ? "&e(+" + po.getCoins_gained() + ")" : "";
+            String coins_gained = "";
+            if (po.getCoins_gained() > 0) {
+                coins_gained = " &e(+" + String.format("%,.0f", po.getCoins_gained()) + ")";
+                plr.playSound(plr.getLocation(), Sound.ANVIL_LAND, 1F, 50F);
+                po.setPurse(po.getPurse() + po.getCoins_gained());
+            }
+
+            String purse = "&fPurse: &6" + String.format("%,.0f", po.getPurse()) + coins_gained;
+            String gems = "&fGems: &a" + String.format("%,.0f", po.getGems());
 
             List<String> contents = new ArrayList<>();
             contents.add("&7" + dtf.format(now));
@@ -53,8 +62,8 @@ public class ScoreboardTask extends BukkitRunnable {
             contents.add(" &f" + names[dayOfWeek - 1] + " " + d.format(now) + Utils.getDayOfMonthSuffix(Integer.parseInt(d.format(now))));
             contents.add(" &7⋄ " + Utils.getLocation(plr));
             contents.add("&2&8 ");
-            contents.add("&fPurse: &6" + String.format("%,.0f", po.getPurse()) + coins_gained);
-            contents.add("&fGems: &a" + String.format("%,.0f", po.getGems()));
+            contents.add(purse);
+            contents.add(gems);
             contents.add("&2&5");
             contents.add("&eplay.apollo30.xyz");
 

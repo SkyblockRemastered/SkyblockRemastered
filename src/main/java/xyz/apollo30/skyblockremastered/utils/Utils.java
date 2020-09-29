@@ -24,6 +24,8 @@ import xyz.apollo30.skyblockremastered.managers.InventoryManager;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.*;
@@ -46,6 +48,18 @@ public class Utils {
 
         ConfigurationSection section = db.getConfigurationSection(uuid + ".Skills." + skill);
 
+    }
+
+    public static String urlToBase64(String url) {
+
+        URI actualUrl;
+        try {
+            actualUrl = new URI(url);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        String toEncode = "{\"textures\":{\"SKIN\":{\"url\":\"" + actualUrl.toString() + "\"}}}";
+        return Base64.getEncoder().encodeToString(toEncode.getBytes());
     }
 
     public static void villagerDialog(Player plr, SkyblockRemastered plugin, String prefix, String... dialog) {

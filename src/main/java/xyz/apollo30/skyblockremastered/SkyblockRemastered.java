@@ -17,7 +17,7 @@ import xyz.apollo30.skyblockremastered.managers.*;
 import xyz.apollo30.skyblockremastered.tasks.ActionBarTask;
 import xyz.apollo30.skyblockremastered.tasks.RegenerationTask;
 import xyz.apollo30.skyblockremastered.tasks.ScoreboardTask;
-import xyz.apollo30.skyblockremastered.tasks.FarmOrb;
+import xyz.apollo30.skyblockremastered.tasks.WheatCrystalTask;
 
 import java.util.HashMap;
 
@@ -104,17 +104,17 @@ public class SkyblockRemastered extends JavaPlugin {
             }
         }
 
-        new FarmOrb(this).runTaskTimer(this, 5, 5);
+
 
         // Inits the timer for all managers.
         blockManager.initTimer();
         // mobManager.initBloccCheck();
         mobManager.initTimer();
         lagManager.lagManager();
-        new ScoreboardTask(this).runTaskTimer(this, 40, 40);
+        new ScoreboardTask(this).runTaskTimer(this, 30, 30);
         new ActionBarTask(this).runTaskTimer(this, 20, 20);
-        new RegenerationTask(this).runTaskTimer(this, 40, 40);
-
+        new RegenerationTask(this).runTaskTimer(this, 30, 30);
+        new WheatCrystalTask(this).runTaskTimer(this, 1, 1);
     }
 
     @Override
@@ -126,6 +126,15 @@ public class SkyblockRemastered extends JavaPlugin {
         }
 
     }
+
+    // Overflux
+    // eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODQ4NTlkMGFkZmM5M2JlMTliYjQ0MWU2ZWRmZDQzZjZiZmU2OTEyNzIzMDMzZjk2M2QwMDlhMTFjNDgyNDUxMCJ9fX0
+
+    // Mana Flux
+    // eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODJhZGExYzdmY2M4Y2YzNWRlZmViOTQ0YTRmOGZmYTlhOWQyNjA1NjBmYzdmNWY1ODI2ZGU4MDg1NDM1OTY3YyJ9fX0=
+
+    // Radiant
+    // eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2FiNGM0ZDZlZTY5YmMyNGJiYTJiOGZhZjY3YjlmNzA0YTA2YjAxYWE5M2YzZWZhNmFlZjdhOTY5NmM0ZmVlZiJ9fX0=
 
     // Skeletor:
     // eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODlkMDc0YWQ5Yjk5NzE4NzllYjMyNWJkZGZmMzY3NWY3MjI0ODU2YmQ2ZDU2OWZjOGQ0ODNjMTMzZDczMDA1ZCJ9fX0

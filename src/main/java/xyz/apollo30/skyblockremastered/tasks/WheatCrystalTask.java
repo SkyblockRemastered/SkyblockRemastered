@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,45 +16,46 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.*;
 
-public class FarmOrb extends BukkitRunnable {
+public class WheatCrystalTask extends BukkitRunnable {
 
     private final SkyblockRemastered plugin;
     private boolean upDown = false;
     private int currentTickRotCount = 0;
 
-    ArrayList<Block> farmLand = new ArrayList<>();
-
     HashMap<UUID, ArrayList<Block>> farmLandAreas = new HashMap<>();
+    HashMap<UUID, Integer> ranges = new HashMap<>();
 
-    public FarmOrb(SkyblockRemastered plugin) {
+    public WheatCrystalTask(SkyblockRemastered plugin) {
         this.plugin = plugin;
     }
 
-    private ArrayList<ArmorStand> stands = new ArrayList<>();
+    private HashMap<UUID, ArmorStand> stands = new HashMap<>();
 
     private void setupSubTasks() {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (ArmorStand stand : stands) {
+                for (ArmorStand stand : stands.values()) {
                     spawnArialParticles(stand.getLocation());
                 }
             }
-        }.runTaskTimer(this.plugin, 0L, 5L);
+        }.runTaskTimer(this.plugin, 0L, 10L);
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (ArmorStand stand : stands) {
-                    if (farmLand.size() == 0) farmLandAvailable(stand.getUniqueId(), stand.getLocation(), 100);
+                for (Map.Entry<UUID, ArmorStand> stand : stands.entrySet()) {
+                    if (farmLandAreas.get(stand.getKey()) == null) farmLandAvailable(stand.getKey(), stand.getValue().getLocation(), ranges.get(stand.getKey()));
 
-                    ArrayList<Block> blocks = farmNeededUpdate(stand.getUniqueId());
-
-                    Block selectedBlock = blocks.get(0);
-                    plantWheat(stand.getEyeLocation(), selectedBlock.getLocation());
+                    ArrayList<Block> blocks = farmNeededUpdate(stand.getKey());
+                    if (blocks.size() > 0) {
+                        Block selectedBlock = blocks.get((int) Math.floor(Math.random() * blocks.size()));
+                        plantWheat(stand.getValue().getEyeLocation(), selectedBlock.getLocation());
+                    }
                 }
             }
         }.runTaskTimer(this.plugin, 0L, 20L);
@@ -61,31 +63,31 @@ public class FarmOrb extends BukkitRunnable {
 
     private void setupOrbs() {
 
-        List<Block> blocks = new ArrayList<>();
-        blocks.add(this.plugin.getServer().getWorld("hub").getBlockAt(28, 82, -141));
-        blocks.add(this.plugin.getServer().getWorld("hub").getBlockAt(44, 82, -123));
-        blocks.add(this.plugin.getServer().getWorld("hub").getBlockAt(63, 82, -134));
-        blocks.add(this.plugin.getServer().getWorld("hub").getBlockAt(74, 82, -161));
-        blocks.add(this.plugin.getServer().getWorld("hub").getBlockAt(59, 82, -183));
-        blocks.add(this.plugin.getServer().getWorld("hub").getBlockAt(24, 82, -178));
+        HashMap<Block, Integer> blocks = new HashMap<>();
+        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(28, 75, -141), 13);
+        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(44, 75, -123), 10);
+        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(63, 76, -134), 10);
+        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(74, 77, -161), 10);
+        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(59, 78, -183), 10);
+        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(24, 77, -178), 10);
 
-        for (Block block : blocks) {
-            block.setType(Material.AIR);
-            Location location = block.getLocation();
+        for (Map.Entry<Block, Integer> block : blocks.entrySet()) {
+            block.getKey().setType(Material.AIR);
+            Location location = block.getKey().getLocation();
             ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
 
             armorStand.setGravity(false);
             armorStand.setVisible(false);
             armorStand.setSmall(true);
 
-            ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
-            SkullMeta meta = (SkullMeta) skull.getItemMeta();
-            meta.setOwner("robloxrocks");
-            skull.setItemMeta(meta);
+            ItemStack skull = Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjJjYjQ2ODM2Y2NjY2JhYjQyNGRhZDEzNTU3ZjIwOTYyM2Y5ZDZlYzVjNjY1ZjdiZTc2OWJlYmVjNGMxNTdmYSJ9fX0");
 
             armorStand.setHelmet(skull);
 
-            stands.add(armorStand);
+            UUID uuid = UUID.randomUUID();
+
+            stands.put(uuid, armorStand);
+            ranges.put(uuid, block.getValue());
         }
 
         this.setupSubTasks();
@@ -216,7 +218,7 @@ public class FarmOrb extends BukkitRunnable {
     public void run() {
         if (stands.size() == 0) this.setupOrbs();
 
-        for (ArmorStand stand : stands) {
+        for (ArmorStand stand : stands.values()) {
             if (!upDown) {
                 stand.setVelocity(new Vector(0, .05, 0));
 

@@ -59,7 +59,6 @@ public class Weapons {
         }
 
         Location location = block.getLocation();
-        location = Utils.getCenter(location);
         location.setYaw(plr.getLocation().getYaw());
         location.setPitch(plr.getLocation().getPitch());
         plr.teleport(location);

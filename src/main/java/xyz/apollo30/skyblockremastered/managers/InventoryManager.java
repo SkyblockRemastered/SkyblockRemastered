@@ -288,7 +288,7 @@ public class InventoryManager {
                 "",
                 "&5&lEPIC"), 16);
         Utils.addItem(inv, Utils.addLore(
-                Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTNjOGFhM2ZkZTI5NWZhOWY5YzI3ZjczNGJkYmFiMTFkMzNhMmU0M2U4NTVhY2NkNzQ2NTM1MjM3NzQxM2IifX19"),
+                Utils.getSkull(Utils.urlToBase64("https://textures.minecraft.net/texture/9336d7cc95cbf6689f5e8c954294ec8d1efc494a4031325bb427bc81d56a484d")),
                 "&aMaddox Batphone",
                 "&6Item Ability: Whassup? &e&lRIGHT CLICK",
                 "&7Lets you call &dMaddox&7, when",
