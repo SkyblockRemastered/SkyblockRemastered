@@ -16,9 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class FarmOrb extends BukkitRunnable {
 
@@ -27,6 +25,8 @@ public class FarmOrb extends BukkitRunnable {
     private int currentTickRotCount = 0;
 
     ArrayList<Block> farmLand = new ArrayList<>();
+
+    HashMap<UUID, ArrayList<Block>> farmLandAreas = new HashMap<>();
 
     public FarmOrb(SkyblockRemastered plugin) {
         this.plugin = plugin;
@@ -48,9 +48,9 @@ public class FarmOrb extends BukkitRunnable {
             @Override
             public void run() {
                 for (ArmorStand stand : stands) {
-                    if (farmLand.size() == 0) farmLandAvailable(stand.getLocation(), 100);
+                    if (farmLand.size() == 0) farmLandAvailable(stand.getUniqueId(), stand.getLocation(), 100);
 
-                    ArrayList<Block> blocks = farmNeededUpdate();
+                    ArrayList<Block> blocks = farmNeededUpdate(stand.getUniqueId());
 
                     Block selectedBlock = blocks.get(0);
                     plantWheat(stand.getEyeLocation(), selectedBlock.getLocation());
@@ -166,7 +166,7 @@ public class FarmOrb extends BukkitRunnable {
     }
 
     private void plantWheat(Location armorStandLoc, Location blockLoc) {
-        Block block = this.plugin.getServer().getWorld("hub").getBlockAt(blockLoc);
+        Block block = armorStandLoc.getWorld().getBlockAt(blockLoc);
         block.setType(Material.CROPS);
         block.setData((byte) 7);
 
@@ -175,7 +175,7 @@ public class FarmOrb extends BukkitRunnable {
         newLocVec.setYaw((float) this.getSelectedYaw(armorStandLoc, blockLoc.add(0.5, 0, 0.5)));
         newLocVec.setPitch((float) this.getSelectedPitch(armorStandLoc, blockLoc.add(0.5, 0, 0.5)));
 
-        for (Vector clonedLoc : this.traverse(armorStandLoc.toVector(), newLocVec.getDirection(), 20.0)) {
+        for (Vector clonedLoc : this.traverse(armorStandLoc.toVector(), newLocVec.getDirection(), 30.0)) {
             PacketPlayOutWorldParticles particle = new PacketPlayOutWorldParticles(EnumParticle.FIREWORKS_SPARK,true, (float) clonedLoc.getX(), (float) clonedLoc.getY(), (float) clonedLoc.getZ(), 0, 0, 0, 0, 1);
 
             for (Player online : Bukkit.getOnlinePlayers()) {
@@ -184,22 +184,26 @@ public class FarmOrb extends BukkitRunnable {
         }
     }
 
-    public void farmLandAvailable(Location origin, int range) {
+    public void farmLandAvailable(UUID uuid, Location origin, int range) {
+        ArrayList<Block> farmBlocks = new ArrayList<>();
+
         for (int x = origin.getBlockX() - range; x <= origin.getBlockX() + range; x++) {
             for (int y = origin.getBlockY() - range; y <= origin.getBlockY() + range; y++) {
                 for (int z = origin.getBlockZ() - range; z <= origin.getBlockZ() + range; z++) {
                     if (origin.getWorld().getBlockAt(x, y, z).getType() == Material.SOIL) {
-                        farmLand.add(origin.getWorld().getBlockAt(x, y, z));
+                        farmBlocks.add(origin.getWorld().getBlockAt(x, y, z));
                     }
                 }
             }
         }
+
+        farmLandAreas.put(uuid, farmBlocks);
     }
 
-    private ArrayList<Block> farmNeededUpdate() {
+    private ArrayList<Block> farmNeededUpdate(UUID uuid) {
         ArrayList<Block> farm = new ArrayList<>();
 
-        for (Block block : farmLand) {
+        for (Block block : farmLandAreas.get(uuid)) {
             if (block.getLocation().getWorld().getBlockAt(block.getLocation().add(0, 1, 0)).getType() != Material.CROPS) {
                 farm.add(block.getLocation().getWorld().getBlockAt(block.getLocation().add(0, 1, 0)));
             }
