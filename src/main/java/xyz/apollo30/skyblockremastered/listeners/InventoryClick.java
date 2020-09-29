@@ -10,7 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.managers.InventoryManager;
+import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -39,7 +39,7 @@ public class InventoryClick implements Listener {
 
         // Skyblock Menu
         if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
-            InventoryManager.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
             e.setCancelled(true);
         // Ender Chest
         } else if (item.equals(Utils.chat("&aEnder Chest"))) {
@@ -48,21 +48,21 @@ public class InventoryClick implements Listener {
             e.setCancelled(true);
         // Crafting Table
         } else if (item.equals(Utils.chat("&aCrafting Table"))) {
-            InventoryManager.craftingMenu(plr, plr.getUniqueId().toString(), "empty");
+            GuiUtils.craftingMenu(plr, plr.getUniqueId().toString(), "empty");
             e.setCancelled(true);
         // Trade Menu
         } else if (item.equals(Utils.chat("&aTrades"))) {
-            InventoryManager.tradeMenu(plr, plr.getUniqueId().toString());
+            GuiUtils.tradeMenu(plr, plr.getUniqueId().toString());
             e.setCancelled(true);
         // Close Button
         } else if (item.equals(Utils.chat("&cClose"))) {
             plr.closeInventory();
             e.setCancelled(true);
         } else if (item.equals(Utils.chat("&aYour Skills"))) {
-            InventoryManager.skillMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers());
+            GuiUtils.skillMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers());
             e.setCancelled(true);
         } else if (item.equals(Utils.chat("&aGo Back"))) {
-            InventoryManager.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
             e.setCancelled(true);
         }
 
@@ -70,7 +70,7 @@ public class InventoryClick implements Listener {
         if (title.equals("SkyBlock Menu")) {
             e.setCancelled(true);
             if (item.equals(Utils.chat("&aPlugin Developer Menu"))) {
-                InventoryManager.adminPanel(plr, plr.getUniqueId().toString());
+                GuiUtils.adminPanel(plr, plr.getUniqueId().toString());
             }
         // Trade Menu
         } else if (title.equals("Trades")) {
@@ -95,9 +95,9 @@ public class InventoryClick implements Listener {
         } else if (title.equals("Bank")) {
             e.setCancelled(true);
             if (item.equalsIgnoreCase(Utils.chat("&aDeposit Coins"))) {
-                InventoryManager.bankDeposit(plr, plr.getUniqueId().toString(), plugin);
+                GuiUtils.bankDeposit(plr, plr.getUniqueId().toString(), plugin);
             } else if (item.equalsIgnoreCase(Utils.chat("&aWithdraw Coins"))) {
-                InventoryManager.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
+                GuiUtils.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
             }
         // Bank Dep
         } else if (title.equals("Bank Deposit")) {
@@ -121,7 +121,7 @@ public class InventoryClick implements Listener {
                 po.setPurse(0);
 
                 // Refreshing the Page
-                InventoryManager.bankDeposit(plr, plr.getUniqueId().toString(), plugin);
+                GuiUtils.bankDeposit(plr, plr.getUniqueId().toString(), plugin);
             } else if (item.equalsIgnoreCase(Utils.chat("&aHalf your purse"))) {
                 PlayerObject po = plugin.playerManager.playerObjects.get(plr);
 
@@ -140,7 +140,7 @@ public class InventoryClick implements Listener {
                 po.setPurse(po.getPurse() / 2);
 
                 // Refreshing the Page
-                InventoryManager.bankDeposit(plr, plr.getUniqueId().toString(), plugin);
+                GuiUtils.bankDeposit(plr, plr.getUniqueId().toString(), plugin);
             }
         // Bank Withdrawal
         } else if (title.equals("Bank Withdrawal")) {
@@ -164,7 +164,7 @@ public class InventoryClick implements Listener {
                 po.setBank(0);
 
                 // Refreshing the Page
-                InventoryManager.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
+                GuiUtils.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
             } else if (item.equalsIgnoreCase(Utils.chat("&aHalf your account"))) {
                 PlayerObject po = plugin.playerManager.playerObjects.get(plr);
 
@@ -183,7 +183,7 @@ public class InventoryClick implements Listener {
                 po.setBank(po.getBank() - po.getBank() / 2);
 
                 // Refreshing the Page
-                InventoryManager.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
+                GuiUtils.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
             } else if (item.equalsIgnoreCase(Utils.chat("&a20% of your account"))) {
                 PlayerObject po = plugin.playerManager.playerObjects.get(plr);
 
@@ -202,7 +202,7 @@ public class InventoryClick implements Listener {
                 po.setBank((int) (po.getBank() - (po.getBank() * .2)));
 
                 // Refreshing the Page
-                InventoryManager.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
+                GuiUtils.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
             }
         }
 

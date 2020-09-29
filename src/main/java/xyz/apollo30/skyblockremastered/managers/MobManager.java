@@ -4,16 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.objects.MobObject;
+import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.*;
@@ -269,11 +268,16 @@ public class MobManager {
             mo.setDamage(800);
             mo.setLevel(55);
             mo.setName("Old Wolf");
+        } else {
+            mo.setName(entity.getName());
+            mo.setLevel(3);
+            mo.setLocation("???");
+            mo.setMaxHealth(100);
         }
 
         ArmorStand armorStand = entity.getWorld().spawn(entity.getLocation(), ArmorStand.class);
         armorStand.setGravity(false);
-        armorStand.setCustomName(Utils.chat("&8[&7Lv" + mo.getLevel() + "&8] &c" + mo.getName() + " &a" + mo.getHealth() + "&f/&a" + mo.getMaxHealth() + "&c" + InventoryManager.getUnicode("heart")));
+        armorStand.setCustomName(Utils.chat("&8[&7Lv" + mo.getLevel() + "&8] &c" + mo.getName() + " &a" + mo.getHealth() + "&f/&a" + mo.getMaxHealth() + "&c" + GuiUtils.getUnicode("heart")));
         armorStand.setCustomNameVisible(true);
         armorStand.setRemoveWhenFarAway(true);
         armorStand.setVisible(false);

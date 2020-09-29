@@ -21,12 +21,22 @@ public class Miscs {
     }
 
     public void maddox_batphone(Player plr) {
-        plr.sendMessage(Utils.chat("&e✆Ring..."));
-        // gonna add delay here 1s
-        plr.sendMessage(Utils.chat("&✆Ring... Ring..."));
-        // gonna add delay here 1s
-        plr.sendMessage(Utils.chat("&e✆Ring... Ring... Ring..."));
-        // gonna add delay here 1s
+        plr.sendMessage(Utils.chat("&e✆ Ring..."));
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> plr.sendMessage(Utils.chat("&e✆ Ring... Ring...")), 20L);
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> plr.sendMessage(Utils.chat("&e✆ Ring... Ring... Ring...")), 40L);
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> maddox_do(plr), 60L);
+
+//        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
+//                {
+//                    public void run() {
+//                        p.setVelocity(new Vector());
+//                    }
+//                }
+//                , 1L);
+
+    }
+
+    private void maddox_do(Player plr) {
         // on cooldown
         if (bcd.containsKey(plr.getUniqueId())) {
             // more than 3 attempts
@@ -51,5 +61,4 @@ public class Miscs {
             return;
         }
     }
-
 }

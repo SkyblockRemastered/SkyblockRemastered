@@ -1,15 +1,12 @@
 package xyz.apollo30.skyblockremastered.managers;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
-import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +55,7 @@ public class LagManager implements Runnable {
         Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             for (World world : Bukkit.getWorlds()) {
                 for (Entity entity : world.getEntities()) {
-                    if (entity.getCustomName() != null && entity.getCustomName().startsWith(Utils.chat("&8[&7Lv")) && entity.getCustomName().endsWith(Utils.chat("&c" + InventoryManager.getUnicode("heart")))) {
+                    if (entity.getCustomName() != null && entity.getCustomName().startsWith(Utils.chat("&8[&7Lv")) && entity.getCustomName().endsWith(Utils.chat("&c" + GuiUtils.getUnicode("heart")))) {
                         if (entity.getVehicle() == null) entity.remove();
                     }
                 }

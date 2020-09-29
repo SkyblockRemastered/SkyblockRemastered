@@ -1,6 +1,7 @@
 package xyz.apollo30.skyblockremastered.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -18,7 +19,12 @@ public class EntityExplode implements Listener {
 
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent e) {
-        e.setCancelled(true);
+
+        if (e.getEntityType() != EntityType.PRIMED_TNT) e.setCancelled(true);
+        else {
+            if (e.getEntity().getWorld().getName().startsWith("islands/")) return;
+        }
+
     }
 
 }

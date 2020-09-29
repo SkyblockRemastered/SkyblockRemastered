@@ -20,14 +20,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.managers.InventoryManager;
 
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.ParseException;
 import java.util.*;
 
 public class Utils {
@@ -538,7 +536,7 @@ public class Utils {
                 color += previous.equals("red") ? "&f" + letter : previous.equals("white") ? "&e" + letter : previous.equals("yellow") ? "&6" + letter : previous.equals("orange") ? "&c" + letter : "&f" + letter;
                 previous = previous.equals("red") ? "white" : previous.equals("white") ? "yellow" : previous.equals("yellow") ? "orange" : previous.equals("orange") ? "red" : "red";
             }
-            color = "&f" + InventoryManager.getUnicode("crithit") + color + "&c" + InventoryManager.getUnicode("crithit");
+            color = "&f" + GuiUtils.getUnicode("crithit") + color + "&c" + GuiUtils.getUnicode("crithit");
         }
 
         ArmorStand armorStand = entity.getWorld().spawn(entity.getLocation().add(x, y, z), ArmorStand.class);
@@ -601,7 +599,7 @@ public class Utils {
     public static String getDisplayHP(int level, String mobname, int current_health, int max_health) {
         double percent = current_health / max_health;
         String color = percent < .30 ? "&c" : percent < .50 ? "&e" : "&a";
-        return "&8[&7Lv" + level + "&8] &c" + mobname + " " + color + (current_health < 0 ? 0 : current_health) + "&f/&a" + max_health + "&c" + InventoryManager.getUnicode("heart");
+        return "&8[&7Lv" + level + "&8] &c" + mobname + " " + color + (current_health < 0 ? 0 : current_health) + "&f/&a" + max_health + "&c" + GuiUtils.getUnicode("heart");
     }
 
     public static String toRoman(int level) {

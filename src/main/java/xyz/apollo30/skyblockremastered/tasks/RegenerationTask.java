@@ -4,12 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.managers.InventoryManager;
-import xyz.apollo30.skyblockremastered.managers.PacketManager;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
-import xyz.apollo30.skyblockremastered.utils.Utils;
-
-import java.util.UUID;
 
 public class RegenerationTask extends BukkitRunnable {
 

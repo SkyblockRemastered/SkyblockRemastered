@@ -34,6 +34,8 @@ public class EntityDamageByEntity implements Listener {
             // Cancels the damage on armor stands
             if (e.getEntityType() == EntityType.ARMOR_STAND) e.setCancelled(true);
 
+            if (e.getEntity().getPassenger() == null) plugin.mobManager.createMob((LivingEntity) e.getEntity(), e.getEntity().getName());
+
             // Checks if the damaged entity is living.
             if (e.getEntity() instanceof LivingEntity) {
 

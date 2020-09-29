@@ -5,13 +5,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import xyz.apollo30.skyblockremastered.managers.InventoryManager;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-
-import java.util.UUID;
 
 public class Visit implements CommandExecutor {
 

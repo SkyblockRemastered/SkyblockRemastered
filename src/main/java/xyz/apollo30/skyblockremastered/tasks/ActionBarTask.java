@@ -4,12 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.managers.InventoryManager;
+import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.managers.PacketManager;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
-
-import java.util.UUID;
 
 public class ActionBarTask extends BukkitRunnable {
 
@@ -38,7 +36,7 @@ public class ActionBarTask extends BukkitRunnable {
             String intell = Integer.toString(po.getIntelligence());
             String maxIntell = Integer.toString(po.getMaxIntelligence());
 
-            String actionbar = "&c" + hp + "/" + maxhp + InventoryManager.getUnicode("heart") + " HP" + "     &a" + defense + InventoryManager.getUnicode("defense") + " Defense" + "     &b" + intell + "/" + maxIntell + InventoryManager.getUnicode("intel") + " Intelligence";
+            String actionbar = "&c" + hp + "/" + maxhp + GuiUtils.getUnicode("heart") + " HP" + "     &a" + defense + GuiUtils.getUnicode("defense") + " Defense" + "     &b" + intell + "/" + maxIntell + GuiUtils.getUnicode("intel") + " Intelligence";
             PacketManager.sendMessage(plr, Utils.chat(actionbar));
         }
     }

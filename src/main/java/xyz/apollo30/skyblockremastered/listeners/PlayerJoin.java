@@ -7,11 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.managers.InventoryManager;
-import xyz.apollo30.skyblockremastered.managers.PlayerManager;
+import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
-
-import java.io.File;
 
 public class PlayerJoin implements Listener {
 
@@ -59,7 +56,7 @@ public class PlayerJoin implements Listener {
         plr.teleport(loc);
 
         // Create Player.yml section for them
-        InventoryManager.createPlayerData(plr, plr.getUniqueId().toString(), plugin.db.getPlayers());
+        GuiUtils.createPlayerData(plr, plr.getUniqueId().toString(), plugin.db.getPlayers());
         plugin.db.savePlayers();
 
         // Give the player a temporary database.
