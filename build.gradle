@@ -38,7 +38,11 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+<<<<<<< HEAD
+
+=======
     compileOnly group: "com.grinderwolf", name: "slimeworldmanager-api", version: "2.2.1";
+>>>>>>> bb9158f61729e1a10b71cf44d00013f934df3ac1
 }
 
 processResources {

@@ -15,6 +15,7 @@ import xyz.apollo30.skyblockremastered.managers.InventoryManager;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class PlayerInteract implements Listener {
@@ -26,6 +27,8 @@ public class PlayerInteract implements Listener {
 
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
+    // batphone cooldown
+    public HashMap<UUID, Integer> bcd = new HashMap<>();
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
@@ -92,7 +95,41 @@ public class PlayerInteract implements Listener {
                 location.setYaw(plr.getLocation().getYaw());
                 location.setPitch(plr.getLocation().getPitch());
                 plr.teleport(location);
+            } else if (item.equals(Utils.chat("&aMaddox Batphone"))) {
+                // on cooldown
+                if (bcd.containsKey(plr.getUniqueId())){
+                    // more than 3 attempts
+                    if (bcd.get(plr.getUniqueId()).equals(3)) {
+                        plr.sendMessage(Utils.chat("&c✆HEY IT'S NOT PICKING UP STOP TRYING!"));
+                        return;
+                    }
+                    // on cooldown, less than 3 attempts
+                    else {
+                        plr.sendMessage(callFailed());
+                        int failNum = bcd.get(plr.getUniqueId());
+                        ++failNum;
+                        return;
+                    }
+                }
+                // not on cooldown, add to cooldown list.
+                else{
+                    plr.sendMessage(callSuccess());
+                    // open GUI (will be done tmr, also please give me a list of slayers and stuff so i can do this)
+                    bcd.put(plr.getUniqueId(), 0);
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> bcd.remove(plr.getUniqueId()), 600);
+                    return;
+                }
+
+            // batphone ^^
             }
         }
+    }
+    public String callSuccess(){
+        String[] responses = {"✆Hello?", "✆Someone answers!", "✆How does a lobster answer? Shello!", "✆Hey what you do you need?", "✆You hear the line pick up...", "✆You again? What do you want this time?"};
+        return Utils.chat("&a" + responses[(int) Math.floor(Math.random() * responses.length)]);
+    }
+    public String callFailed(){
+        String[] responses = {"✆Please leave your message after the beep.", "✆How can you tell if a bee is on the phone? You get a buzzy signal!", "✆The phone keeps ringing, is it broken?", "✆The phone picks up but it immediately hangs up!", "✆What did the cat say on the phone? Can you hear meow?", "✆No answer.", "✆Seems like it's not picking up!", "✆\"Your call is important to us, please stay on the line\", so you hang up."};
+        return Utils.chat("&c" + responses[(int) Math.floor(Math.random() * responses.length)] + "&2&l[OPEN MENU]");
     }
 }
