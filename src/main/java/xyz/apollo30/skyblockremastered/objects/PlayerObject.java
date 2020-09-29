@@ -25,6 +25,7 @@ public class PlayerObject {
     double bank = 0;
     double gems = 0;
 
+
     // Stats
     int health = 100;
     int maxHealth = 100;
@@ -49,6 +50,7 @@ public class PlayerObject {
     // Database
     int zealot_kills = 0;
     double coins_gained = 0;
+    String slayer = "none";
 
     // Skills
     int farmingLevel = 0;

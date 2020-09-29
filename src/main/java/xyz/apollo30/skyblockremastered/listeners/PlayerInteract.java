@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.InventoryManager;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.utils.ResponsesUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.*;
@@ -27,11 +28,14 @@ public class PlayerInteract implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    // Maddox Batphone Cooldown
+    public HashMap<UUID, Integer> bcd = new HashMap<>();
+
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         Player plr = e.getPlayer();
 
-        if(e.getAction() == Action.PHYSICAL && e.getClickedBlock().getType() == Material.SOIL)
+        if (e.getAction() == Action.PHYSICAL && e.getClickedBlock().getType() == Material.SOIL)
             e.setCancelled(true);
 
         if (e.getItem() == null || e.getAction() == null)
@@ -92,6 +96,30 @@ public class PlayerInteract implements Listener {
                 location.setYaw(plr.getLocation().getYaw());
                 location.setPitch(plr.getLocation().getPitch());
                 plr.teleport(location);
+            } else if (item.equals(Utils.chat("&aMaddox Batphone"))) {
+                // on cooldown
+                if (bcd.containsKey(plr.getUniqueId())) {
+                    // more than 3 attempts
+                    if (bcd.get(plr.getUniqueId()).equals(3)) {
+                        plr.sendMessage(Utils.chat("&c✆ HEY IT'S NOT PICKING UP STOP TRYING!"));
+                        return;
+                    }
+                    // on cooldown, less than 3 attempts
+                    else {
+                        plr.sendMessage(ResponsesUtils.callFailed());
+                        int failNum = bcd.get(plr.getUniqueId());
+                        ++failNum;
+                        return;
+                    }
+                }
+                // not on cooldown, add to cooldown list.
+                else {
+                    plr.sendMessage(ResponsesUtils.callSuccess());
+                    // open GUI (will be done tmr, also please give me a list of slayers and stuff so i can do this)
+                    bcd.put(plr.getUniqueId(), 0);
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> bcd.remove(plr.getUniqueId()), 600);
+                    return;
+                }
             }
         }
     }
