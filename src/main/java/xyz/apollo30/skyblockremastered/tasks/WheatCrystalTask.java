@@ -8,11 +8,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
@@ -28,19 +26,22 @@ public class WheatCrystalTask extends BukkitRunnable {
 
     HashMap<UUID, ArrayList<Block>> farmLandAreas = new HashMap<>();
     HashMap<UUID, Integer> ranges = new HashMap<>();
+    HashMap<Block, Integer> blocks = new HashMap<>();
 
     public WheatCrystalTask(SkyblockRemastered plugin) {
         this.plugin = plugin;
     }
 
-    private HashMap<UUID, ArmorStand> stands = new HashMap<>();
-
+    private final HashMap<UUID, ArrayList> stands = new HashMap<>();
+    //ArmorStand, Location
     private void setupSubTasks() {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (ArmorStand stand : stands.values()) {
-                    spawnArialParticles(stand.getLocation());
+                for (Map.Entry<UUID, ArrayList> stand : stands.entrySet()) {
+                    ArmorStand armorStand = (ArmorStand) stand.getValue().get(0);
+
+                    spawnArialParticles(armorStand.getLocation());
                 }
             }
         }.runTaskTimer(this.plugin, 0L, 10L);
@@ -48,13 +49,15 @@ public class WheatCrystalTask extends BukkitRunnable {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (Map.Entry<UUID, ArmorStand> stand : stands.entrySet()) {
-                    if (farmLandAreas.get(stand.getKey()) == null) farmLandAvailable(stand.getKey(), stand.getValue().getLocation(), ranges.get(stand.getKey()));
+                for (Map.Entry<UUID, ArrayList> stand : stands.entrySet()) {
+                    ArmorStand armorStand = (ArmorStand) stand.getValue().get(0);
+
+                    if (farmLandAreas.get(stand.getKey()) == null) farmLandAvailable(stand.getKey(), armorStand.getLocation(), ranges.get(stand.getKey()));
 
                     ArrayList<Block> blocks = farmNeededUpdate(stand.getKey());
                     if (blocks.size() > 0) {
                         Block selectedBlock = blocks.get((int) Math.floor(Math.random() * blocks.size()));
-                        plantWheat(stand.getValue().getEyeLocation(), selectedBlock.getLocation());
+                        plantWheat(armorStand.getEyeLocation(), selectedBlock.getLocation());
                     }
                 }
             }
@@ -62,8 +65,6 @@ public class WheatCrystalTask extends BukkitRunnable {
     }
 
     private void setupOrbs() {
-
-        HashMap<Block, Integer> blocks = new HashMap<>();
         blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(28, 75, -141), 13);
         blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(44, 75, -123), 10);
         blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(63, 76, -134), 10);
@@ -86,7 +87,12 @@ public class WheatCrystalTask extends BukkitRunnable {
 
             UUID uuid = UUID.randomUUID();
 
-            stands.put(uuid, armorStand);
+            ArrayList<Object> list = new ArrayList<>();
+
+            list.add(armorStand);
+            list.add(location);
+
+            stands.put(uuid, list);
             ranges.put(uuid, block.getValue());
         }
 
@@ -218,17 +224,20 @@ public class WheatCrystalTask extends BukkitRunnable {
     public void run() {
         if (stands.size() == 0) this.setupOrbs();
 
-        for (ArmorStand stand : stands.values()) {
+        for (Map.Entry<UUID, ArrayList> entry : stands.entrySet()) {
+            Location originalLoc = (Location) entry.getValue().get(1);
+            ArmorStand stand = (ArmorStand) entry.getValue().get(0);
+
             if (!upDown) {
                 stand.setVelocity(new Vector(0, .05, 0));
 
-                if (stand.getLocation().getY() > 84.6) {
+                if (stand.getLocation().getY() > originalLoc.getY() + 1) {
                     upDown = true;
                 }
             } else {
                 stand.setVelocity(new Vector(0, -.05, 0));
 
-                if (stand.getLocation().getY() < 83) {
+                if (stand.getLocation().getY() < originalLoc.getY()) {
                     upDown = false;
                 }
             }
