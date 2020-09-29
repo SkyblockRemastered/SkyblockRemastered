@@ -43,8 +43,6 @@ public class PlayerManager {
             po.setIgn(plr.getName());
             po.setUuid(plr.getUniqueId().toString());
 
-            po.setSlayer(player.getConfigurationSection(".Information").getString("slayer"));
-
             po.setBank(player.getConfigurationSection(".Information").getDouble("bank"));
             po.setPurse(player.getConfigurationSection(".Information").getDouble("purse"));
             po.setGems(player.getConfigurationSection(".Information").getDouble("gems"));
@@ -138,8 +136,6 @@ public class PlayerManager {
         player.getConfigurationSection(".Information").set("purse", po.getPurse());
         player.getConfigurationSection(".Information").set("bank", po.getBank());
         player.getConfigurationSection(".Information").set("gems", po.getGems());
-
-        player.getConfigurationSection(".Information").set("slayer", po.getSlayer());
 
         player.getConfigurationSection(".Stats").set("health", po.getMaxHealth());
         player.getConfigurationSection(".Stats").set("defense", po.getDefense());
