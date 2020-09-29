@@ -17,6 +17,7 @@ import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class FarmOrb extends BukkitRunnable {
@@ -59,24 +60,33 @@ public class FarmOrb extends BukkitRunnable {
     }
 
     private void setupOrbs() {
-        Block block = this.plugin.getServer().getWorld("hub").getBlockAt(-39, 84, 17);
-        block.setType(Material.AIR);
 
-        Location location = block.getLocation();
-        ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
+        List<Block> blocks = new ArrayList<>();
+        blocks.add(this.plugin.getServer().getWorld("hub").getBlockAt(28, 82, -141));
+        blocks.add(this.plugin.getServer().getWorld("hub").getBlockAt(44, 82, -123));
+        blocks.add(this.plugin.getServer().getWorld("hub").getBlockAt(63, 82, -134));
+        blocks.add(this.plugin.getServer().getWorld("hub").getBlockAt(74, 82, -161));
+        blocks.add(this.plugin.getServer().getWorld("hub").getBlockAt(59, 82, -183));
+        blocks.add(this.plugin.getServer().getWorld("hub").getBlockAt(24, 82, -178));
 
-        armorStand.setGravity(true);
-        armorStand.setVisible(false);
-        armorStand.setSmall(true);
+        for (Block block : blocks) {
+            block.setType(Material.AIR);
+            Location location = block.getLocation();
+            ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
 
-        ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
-        SkullMeta meta = (SkullMeta) skull.getItemMeta();
-        meta.setOwner("robloxrocks");
-        skull.setItemMeta(meta);
+            armorStand.setGravity(false);
+            armorStand.setVisible(false);
+            armorStand.setSmall(true);
 
-        armorStand.setHelmet(skull);
+            ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+            SkullMeta meta = (SkullMeta) skull.getItemMeta();
+            meta.setOwner("robloxrocks");
+            skull.setItemMeta(meta);
 
-        stands.add(armorStand);
+            armorStand.setHelmet(skull);
+
+            stands.add(armorStand);
+        }
 
         this.setupSubTasks();
     }

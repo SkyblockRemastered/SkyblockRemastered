@@ -11,6 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.abilities.Miscs;
+import xyz.apollo30.skyblockremastered.abilities.Weapons;
 import xyz.apollo30.skyblockremastered.managers.InventoryManager;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.ResponsesUtils;
@@ -27,9 +29,6 @@ public class PlayerInteract implements Listener {
 
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
-
-    // Maddox Batphone Cooldown
-    public HashMap<UUID, Integer> bcd = new HashMap<>();
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
@@ -48,79 +47,16 @@ public class PlayerInteract implements Listener {
             return;
 
         if (action.contains("LEFT_CLICK")) {
-            if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
+            if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)")))
                 InventoryManager.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
-                e.setCancelled(true);
-            }
         } else if (action.contains("RIGHT_CLICK")) {
-            if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
+            if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)")))
                 InventoryManager.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
-                e.setCancelled(true);
-            } else if (item.contains(Utils.chat("&9Aspect of The End"))) {
+            else if (item.contains(Utils.chat("&9Aspect of The End")))
+                plugin.weaponAbilities.aspect_of_the_end(plr);
+            else if (item.equals(Utils.chat("&aMaddox Batphone")))
+                plugin.miscAbilities.maddox_batphone(plr);
 
-                PlayerObject po = plugin.playerManager.playerObjects.get(plr);
-                if (po.getIntelligence() - 50 <= 0 || po.getIntelligence() <= 0) {
-                    plr.sendMessage(Utils.chat("&cYou do not have enough mana"));
-                    return;
-                }
-                po.setIntelligence(po.getIntelligence() - 50);
-
-                plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1F);
-
-                Set<Material> whitelisted = new HashSet<>();
-                whitelisted.add(Material.AIR);
-                whitelisted.add(Material.WATER);
-                whitelisted.add(Material.STATIONARY_WATER);
-                whitelisted.add(Material.SIGN);
-                whitelisted.add(Material.LAVA);
-                whitelisted.add(Material.STATIONARY_LAVA);
-
-                List<Block> blocks = plr.getLineOfSight(whitelisted, 8);
-                Collections.reverse(blocks);
-
-                Block block = null;
-                for (Block blocc : blocks) {
-                    if (whitelisted.contains(blocc.getType())) {
-                        block = blocc;
-                        break;
-                    }
-                }
-
-                if (block == null || !whitelisted.contains(block.getType())) {
-                    plr.sendMessage(Utils.chat("&cThere are blocks in the way!"));
-                    return;
-                }
-
-                Location location = block.getLocation();
-                location = Utils.getCenter(location);
-                location.setYaw(plr.getLocation().getYaw());
-                location.setPitch(plr.getLocation().getPitch());
-                plr.teleport(location);
-            } else if (item.equals(Utils.chat("&aMaddox Batphone"))) {
-                // on cooldown
-                if (bcd.containsKey(plr.getUniqueId())) {
-                    // more than 3 attempts
-                    if (bcd.get(plr.getUniqueId()).equals(3)) {
-                        plr.sendMessage(Utils.chat("&c✆ HEY IT'S NOT PICKING UP STOP TRYING!"));
-                        return;
-                    }
-                    // on cooldown, less than 3 attempts
-                    else {
-                        plr.sendMessage(ResponsesUtils.callFailed());
-                        int failNum = bcd.get(plr.getUniqueId());
-                        ++failNum;
-                        return;
-                    }
-                }
-                // not on cooldown, add to cooldown list.
-                else {
-                    plr.sendMessage(ResponsesUtils.callSuccess());
-                    // open GUI (will be done tmr, also please give me a list of slayers and stuff so i can do this)
-                    bcd.put(plr.getUniqueId(), 0);
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> bcd.remove(plr.getUniqueId()), 600);
-                    return;
-                }
-            }
         }
     }
 }

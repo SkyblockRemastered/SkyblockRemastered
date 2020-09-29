@@ -7,6 +7,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import xyz.apollo30.skyblockremastered.abilities.Miscs;
+import xyz.apollo30.skyblockremastered.abilities.Weapons;
 import xyz.apollo30.skyblockremastered.commands.Hub;
 import xyz.apollo30.skyblockremastered.commands.Tps;
 import xyz.apollo30.skyblockremastered.commands.Visit;
@@ -27,6 +29,9 @@ public class SkyblockRemastered extends JavaPlugin {
     public PlayerManager playerManager;
     public MobManager mobManager;
     public LagManager lagManager;
+
+    public Miscs miscAbilities;
+    public Weapons weaponAbilities;
 
     @Override
     public void onEnable() {
@@ -77,6 +82,10 @@ public class SkyblockRemastered extends JavaPlugin {
         new Hub(this);
         new Tps(this);
 
+        // Abilities
+        this.miscAbilities = new Miscs(this);
+        this.weaponAbilities = new Weapons(this);
+
         // Managers
         this.blockManager = new BlockManager(this);
         this.playerManager = new PlayerManager(this);
@@ -94,6 +103,8 @@ public class SkyblockRemastered extends JavaPlugin {
                 if (entity.getType() != EntityType.PLAYER) entity.remove();
             }
         }
+
+        new FarmOrb(this).runTaskTimer(this, 5, 5);
 
         // Inits the timer for all managers.
         blockManager.initTimer();

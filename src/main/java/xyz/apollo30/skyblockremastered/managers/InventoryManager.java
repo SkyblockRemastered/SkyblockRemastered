@@ -287,6 +287,14 @@ public class InventoryManager {
                 "&7summon Ender Dragons!",
                 "",
                 "&5&lEPIC"), 16);
+        Utils.addItem(inv, Utils.addLore(
+                Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTNjOGFhM2ZkZTI5NWZhOWY5YzI3ZjczNGJkYmFiMTFkMzNhMmU0M2U4NTVhY2NkNzQ2NTM1MjM3NzQxM2IifX19"),
+                "&aMaddox Batphone",
+                "&6Item Ability: Whassup? &e&lRIGHT CLICK",
+                "&7Lets you call &dMaddox&7, when",
+                "&7he's not busy.",
+                "",
+                "&a&lUNCOMMON"), 17);
         Utils.createItemByte(inv, 2, 0, 1, 54, "&aCreative");
         Utils.createGlass(inv, "STAINED_GLASS_PANE", 15, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 18, 19, 27, 28, 36, 37, 45,
                 46, 47, 48, 49, 50, 51, 52, 53);

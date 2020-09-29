@@ -46,7 +46,7 @@ processResources {
         filter ReplaceTokens, tokens: [version: version]
     }
 }
-libsDirName = 'C:\\Users\\Jackson\\Downloads\\skyblockremastered\\plugins'
+libsDirName = 'C:\\Users\\Apollo\\Downloads\\Recreating Hypixel Skyblock 1.8\\plugins'
 compileJava.options.encoding = 'UTF-8'
 
 tasks.withType(JavaCompile) {
