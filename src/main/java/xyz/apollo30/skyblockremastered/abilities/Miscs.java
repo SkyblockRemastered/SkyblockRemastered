@@ -21,6 +21,12 @@ public class Miscs {
     }
 
     public void maddox_batphone(Player plr) {
+        plr.sendMessage(Utils.chat("&e✆Ring..."));
+        // gonna add delay here 1s
+        plr.sendMessage(Utils.chat("&✆Ring... Ring..."));
+        // gonna add delay here 1s
+        plr.sendMessage(Utils.chat("&e✆Ring... Ring... Ring..."));
+        // gonna add delay here 1s
         // on cooldown
         if (bcd.containsKey(plr.getUniqueId())) {
             // more than 3 attempts
