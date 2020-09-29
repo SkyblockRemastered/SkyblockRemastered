@@ -27,6 +27,7 @@ public class WheatCrystalTask extends BukkitRunnable {
     HashMap<UUID, ArrayList<Block>> farmLandAreas = new HashMap<>();
     HashMap<UUID, Integer> ranges = new HashMap<>();
     HashMap<Block, Integer> blocks = new HashMap<>();
+    HashMap<UUID, Boolean> motion = new HashMap<>();
 
     public WheatCrystalTask(SkyblockRemastered plugin) {
         this.plugin = plugin;
@@ -77,7 +78,7 @@ public class WheatCrystalTask extends BukkitRunnable {
             Location location = block.getKey().getLocation();
             ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
 
-            armorStand.setGravity(false);
+            armorStand.setGravity(true);
             armorStand.setVisible(false);
             armorStand.setSmall(true);
 
@@ -90,7 +91,7 @@ public class WheatCrystalTask extends BukkitRunnable {
             ArrayList<Object> list = new ArrayList<>();
 
             list.add(armorStand);
-            list.add(location);
+            list.add(armorStand.getLocation().getBlockY());
 
             stands.put(uuid, list);
             ranges.put(uuid, block.getValue());
@@ -225,29 +226,33 @@ public class WheatCrystalTask extends BukkitRunnable {
         if (stands.size() == 0) this.setupOrbs();
 
         for (Map.Entry<UUID, ArrayList> entry : stands.entrySet()) {
-            Location originalLoc = (Location) entry.getValue().get(1);
+            int originalLoc = (int) entry.getValue().get(1);
+
             ArmorStand stand = (ArmorStand) entry.getValue().get(0);
 
-            if (!upDown) {
+            motion.putIfAbsent(entry.getKey(), false);
+            boolean motionUpDown = motion.get(entry.getKey());
+
+            if (!motionUpDown) {
                 stand.setVelocity(new Vector(0, .05, 0));
 
-                if (stand.getLocation().getY() > originalLoc.getY() + 1) {
-                    upDown = true;
+                if ((stand.getLocation().getY() - originalLoc) >= 1) {
+                    motion.put(entry.getKey(), true);
                 }
             } else {
                 stand.setVelocity(new Vector(0, -.05, 0));
 
-                if (stand.getLocation().getY() < originalLoc.getY()) {
-                    upDown = false;
+                if ((stand.getLocation().getY() - originalLoc) < -0.5) {
+                    motion.put(entry.getKey(), false);
                 }
             }
 
             Location newLoc = stand.getLocation();
 
             currentTickRotCount = currentTickRotCount + 1;
-            if (currentTickRotCount == 4) currentTickRotCount = 0;
+            if (currentTickRotCount == 8) currentTickRotCount = 0;
 
-            int yaw = currentTickRotCount * 90;
+            int yaw = currentTickRotCount * 45;
             yaw = this.normalizeYaw(yaw);
 
             newLoc.setYaw(yaw);
