@@ -15,6 +15,7 @@ import xyz.apollo30.skyblockremastered.managers.*;
 import xyz.apollo30.skyblockremastered.tasks.ActionBarTask;
 import xyz.apollo30.skyblockremastered.tasks.RegenerationTask;
 import xyz.apollo30.skyblockremastered.tasks.ScoreboardTask;
+import xyz.apollo30.skyblockremastered.tasks.FarmOrb;
 
 import java.util.HashMap;
 

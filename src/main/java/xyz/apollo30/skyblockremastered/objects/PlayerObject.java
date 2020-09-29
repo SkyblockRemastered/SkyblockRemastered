@@ -1,12 +1,16 @@
 package xyz.apollo30.skyblockremastered.objects;
 
-import lombok.Getter;
-import lombok.Setter;
+
 import org.bukkit.entity.Player;
+
 
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
+=======
+import java.util.UUID;
 
+>>>>>>> bb9158f61729e1a10b71cf44d00013f934df3ac1
 @Getter
 @Setter
 public class PlayerObject {
@@ -19,6 +23,7 @@ public class PlayerObject {
     boolean statOverride = false;
     boolean blockBreak = false;
     boolean vanished = false;
+    String slayer = "none";
 
     double purse = 100;
     double bank = 0;
@@ -42,8 +47,8 @@ public class PlayerObject {
 
 
     // Island
-    List<Player> coop = new ArrayList<>();
-    List<Player> builders = new ArrayList<>();
+    List<UUID> coop = new ArrayList<>();
+    List<UUID> builders = new ArrayList<>();
 
     // Database
     int zealot_kills = 0;
@@ -110,4 +115,6 @@ public class PlayerObject {
     public void resetZealotKills() {
         zealot_kills = 0;
     }
+
+
 }
