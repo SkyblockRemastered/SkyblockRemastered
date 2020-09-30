@@ -69,7 +69,7 @@ public class Bank {
         plr.openInventory(inv);
 
     }
-
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         Player plr = (Player) e.getWhoClicked();
         String item = e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() ? e.getCurrentItem().getItemMeta().getDisplayName() : null;
