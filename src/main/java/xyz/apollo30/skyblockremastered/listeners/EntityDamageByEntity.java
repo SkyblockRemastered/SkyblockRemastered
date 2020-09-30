@@ -118,11 +118,6 @@ public class EntityDamageByEntity implements Listener {
                     mo.subtractHealth((int) final_damage);
                     if (mo.getHealth() <= 0 && !e.getEntity().isDead()) ((LivingEntity) e.getEntity()).setHealth(0);
                     e.getEntity().getPassenger().setCustomName(Utils.chat(Utils.getDisplayHP(mo.getLevel(), mo.getName(), mo.getHealth(), mo.getMaxHealth())));
-
-                    // Slayers for the player.
-                    if (!po.getCurrentSlayer().equals("none")){
-                        // this is going to be worked on tomorrow as well so don't mind it
-                    }
                 } else {
                     // Mob hits player.
                     LivingEntity killer = (LivingEntity) e.getDamager();
