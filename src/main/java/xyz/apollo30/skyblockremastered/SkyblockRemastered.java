@@ -89,6 +89,16 @@ public class SkyblockRemastered extends JavaPlugin {
         this.playerManager = new PlayerManager(this);
         this.mobManager = new MobManager(this);
 
+        // gui utils
+        new AdminPanel(this);
+        new Bank(this);
+        new CraftingMenu(this);
+        new MaddoxBatphone(this);
+        new SkillMenu(this);
+        new SkyblockMenu(this);
+        new TradeMenu(this);
+        new VisitMenu(this);
+
         // When reloaded and the players still exist, it just recreates their database again.
         for (Player plr : Bukkit.getOnlinePlayers()) {
             if (playerManager.getPlayerData(plr) == null) playerManager.createPlayerData(plr);
