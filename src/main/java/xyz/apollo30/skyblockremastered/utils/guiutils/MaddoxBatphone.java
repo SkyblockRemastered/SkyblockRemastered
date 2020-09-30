@@ -9,8 +9,9 @@ import org.bukkit.inventory.Inventory;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
+import org.bukkit.event.Listener;
 // REMEMBER TO REGISTER THE EVENT!
-public class MaddoxBatphone {
+public class MaddoxBatphone implements Listener {
 
     public SkyblockRemastered plugin;
 
