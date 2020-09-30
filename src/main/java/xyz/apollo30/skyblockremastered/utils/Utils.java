@@ -15,12 +15,10 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.util.Vector;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.tasks.LagPreventerTask;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -494,7 +492,7 @@ public class Utils {
                 color += previous.equals("red") ? "&f" + letter : previous.equals("white") ? "&e" + letter : previous.equals("yellow") ? "&6" + letter : previous.equals("orange") ? "&c" + letter : "&f" + letter;
                 previous = previous.equals("red") ? "white" : previous.equals("white") ? "yellow" : previous.equals("yellow") ? "orange" : previous.equals("orange") ? "red" : "red";
             }
-            color = "&f" + GuiUtils.getUnicode("crithit") + color + "&c" + GuiUtils.getUnicode("crithit");
+            color = "&f" + UnicodeUtils.getUnicode("crithit") + color + "&c" + UnicodeUtils.getUnicode("crithit");
         }
 
         ArmorStand armorStand = entity.getWorld().spawn(entity.getLocation().add(x, y, z), ArmorStand.class);
@@ -537,7 +535,7 @@ public class Utils {
     public static String getDisplayHP(int level, String mobname, int current_health, int max_health) {
         double percent = current_health / max_health;
         String color = percent < .30 ? "&c" : percent < .50 ? "&e" : "&a";
-        return "&8[&7Lv" + level + "&8] &c" + mobname + " " + color + (current_health < 0 ? 0 : current_health) + "&f/&a" + max_health + "&c" + GuiUtils.getUnicode("heart");
+        return "&8[&7Lv" + level + "&8] &c" + mobname + " " + color + (current_health < 0 ? 0 : current_health) + "&f/&a" + max_health + "&c" + UnicodeUtils.getUnicode("heart");
     }
 
     public static String intToRoman(int level) {

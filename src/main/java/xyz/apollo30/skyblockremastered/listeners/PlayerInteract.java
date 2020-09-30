@@ -8,8 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
+import xyz.apollo30.skyblockremastered.utils.guiutils.SkyblockMenu;
 
 public class PlayerInteract implements Listener {
 
@@ -39,10 +39,10 @@ public class PlayerInteract implements Listener {
 
         if (action.contains("LEFT_CLICK")) {
             if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)")))
-                GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+                SkyblockMenu.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
         } else if (action.contains("RIGHT_CLICK")) {
             if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)")))
-                GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+                SkyblockMenu.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
             else if (item.contains(Utils.chat("&9Aspect of The End")))
                 plugin.weaponAbilities.aspect_of_the_end(plr);
             else if (item.equals(Utils.chat("&aMaddox Batphone")))

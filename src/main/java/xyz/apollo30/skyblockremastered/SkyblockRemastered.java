@@ -14,14 +14,14 @@ import xyz.apollo30.skyblockremastered.commands.Gamemode;
 import xyz.apollo30.skyblockremastered.commands.Hub;
 import xyz.apollo30.skyblockremastered.commands.Visit;
 import xyz.apollo30.skyblockremastered.listeners.*;
-import xyz.apollo30.skyblockremastered.managers.*;
+import xyz.apollo30.skyblockremastered.managers.BlockManager;
+import xyz.apollo30.skyblockremastered.managers.ConfigManager;
+import xyz.apollo30.skyblockremastered.managers.MobManager;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.tasks.*;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
-import xyz.apollo30.skyblockremastered.utils.Utils;
+import xyz.apollo30.skyblockremastered.utils.guiutils.*;
 
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 public class SkyblockRemastered extends JavaPlugin {
 
@@ -54,7 +54,6 @@ public class SkyblockRemastered extends JavaPlugin {
         new EntityDeath(this);
         new EntitySpawn(this);
         new EntityTeleport(this);
-        new InventoryClick(this);
         new InventoryItemMove(this);
         new ItemDamage(this);
         new ItemDrag(this);
@@ -100,7 +99,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new Bank(this);
         new CraftingMenu(this);
         new MaddoxBatphone(this);
-        new SkillMenu(this);
+        new SkillMenu();
         new SkyblockMenu(this);
         new TradeMenu(this);
         new VisitMenu(this);

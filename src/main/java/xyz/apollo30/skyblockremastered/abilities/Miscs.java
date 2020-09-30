@@ -3,9 +3,9 @@ package xyz.apollo30.skyblockremastered.abilities;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.ResponsesUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
+import xyz.apollo30.skyblockremastered.utils.guiutils.MaddoxBatphone;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -45,7 +45,7 @@ public class Miscs {
             // not on cooldown, add to cooldown list.
             else {
                 plr.sendMessage(ResponsesUtils.callSuccess());
-                GuiUtils.batphoneMenu(plr, plr.getUniqueId().toString(), plugin);
+                MaddoxBatphone.openGui(plr, plugin);
                 bcd.put(plr.getUniqueId(), 0);
                 Bukkit.getScheduler().runTaskLater(plugin, () -> bcd.remove(plr.getUniqueId()), 600);
                 return;

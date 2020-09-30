@@ -6,8 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
+import xyz.apollo30.skyblockremastered.utils.guiutils.SkyblockMenu;
 
 public class ItemDrag implements Listener {
 
@@ -29,7 +29,7 @@ public class ItemDrag implements Listener {
             return;
 
         if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
-            GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            SkyblockMenu.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
             e.setCancelled(true);
         }
     }

@@ -12,7 +12,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.objects.MobObject;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
+import xyz.apollo30.skyblockremastered.utils.UnicodeUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.*;
@@ -277,7 +277,7 @@ public class MobManager {
 
         ArmorStand armorStand = entity.getWorld().spawn(entity.getLocation(), ArmorStand.class);
         armorStand.setGravity(false);
-        armorStand.setCustomName(Utils.chat("&8[&7Lv" + mo.getLevel() + "&8] &c" + mo.getName() + " &a" + mo.getHealth() + "&f/&a" + mo.getMaxHealth() + "&c" + GuiUtils.getUnicode("heart")));
+        armorStand.setCustomName(Utils.chat("&8[&7Lv" + mo.getLevel() + "&8] &c" + mo.getName() + " &a" + mo.getHealth() + "&f/&a" + mo.getMaxHealth() + "&c" + UnicodeUtils.getUnicode("heart")));
         armorStand.setCustomNameVisible(true);
         armorStand.setRemoveWhenFarAway(true);
         armorStand.setVisible(false);
