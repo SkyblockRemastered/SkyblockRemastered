@@ -16,5 +16,9 @@ commands:
     aliases: [survival, creative, adventure, spectator, spec, gms, gmc, gma, gmsp, esurvival, ecreative, eadventure, espectator, espec]
   visit:
     description: Visit a player's island
+    aliases: [lookup, view]
   hub:
     description: Warps you to the Skyblock Hub
+  island:
+    description: Teleports you to your private island
+    aliases: [is]

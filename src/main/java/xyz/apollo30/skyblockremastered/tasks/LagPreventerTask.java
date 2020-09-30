@@ -1,11 +1,13 @@
 package xyz.apollo30.skyblockremastered.tasks;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.managers.PacketManager;
 import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -16,14 +18,9 @@ import java.util.Map;
 public class LagPreventerTask extends BukkitRunnable {
 
     private SkyblockRemastered plugin;
-    public HashMap<Entity, Long> indicator = new HashMap<>();
 
     public LagPreventerTask(final SkyblockRemastered plugin) {
         this.plugin = plugin;
-    }
-
-    public void lagManager() {
-
     }
 
     @Override
@@ -50,12 +47,24 @@ public class LagPreventerTask extends BukkitRunnable {
                 }
             }
         }
-        if (indicator.size() != 0) {
-            for (Map.Entry<Entity, Long> entities : indicator.entrySet()) {
+        if (plugin.indicator.size() != 0) {
+            for (Map.Entry<Entity, Long> entities : plugin.indicator.entrySet()) {
                 if ((new Date().getTime() - entities.getValue()) > 2000) {
                     entities.getKey().remove();
                 }
             }
         }
+
+        // Checking if the player's inventory is full.
+        for (Player plr : Bukkit.getOnlinePlayers()) {
+
+            if ((plr.getInventory().firstEmpty() == -1)) {
+                plr.sendMessage(Utils.chat("&cYour inventory is full!"));
+                PacketManager.sendTitle(plr, 0, 180, 40, Utils.chat("&cInventory Full!"),Utils.chat("&cTime to clear it out."));
+                plr.playSound(plr.getLocation(), Sound.NOTE_PLING, 1L, 3L);
+            }
+
+        }
+
     }
 }

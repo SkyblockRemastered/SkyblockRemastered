@@ -45,11 +45,15 @@ public class PlayerObject {
     // Island
     List<UUID> coop = new ArrayList<>();
     List<UUID> builders = new ArrayList<>();
+    boolean visit_public = true;
+    boolean visit_friend = true;
+
+    String pickup_rarity = "All";
+    boolean full_inventory_notification = true;
 
     // Database
     int zealot_kills = 0;
     double coins_gained = 0;
-    String slayer = "none";
 
     // Skills
     int farmingLevel = 0;

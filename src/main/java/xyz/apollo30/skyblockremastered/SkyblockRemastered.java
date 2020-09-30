@@ -25,8 +25,7 @@ public class SkyblockRemastered extends JavaPlugin {
     public BlockManager blockManager;
     public PlayerManager playerManager;
     public MobManager mobManager;
-    public LagPreventerTask lagManager;
-
+    public HashMap<Entity, Long> indicator = new HashMap<>();
     public Miscs miscAbilities;
     public Weapons weaponAbilities;
 
@@ -71,6 +70,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new WeatherChange(this);
         new PlayerBucketEmpty(this);
         new PlayerBucketFill(this);
+        new PlayerPickupItem(this);
 
         // Command
         new Gamemode(this);
@@ -109,7 +109,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new ActionBarTask(this).runTaskTimer(this, 20, 20);
         new RegenerationTask(this).runTaskTimer(this, 30, 30);
         new WheatCrystalTask(this).runTaskTimer(this, 1, 1);
-        new LagPreventerTask(this).runTaskTimer(this, 0, 6000);
+        new LagPreventerTask(this).runTaskTimer(this, 0, 60);
     }
 
     @Override

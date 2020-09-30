@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.utils.ResponsesUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 public class SkyblockRemastered implements CommandExecutor {
@@ -96,9 +97,9 @@ public class SkyblockRemastered implements CommandExecutor {
             GuiUtils.bankMenu(plr, plr.getUniqueId().toString(), plugin);
         } else if (args[0].equalsIgnoreCase("dialogs")) {
             if (args[1].equalsIgnoreCase("clerk")) {
-                Utils.villagerDialog(plr, plugin, "&e[NPC] Clerk Seraphine:", "&fOh hello! You're here for the mayor elections?", "&fWell, this server ain't pay to win, &c&lGET OUTTA HERE!");
+                ResponsesUtils.villagerDialog(plr, plugin, "&e[NPC] Clerk Seraphine:", "&fOh hello! You're here for the mayor elections?", "&fWell, this server ain't pay to win, &c&lGET OUTTA HERE!");
             } else if (args[1].equalsIgnoreCase("hub")) {
-                Utils.witherDialog(plr, plugin, "&e[NPC] Apollo30:", "&fWelcome to the server! In here this server is just a remake of Hypixel Skyblock!", "&fAs of now, this server is still in beta mode.", "&fWhen the remake is done, most things in the server will be changed.", "&fThis is so I do not get sued.");
+                ResponsesUtils.witherDialog(plr, plugin, "&e[NPC] Apollo30:", "&fWelcome to the server! In here this server is just a remake of Hypixel Skyblock!", "&fAs of now, this server is still in beta mode.", "&fWhen the remake is done, most things in the server will be changed.", "&fThis is so I do not get sued.");
             }
         } else if (args[0].equalsIgnoreCase("template-island")) {
             if (!plr.isOp()) return false;
@@ -109,7 +110,7 @@ public class SkyblockRemastered implements CommandExecutor {
             if (!plr.hasPermission("sbr.bypass") || !plr.isOp()) return false;
             PlayerObject po = plugin.playerManager.playerObjects.get(plr);
             plr.sendMessage(Utils.chat(po.isBlockBreak() ? "&cYou can no longer alter any islands" : "&aYou can now alter islands."));
-            po.setBlockBreak(po.isBlockBreak() ? false : true);
+            po.setBlockBreak(!po.isBlockBreak());
         } else if (args[0].equalsIgnoreCase("hub2")) {
             if (!plr.isOp()) return false;
             World island = Bukkit.getServer().createWorld(new WorldCreator("hub2"));

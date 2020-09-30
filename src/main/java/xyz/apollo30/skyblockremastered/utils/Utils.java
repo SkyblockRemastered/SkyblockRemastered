@@ -20,6 +20,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.tasks.LagPreventerTask;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -62,32 +63,6 @@ public class Utils {
         }
         String toEncode = "{\"textures\":{\"SKIN\":{\"url\":\"" + actualUrl.toString() + "\"}}}";
         return Base64.getEncoder().encodeToString(toEncode.getBytes());
-    }
-
-    public static void villagerDialog(Player plr, SkyblockRemastered plugin, String prefix, String... dialog) {
-
-        for (int i = 0; i < dialog.length; i++) {
-            int finalI = i;
-            plugin.getServer().getScheduler()
-                    .scheduleSyncDelayedTask(plugin, () -> {
-                        plr.sendMessage(Utils.chat(prefix + " " + dialog[finalI]));
-                        plr.playSound(plr.getLocation(), Sound.VILLAGER_YES, 1F, 2F);
-                    }, 30L * i);
-        }
-
-    }
-
-    public static void witherDialog(Player plr, SkyblockRemastered plugin, String prefix, String... dialog) {
-
-        for (int i = 0; i < dialog.length; i++) {
-            int finalI = i;
-            plugin.getServer().getScheduler()
-                    .scheduleSyncDelayedTask(plugin, () -> {
-                        plr.sendMessage(Utils.chat(prefix + " " + dialog[finalI]));
-                        plr.playSound(plr.getLocation(), Sound.WITHER_IDLE, .5F, 1.5F);
-                    }, 30L * i);
-        }
-
     }
 
     public static String getDayOfMonthSuffix(final int n) {
@@ -272,27 +247,6 @@ public class Utils {
 
         inv.setItem(invSlot - 1, item);
         return item;
-    }
-
-    public static Location getCenter(Location loc) {
-        return new Location(loc.getWorld(), getRelativeCoord1(loc.getBlockX()), getRelativeCoord1(loc.getBlockY()),
-                getRelativeCoord1(loc.getBlockZ()));
-    }
-
-    private static double getRelativeCoord1(int i) {
-        double d = i;
-        d = d < 0 ? d - .5 : d + .5;
-        return d;
-    }
-
-    public static Vector getVectorForPoints(Location l1, Location l2) {
-        double g = -0.08;
-        double d = l2.distance(l1);
-        double t = d;
-        double vX = (1.0 + 0.07 * t) * (l2.getX() - l1.getX()) / t;
-        double vY = (1.0 + 0.03 * t) * (l2.getY() - l1.getY()) / t - 0.5 * g * t;
-        double vZ = (1.0 + 0.07 * t) * (l2.getZ() - l1.getZ()) / t;
-        return new Vector(vX, vY, vZ);
     }
 
     @SuppressWarnings({"unchecked"})
@@ -510,7 +464,7 @@ public class Utils {
                     "http://textures.minecraft.net/texture/3654a0f8a85d131ac9e633776837d931f0a952dcf174c28972788fef343917ed");
             meta = head.getItemMeta();
             meta.setDisplayName(Utils.chat("&9Lapis Minion "
-                    + toRoman(db.isConfigurationSection(name) ? db.getConfigurationSection(name).getInt("level") : 1)));
+                    + intToRoman(db.isConfigurationSection(name) ? db.getConfigurationSection(name).getInt("level") : 1)));
             meta.setLore(lore);
         }
 
@@ -544,33 +498,13 @@ public class Utils {
         }
 
         ArmorStand armorStand = entity.getWorld().spawn(entity.getLocation().add(x, y, z), ArmorStand.class);
-        if (armorStand == null) return;
         armorStand.setGravity(false);
         armorStand.setCustomName(Utils.chat(color));
         armorStand.setCustomNameVisible(true);
         armorStand.setRemoveWhenFarAway(true);
         armorStand.setVisible(false);
         armorStand.setMarker(true);
-        plugin.lagManager.indicator.put(armorStand, new Date().getTime());
-    }
-
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public static ItemStack setBaseDamage(ItemStack item, String displayName, int baseDamage, int baseStrength) {
-
-        if (displayName == null)
-            displayName = item.getItemMeta().getDisplayName();
-
-        List<String> lore = new ArrayList();
-
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(Utils.chat(displayName));
-
-        lore.add(Utils.chat("&7Damage: &c+" + baseDamage));
-        lore.add(Utils.chat("&7Strength: &c+" + baseStrength));
-
-        meta.setLore(lore);
-        item.setItemMeta(meta);
-        return item;
+        plugin.indicator.put(armorStand, new Date().getTime());
     }
 
     @SuppressWarnings("unchecked")
@@ -606,7 +540,7 @@ public class Utils {
         return "&8[&7Lv" + level + "&8] &c" + mobname + " " + color + (current_health < 0 ? 0 : current_health) + "&f/&a" + max_health + "&c" + GuiUtils.getUnicode("heart");
     }
 
-    public static String toRoman(int level) {
+    public static String intToRoman(int level) {
         LinkedHashMap<String, Integer> roman_numerals = new LinkedHashMap<String, Integer>();
         roman_numerals.put("M", 1000);
         roman_numerals.put("CM", 900);

@@ -106,9 +106,11 @@ public class EntityDamageByEntity implements Listener {
                     } else type = "normal";
 
                     // Defense Calculation
-                    float final_damage = (float) damage;
-                    float defense = (float) po.getDefense();
-                    final_damage = final_damage - (final_damage * (1 - (defense / (defense + 100))));
+//                    double final_damage = damage;
+//                    double defense = po.getDefense();
+//                    final_damage = final_damage - (final_damage * (1 - (defense / (defense + 100))));
+
+                    int final_damage = 10000;
 
                     Utils.damageIndicator(e.getEntity(), (int) final_damage, type, plugin);
                     e.setDamage(0);
@@ -118,7 +120,7 @@ public class EntityDamageByEntity implements Listener {
                     e.getEntity().getPassenger().setCustomName(Utils.chat(Utils.getDisplayHP(mo.getLevel(), mo.getName(), mo.getHealth(), mo.getMaxHealth())));
 
                     // Slayers for the player.
-                    if (!po.getSlayer().equals("none")){
+                    if (!po.getCurrentSlayer().equals("none")){
                         // this is going to be worked on tomorrow as well so don't mind it
                     }
                 } else {
@@ -132,8 +134,8 @@ public class EntityDamageByEntity implements Listener {
                     target.setLastDamageCause(ev);
 
                     // Defense Calculation
-                    float damage = mo.getDamage();
-                    float defense = (float) po.getDefense();
+                    double damage = mo.getDamage();
+                    double defense = po.getDefense();
                     damage = damage - (damage * (1 - (defense / (defense + 100))));
 
                     po.subtractHealth((int) damage);

@@ -49,10 +49,8 @@ public class BlockBreak implements Listener {
                         e.setCancelled(true);
                     }
 
-                }
+                } else e.setCancelled(true);
             }
-
-
             // If the player is in their island
         } else if (!plr.getWorld().getName().replace("islands/", "").equals(plr.getUniqueId().toString())) {
             if (!po.isBlockBreak()) {

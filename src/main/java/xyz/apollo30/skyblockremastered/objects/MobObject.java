@@ -12,12 +12,11 @@ public class MobObject {
     int maxHealth = 100;
     int defense = 0;
     int damage = 20;
-    int level = 0;
+    int level = 353643858;
     String location = "";
     String name = "";
 
     int xpGain = 10;
-    int coinGain = 10;
 
     ItemStack helmet;
     ItemStack chestplate;

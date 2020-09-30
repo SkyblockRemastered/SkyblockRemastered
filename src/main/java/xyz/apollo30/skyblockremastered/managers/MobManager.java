@@ -270,7 +270,7 @@ public class MobManager {
             mo.setName("Old Wolf");
         } else {
             mo.setName(entity.getName());
-            mo.setLevel(3);
+            mo.setLevel(300000);
             mo.setLocation("???");
             mo.setMaxHealth(100);
         }

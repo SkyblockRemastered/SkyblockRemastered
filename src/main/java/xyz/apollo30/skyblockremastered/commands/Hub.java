@@ -33,5 +33,4 @@ public class Hub implements CommandExecutor {
 
         return false;
     }
-
 }
