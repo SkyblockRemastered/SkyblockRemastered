@@ -14,10 +14,7 @@ import xyz.apollo30.skyblockremastered.commands.Hub;
 import xyz.apollo30.skyblockremastered.commands.Visit;
 import xyz.apollo30.skyblockremastered.listeners.*;
 import xyz.apollo30.skyblockremastered.managers.*;
-import xyz.apollo30.skyblockremastered.tasks.ActionBarTask;
-import xyz.apollo30.skyblockremastered.tasks.RegenerationTask;
-import xyz.apollo30.skyblockremastered.tasks.ScoreboardTask;
-import xyz.apollo30.skyblockremastered.tasks.WheatCrystalTask;
+import xyz.apollo30.skyblockremastered.tasks.*;
 
 import java.util.HashMap;
 
@@ -28,7 +25,7 @@ public class SkyblockRemastered extends JavaPlugin {
     public BlockManager blockManager;
     public PlayerManager playerManager;
     public MobManager mobManager;
-    public LagManager lagManager;
+    public LagPreventerTask lagManager;
 
     public Miscs miscAbilities;
     public Weapons weaponAbilities;
@@ -89,7 +86,6 @@ public class SkyblockRemastered extends JavaPlugin {
         this.blockManager = new BlockManager(this);
         this.playerManager = new PlayerManager(this);
         this.mobManager = new MobManager(this);
-        this.lagManager = new LagManager(this);
 
         // When reloaded and the players still exist, it just recreates their database again.
         for (Player plr : Bukkit.getOnlinePlayers()) {
@@ -109,11 +105,11 @@ public class SkyblockRemastered extends JavaPlugin {
         blockManager.initTimer();
         // mobManager.initBloccCheck();
         mobManager.initTimer();
-        lagManager.lagManager();
         new ScoreboardTask(this).runTaskTimer(this, 30, 30);
         new ActionBarTask(this).runTaskTimer(this, 20, 20);
         new RegenerationTask(this).runTaskTimer(this, 30, 30);
         new WheatCrystalTask(this).runTaskTimer(this, 1, 1);
+        new LagPreventerTask(this).runTaskTimer(this, 0, 6000);
     }
 
     @Override

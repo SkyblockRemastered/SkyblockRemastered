@@ -39,19 +39,14 @@ public class BlockBreak implements Listener {
             if (!po.isBlockBreak()) {
                 // Wheat Detection
                 if(Utils.isInZone(plr.getLocation(), new Location(plr.getWorld(), 3, 255, -194), new Location(plr.getWorld(), 81, 0, -116))) {
-                    Utils.broadCast("yes.");
-
                     if (e.getBlock().getType() != Material.CROPS) {
                         e.setCancelled(true);
-                        Utils.broadCast(e.getBlock().getType().toString());
                     }
 
                     // Oak Wood Detection
                 } else if (Utils.isInZone(plr.getLocation(), new Location(plr.getWorld(), -236, 255, -82), new Location(plr.getWorld(), -90, 0, 34))) {
-                    Utils.broadCast("yes2");
                     if (e.getBlock().getType() != Material.LOG && e.getBlock().getTypeId() != 0) {
                         e.setCancelled(true);
-                        Utils.broadCast(e.getBlock().getType().toString());
                     }
 
                 }

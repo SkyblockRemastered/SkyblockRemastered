@@ -59,12 +59,10 @@ public class PlayerMove implements Listener {
             } else plr.sendMessage(Utils.chat("&cYou fell into the void"));
         }
 
-        // Utils.broadCast(Boolean.toString(Utils.isInZone(plr.getLocation(), new Location(plr.getWorld(), -6, 255, -60), new Location(plr.getWorld(), 0, 0, -65))));
-
         // Portal Mechanism.
         if (e.getTo().getBlock().getType().toString().toLowerCase().contains("portal")) {
             if (plr.getWorld().getName().equals("hub")) {
-                if (Utils.isInZone(plr.getLocation(), new Location(plr.getWorld(), -6, 79, -66), new Location(plr.getWorld(), 0, 68, -60))) {
+                if (Utils.isInZone(plr.getLocation(), new Location(plr.getWorld(), -0, 80, -67), new Location(plr.getWorld(), 6, 68, -60))) {
                     plr.sendMessage(Utils.chat("&7Sending you to your island."));
                     World island = Bukkit.getServer().createWorld(new WorldCreator("islands/" + plr.getUniqueId().toString()));
                     Location loc = new Location(island, island.getSpawnLocation().getX(), island.getSpawnLocation().getY(), island.getSpawnLocation().getZ());
