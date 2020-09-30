@@ -14,7 +14,7 @@ public class Island implements CommandExecutor {
 
     public Island(SkyblockRemastered plugin) {
         this.plugin = plugin;
-        plugin.getCommand("hub").setExecutor(this);
+        plugin.getCommand("island").setExecutor(this);
     }
 
     @Override

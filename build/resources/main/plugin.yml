@@ -22,3 +22,9 @@ commands:
   island:
     description: Teleports you to your private island
     aliases: [is]
+  build:
+    description: Allows the people with sbr.buildbypass to build
+    permissions:
+      sbr.buildbypass:
+        description: Allows the player to bypass build.
+    aliases: [bypass, buildbypass, bb]

@@ -12,7 +12,7 @@ public class MobObject {
     int maxHealth = 100;
     int defense = 0;
     int damage = 20;
-    int level = 353643858;
+    int level = (int) Math.floor(Math.random() * 24239485);
     String location = "";
     String name = "";
 

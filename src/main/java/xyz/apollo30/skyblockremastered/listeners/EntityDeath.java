@@ -56,15 +56,15 @@ public class EntityDeath implements Listener {
         if ((mo.getLevel() / 10) > 1) {
             int coins = mo.getLevel() / 10;
             if ((coins / 1000) > 1) {
-                thousand_coins = (int) Math.floor(coins / (double) 1000);
+                thousand_coins = (int) (coins / (double) 1000);
                 coins -= thousand_coins * 1000;
             }
             if ((coins / 100) > 1) {
-                hundred_coins = (int) Math.floor(coins / (double) 100);
+                hundred_coins = (int) (coins / (double) 100);
                 coins -= hundred_coins * 100;
             }
             if ((coins / 10) > 1) {
-                fifty_coins = (int) Math.floor(coins / (double) 10);
+                fifty_coins = (int) (coins / (double) 10);
                 coins -= fifty_coins * 10;
             }
             one_coins = coins;

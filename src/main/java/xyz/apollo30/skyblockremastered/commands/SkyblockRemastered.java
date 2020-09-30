@@ -106,11 +106,6 @@ public class SkyblockRemastered implements CommandExecutor {
             World island = Bukkit.getServer().createWorld(new WorldCreator("private_island_template"));
             Location loc = new Location(island, island.getSpawnLocation().getX(), island.getSpawnLocation().getY(), island.getSpawnLocation().getZ());
             plr.teleport(loc);
-        } else if (args[0].equalsIgnoreCase("bypass")) {
-            if (!plr.hasPermission("sbr.bypass") || !plr.isOp()) return false;
-            PlayerObject po = plugin.playerManager.playerObjects.get(plr);
-            plr.sendMessage(Utils.chat(po.isBlockBreak() ? "&cYou can no longer alter any islands" : "&aYou can now alter islands."));
-            po.setBlockBreak(!po.isBlockBreak());
         } else if (args[0].equalsIgnoreCase("hub2")) {
             if (!plr.isOp()) return false;
             World island = Bukkit.getServer().createWorld(new WorldCreator("hub2"));

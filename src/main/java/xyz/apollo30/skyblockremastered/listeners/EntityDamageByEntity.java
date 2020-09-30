@@ -34,8 +34,6 @@ public class EntityDamageByEntity implements Listener {
             // Cancels the damage on armor stands
             if (e.getEntityType() == EntityType.ARMOR_STAND) e.setCancelled(true);
 
-            if (e.getEntity().getPassenger() == null) plugin.mobManager.createMob((LivingEntity) e.getEntity(), e.getEntity().getName());
-
             // Checks if the damaged entity is living.
             if (e.getEntity() instanceof LivingEntity) {
 
@@ -54,7 +52,7 @@ public class EntityDamageByEntity implements Listener {
                     int critchance = po.getCrit_chance();
                     int atk_speed = 0;
                     int weapon_damage = 0;
-                    int damage;
+                    int damage = 0;
                     String type = "";
 
                     ItemStack sword = plr.getItemInHand();
@@ -80,23 +78,15 @@ public class EntityDamageByEntity implements Listener {
                     }
 
                     // Base Formula
-                    damage = (int) ((5 + weapon_damage + (Math.floor(strength) / 5)) * (1 + strength / 100));
+                    damage += (5 + weapon_damage + (strength / 5)) * (1 + strength / 100);
 
                     // Enchantments
 
                     // Attacc Speed
-                    if (atk_speed > 0) {
-                        if (atk_speed >= 100) atk_speed = 100;
-                        atk_speed = atk_speed / 5;
-                        ((LivingEntity) e.getEntity()).setMaximumNoDamageTicks(20 - atk_speed);
-                        ((LivingEntity) e.getEntity()).setNoDamageTicks(20 - atk_speed);
-                    } else {
-                        ((LivingEntity) e.getEntity()).setMaximumNoDamageTicks(20);
-                        ((LivingEntity) e.getEntity()).setNoDamageTicks(20);
-                    }
+                    attackSpeed(atk_speed, (LivingEntity) e.getEntity());
 
                     // Combat Damage Addition
-                    damage += (int) (combat * .04) * damage;
+                    damage += (int) (combat * .04) * weapon_damage;
 
                     // Combat Crit Chance
                     critchance = (int) (critchance + (combat * .05));
@@ -106,16 +96,13 @@ public class EntityDamageByEntity implements Listener {
                     } else type = "normal";
 
                     // Defense Calculation
-//                    double final_damage = damage;
-//                    double defense = po.getDefense();
-//                    final_damage = final_damage - (final_damage * (1 - (defense / (defense + 100))));
+                    double defense = po.getDefense();
+                    damage = (int) (damage - (damage * (1 - (defense / (defense + 100)))));
 
-                    int final_damage = 10000;
-
-                    Utils.damageIndicator(e.getEntity(), (int) final_damage, type, plugin);
+                    Utils.damageIndicator(e.getEntity(), (int) damage, type, plugin);
                     e.setDamage(0);
 
-                    mo.subtractHealth((int) final_damage);
+                    mo.subtractHealth((int) damage);
                     if (mo.getHealth() <= 0 && !e.getEntity().isDead()) ((LivingEntity) e.getEntity()).setHealth(0);
                     e.getEntity().getPassenger().setCustomName(Utils.chat(Utils.getDisplayHP(mo.getLevel(), mo.getName(), mo.getHealth(), mo.getMaxHealth())));
 
@@ -141,10 +128,7 @@ public class EntityDamageByEntity implements Listener {
                     po.subtractHealth((int) damage);
                     Utils.damageIndicator(target, (int) damage, "normal", plugin);
                     e.setDamage(0);
-                    // Utils.broadCast(Integer.toString(player_data.getHealth()));
-                    if (po.getHealth() <= 0 && !e.getEntity().isDead()) {
-                        target.setHealth(0);
-                    }
+                    if (po.getHealth() <= 0 && !e.getEntity().isDead()) target.setHealth(0);
                 }
             }
 
@@ -153,4 +137,15 @@ public class EntityDamageByEntity implements Listener {
         }
     }
 
+    private void attackSpeed(int atkSpeed, LivingEntity e) {
+        if (atkSpeed > 0) {
+            if (atkSpeed >= 100) atkSpeed = 100;
+            atkSpeed = atkSpeed / 20;
+            e.setMaximumNoDamageTicks(20 - atkSpeed);
+            e.setNoDamageTicks(20 - atkSpeed);
+        } else {
+            e.setMaximumNoDamageTicks(20);
+            e.setNoDamageTicks(20);
+        }
+    }
 }
