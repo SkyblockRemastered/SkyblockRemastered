@@ -10,8 +10,9 @@ import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.UnicodeUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
+import org.bukkit.event.Listener;
 
-public class SkyblockMenu {
+public class SkyblockMenu implements Listener {
     public SkyblockRemastered plugin;
 
     public SkyblockMenu(final SkyblockRemastered plugin) {
@@ -103,7 +104,7 @@ public class SkyblockMenu {
                 "&eClick to alter!");
         plr.openInventory(inv);
     }
-
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         Player plr = (Player) e.getWhoClicked();
         String item = e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() ? e.getCurrentItem().getItemMeta().getDisplayName() : null;
