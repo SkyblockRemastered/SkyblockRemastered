@@ -45,7 +45,7 @@ public class Miscs {
             // not on cooldown, add to cooldown list.
             else {
                 plr.sendMessage(ResponsesUtils.callSuccess());
-                MaddoxBatphone.openGui(plr, plugin);
+                MaddoxBatphone.mainGui(plr, plugin);
                 bcd.put(plr.getUniqueId(), 0);
                 Bukkit.getScheduler().runTaskLater(plugin, () -> bcd.remove(plr.getUniqueId()), 600);
                 return;

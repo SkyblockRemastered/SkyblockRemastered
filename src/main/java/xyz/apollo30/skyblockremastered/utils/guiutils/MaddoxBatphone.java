@@ -2,10 +2,12 @@ package xyz.apollo30.skyblockremastered.utils.guiutils;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.plugin.PluginManager;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
@@ -19,7 +21,7 @@ public class MaddoxBatphone implements Listener {
         this.plugin = plugin;
     }
 
-    public static void openGui(Player plr, SkyblockRemastered plugin) {
+    public static void mainGui(Player plr, SkyblockRemastered plugin) {
 
         PlayerObject player_data = plugin.playerManager.getPlayerData(plr);
 
@@ -49,14 +51,29 @@ public class MaddoxBatphone implements Listener {
 
         plr.openInventory(inv);
     }
+    public static void revGui(Player plr, SkyblockRemastered plugin, FileConfiguration db) {
+        db = plugin.db.getPlayers();
+
+    }
     @EventHandler
     public void guiClickEvent(InventoryClickEvent e){
         // fail-fast
+        e.setCancelled(true);
         String invName = e.getInventory().getTitle();
+        Player plr = (Player) e.getWhoClicked();
+        String item = e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() ? e.getCurrentItem().getItemMeta().getDisplayName() : null;
         if (!invName.equalsIgnoreCase(Utils.chat("&8Slayers"))) return;
 
-        Player plr = (Player) e.getWhoClicked();
-        e.setCancelled(true);
+        assert item != null;
+        if (item.equals(Utils.chat("&eRevenant Horror"))) {
+            // open rev gui
+        } else if (item.equals(Utils.chat("&eTarantula Broodfather"))) {
+
+        } else if (item.equals(Utils.chat("&eSven Packmaster"))) {
+
+        } else if (item.equals(Utils.chat("&eBoneyard Bruiser"))) {
+
+        }
 
     }
 }

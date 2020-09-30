@@ -42,6 +42,8 @@ public class SkyblockRemastered extends JavaPlugin {
         db.saveDefaultMinions();
         db.saveDefaultSpawns();
 
+        registerGuis();
+
         // Listener
         new BlockFade(this);
         new BlockForm(this);
@@ -94,15 +96,6 @@ public class SkyblockRemastered extends JavaPlugin {
         this.playerManager = new PlayerManager(this);
         this.mobManager = new MobManager(this);
 
-        // gui utils
-        new AdminPanel(this);
-        new Bank(this);
-        new CraftingMenu(this);
-        new MaddoxBatphone(this);
-        new SkillMenu();
-        new SkyblockMenu(this);
-        new TradeMenu(this);
-        new VisitMenu(this);
 
         // When reloaded and the players still exist, it just recreates their database again.
         for (Player plr : Bukkit.getOnlinePlayers()) {
@@ -135,6 +128,13 @@ public class SkyblockRemastered extends JavaPlugin {
             playerManager.savePlayerData(plr);
         }
 
+    }
+    // eventually add all the Listeners here but i cba rn
+    public void registerGuis() {
+        Bukkit.getServer().getPluginManager().registerEvents(new Bank(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new MaddoxBatphone(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new SkyblockMenu(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new TradeMenu(this), this);
     }
 
     // Overflux
