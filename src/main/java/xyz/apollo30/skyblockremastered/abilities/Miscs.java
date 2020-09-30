@@ -37,8 +37,7 @@ public class Miscs {
                 else {
                     plr.sendMessage(ResponsesUtils.callFailed());
                     int failNum = bcd.get(plr.getUniqueId());
-                    ++failNum;
-                    bcd.remove(plr.getUniqueId());
+                    failNum++;
                     bcd.put(plr.getUniqueId(), failNum);
                     return;
                 }

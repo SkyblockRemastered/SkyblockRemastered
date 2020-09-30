@@ -73,7 +73,6 @@ public class WheatCrystalTask extends BukkitRunnable {
         blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(24, 77, -178), 10);
 
         for (Map.Entry<Block, Integer> block : blocks.entrySet()) {
-            block.getKey().setType(Material.AIR);
             Location location = block.getKey().getLocation();
             ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
 

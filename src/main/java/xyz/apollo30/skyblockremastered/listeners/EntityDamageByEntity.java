@@ -95,9 +95,9 @@ public class EntityDamageByEntity implements Listener {
                         type = "crithit";
                     } else type = "normal";
 
-                    // Defense Calculation
-                    double defense = po.getDefense();
-                    damage = (int) (damage - (damage * (1 - (defense / (defense + 100)))));
+//                    // Defense Calculation
+//                    double defense = po.getDefense();
+//                    damage = (int) (damage - (damage * (1 - (defense / (defense + 100)))));
 
                     Utils.damageIndicator(e.getEntity(), (int) damage, type, plugin);
                     e.setDamage(0);

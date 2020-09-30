@@ -20,9 +20,10 @@ public class EntityExplode implements Listener {
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent e) {
 
-        if (e.getEntityType() != EntityType.PRIMED_TNT) e.setCancelled(true);
-        else {
-            if (e.getEntity().getWorld().getName().startsWith("islands/")) return;
+        if (e.getEntity().getWorld().getName().equals("hub")) {
+            e.setCancelled(true);
+        } else if (e.getEntity().getWorld().getName().startsWith("islands/")) {
+            if (e.getEntityType() != EntityType.PRIMED_TNT) e.setCancelled(true);
         }
 
     }

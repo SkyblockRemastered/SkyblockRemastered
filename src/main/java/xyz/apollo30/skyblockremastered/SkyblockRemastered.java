@@ -16,8 +16,12 @@ import xyz.apollo30.skyblockremastered.commands.Visit;
 import xyz.apollo30.skyblockremastered.listeners.*;
 import xyz.apollo30.skyblockremastered.managers.*;
 import xyz.apollo30.skyblockremastered.tasks.*;
+import xyz.apollo30.skyblockremastered.utils.GuiUtils;
+import xyz.apollo30.skyblockremastered.utils.Utils;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SkyblockRemastered extends JavaPlugin {
 
@@ -72,6 +76,8 @@ public class SkyblockRemastered extends JavaPlugin {
         new PlayerBucketEmpty(this);
         new PlayerBucketFill(this);
         new PlayerPickupItem(this);
+        new InventoryOpen(this);
+        new ServerListPing(this);
 
         // Command
         new Gamemode(this);
@@ -111,8 +117,6 @@ public class SkyblockRemastered extends JavaPlugin {
             }
         }
 
-
-
         // Inits the timer for all managers.
         blockManager.initTimer();
         // mobManager.initBloccCheck();
@@ -121,7 +125,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new ActionBarTask(this).runTaskTimer(this, 20, 20);
         new RegenerationTask(this).runTaskTimer(this, 30, 30);
         new WheatCrystalTask(this).runTaskTimer(this, 1, 1);
-        new LagPreventerTask(this).runTaskTimer(this, 0, 60);
+        new LagPreventerTask(this).runTaskTimer(this, 0, 20);
     }
 
     @Override

@@ -27,4 +27,5 @@ commands:
     permissions:
       sbr.buildbypass:
         description: Allows the player to bypass build.
+        default: false
     aliases: [bypass, buildbypass, bb]
