@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
-public class TradeMenu {
+public class TradeMenu implements Listener {
 
     public SkyblockRemastered plugin;
 
@@ -56,7 +56,7 @@ public class TradeMenu {
 
         }
     }
-
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         Player plr = (Player) e.getWhoClicked();
         String item = e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() ? e.getCurrentItem().getItemMeta().getDisplayName() : null;
