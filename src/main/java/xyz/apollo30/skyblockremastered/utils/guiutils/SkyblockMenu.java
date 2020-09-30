@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
@@ -111,7 +112,7 @@ public class SkyblockMenu implements Listener {
         String invName = e.getInventory().getTitle();
         // Inv is named skyblock menu
         if (invName.equalsIgnoreCase(Utils.chat("&aSkyblock Menu"))) { e.setCancelled(true); }
-        if (item.equalsIgnoreCase(Utils.chat("&aSkyBlock Menu &7(Right Click)")) {
+        if (item.equalsIgnoreCase(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
             FileConfiguration db = plugin.db.getPlayers();
             SkyblockMenu.skyblockMenu(plr, plr.getUniqueId().toString(), db, plugin);
             assert item != null;
