@@ -18,6 +18,3 @@ commands:
     description: Visit a player's island
   hub:
     description: Warps you to the Skyblock Hub
-  tps:
-    description: Displays the server's Ticks Per Second
-    aliases: [TPS]

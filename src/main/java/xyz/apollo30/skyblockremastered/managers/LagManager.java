@@ -3,6 +3,8 @@ package xyz.apollo30.skyblockremastered.managers;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
@@ -11,47 +13,36 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LagManager implements Runnable {
-
-    public static int TICK_COUNT = 0;
-    public static long[] TICKS = new long[600];
-    public static long LAST_TICK = 0L;
-    public HashMap<Entity, Long> indicator = new HashMap<>();
+public class LagManager extends BukkitRunnable {
 
     private SkyblockRemastered plugin;
+    public HashMap<Entity, Long> indicator = new HashMap<>();
     public LagManager(final SkyblockRemastered plugin) {
         this.plugin = plugin;
     }
 
-    public static double getTPS() {
-        return getTPS(100);
-    }
-
-    public static double getTPS(int ticks) {
-        if (TICK_COUNT < ticks) {
-            return 20.0D;
-        }
-        int target = (TICK_COUNT - 1 - ticks) % TICKS.length;
-        long elapsed = System.currentTimeMillis() - TICKS[target];
-
-        return ticks / (elapsed / 1000.0D);
-    }
-
-    public static long getElapsed(int tickID) {
-        if (TICK_COUNT - tickID >= TICKS.length) {
-        }
-
-        long time = TICKS[(tickID % TICKS.length)];
-        return System.currentTimeMillis() - time;
-    }
-
-    public void run() {
-        TICKS[(TICK_COUNT % TICKS.length)] = System.currentTimeMillis();
-
-        TICK_COUNT += 1;
-    }
-
     public void lagManager() {
+
+    }
+
+    @Override
+    public void run() {
+
+        // Island Unloader, checks if there are any players inside the world.
+        Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            for (World world : Bukkit.getWorlds()) {
+                if (world.getName().startsWith("islands/")) {
+                    if (world.getPlayers().size() == 0) {
+                        for (Player plr : Bukkit.getOnlinePlayers()) {
+                            if (plr.isOp()) plr.sendMessage(Utils.chat("[DEBUG] Unloaded World: " + world.getName().replace("islands/", "")));
+                        }
+                        Bukkit.getServer().unloadWorld(world, true);
+                    }
+                }
+            }
+        }, 6000L, 6000L);
+
+        // Checking for loose armor_stands
         Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             for (World world : Bukkit.getWorlds()) {
                 for (Entity entity : world.getEntities()) {
