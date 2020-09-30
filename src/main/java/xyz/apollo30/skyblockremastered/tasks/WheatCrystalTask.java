@@ -21,7 +21,6 @@ import java.util.*;
 public class WheatCrystalTask extends BukkitRunnable {
 
     private final SkyblockRemastered plugin;
-    private boolean upDown = false;
     private int currentTickRotCount = 0;
 
     HashMap<UUID, ArrayList<Block>> farmLandAreas = new HashMap<>();

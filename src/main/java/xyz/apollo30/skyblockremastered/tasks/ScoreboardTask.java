@@ -53,8 +53,8 @@ public class ScoreboardTask extends BukkitRunnable {
                 po.setPurse(po.getPurse() + po.getCoins_gained());
             }
 
-            String purse = "&fPurse: &6" + String.format("%,.0f", po.getPurse()) + coins_gained;
-            String gems = "&fGems: &a" + String.format("%,.0f", po.getGems());
+            String purse = "&fPurse: &6" + Utils.coinFormat(po.getPurse()) + coins_gained;
+            String gems = "&fGems: &a" + Utils.coinFormat(po.getGems());
 
             List<String> contents = new ArrayList<>();
             contents.add("&7" + dtf.format(now));

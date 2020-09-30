@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.apollo30.skyblockremastered.abilities.Miscs;
 import xyz.apollo30.skyblockremastered.abilities.Weapons;
+import xyz.apollo30.skyblockremastered.commands.Gamemode;
 import xyz.apollo30.skyblockremastered.commands.Hub;
 import xyz.apollo30.skyblockremastered.commands.Tps;
 import xyz.apollo30.skyblockremastered.commands.Visit;
@@ -76,7 +77,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new PlayerBucketFill(this);
 
         // Command
-        // new Gamemode(this);
+        new Gamemode(this);
         new xyz.apollo30.skyblockremastered.commands.SkyblockRemastered(this);
         new Visit(this);
         new Hub(this);

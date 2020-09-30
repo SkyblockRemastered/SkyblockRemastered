@@ -7,6 +7,13 @@ commands:
   skyblockremastered:
     description: SkyblockRemasted Main Command
     aliases: [sr]
+  gamemode:
+    description: Change a players gamemode.
+    permissions:
+      sbr.gamemode:
+        description: Changes the player's gamemode
+        default: false
+    aliases: [survival, creative, adventure, spectator, spec, gms, gmc, gma, gmsp, esurvival, ecreative, eadventure, espectator, espec]
   visit:
     description: Visit a player's island
   hub:
@@ -14,5 +21,3 @@ commands:
   tps:
     description: Displays the server's Ticks Per Second
     aliases: [TPS]
-  items:
-    description: Provides a list of items currently in the game.

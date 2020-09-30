@@ -4,17 +4,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.*;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.UUID;
 
 public class PlayerManager {
 
@@ -47,6 +41,10 @@ public class PlayerManager {
             po.setPurse(player.getConfigurationSection(".Information").getDouble("purse"));
             po.setGems(player.getConfigurationSection(".Information").getDouble("gems"));
 
+            po.setStatOverride(player.getConfigurationSection(".Database").getBoolean("statOverride"));
+            po.setBlockBreak(player.getConfigurationSection(".Database").getBoolean("blockBreak"));
+            po.setVanished(player.getConfigurationSection(".Database").getBoolean("vanished"));
+
             po.setHealth(player.getConfigurationSection(".Stats").getInt("health"));
             po.setMaxHealth(player.getConfigurationSection(".Stats").getInt("health"));
             po.setDefense(player.getConfigurationSection(".Stats").getInt("defense"));
@@ -60,6 +58,34 @@ public class PlayerManager {
             po.setSea_creature_chance(player.getConfigurationSection(".Stats").getInt("seacreaturechance"));
             po.setMagic_find(player.getConfigurationSection(".Stats").getInt("magicfind"));
             po.setPet_luck(player.getConfigurationSection(".Stats").getInt("petluck"));
+
+            po.setRevenantKills(player.getConfigurationSection(".Slayers.Revenant").getInt("revenantkills"));
+            po.setTarantulaKills(player.getConfigurationSection(".Slayers.Tarantula").getInt("tarantulakills"));
+            po.setSvenKills(player.getConfigurationSection(".Slayers.Sven").getInt("svenkills"));
+            po.setSkeletorKills(player.getConfigurationSection(".Slayers.Skeletor").getInt("skeletorkills"));
+            po.setTotalKills(player.getConfigurationSection(".Slayers.TotalStats").getInt("totalkills"));
+
+            po.setRevTier(player.getConfigurationSection(".Slayers.Revenant").getInt("revtier"));
+            po.setTaraTier(player.getConfigurationSection(".Slayers.Tarantula").getInt("taratier"));
+            po.setSvenTier(player.getConfigurationSection(".Slayers.Sven").getInt("sventier"));
+            po.setSkeleTier(player.getConfigurationSection(".Slayers.Skeletor").getInt("skeletier"));
+
+            po.setRevLevel(player.getConfigurationSection(".Slayers.Revenant").getInt("revlevel"));
+            po.setTaraLevel(player.getConfigurationSection(".Slayers.Tarantula").getInt("taralevel"));
+            po.setSvenLevel(player.getConfigurationSection(".Slayers.Sven").getInt("svenlevel"));
+            po.setSkeleLevel(player.getConfigurationSection(".Slayers.Skeletor").getInt("skelelevel"));
+
+            po.setRevRng(player.getConfigurationSection(".Slayers.Revenant").getInt("revrng"));
+            po.setTaraRng(player.getConfigurationSection(".Slayers.Tarantula").getInt("tararng"));
+            po.setSvenRng(player.getConfigurationSection(".Slayers.Sven").getInt("svenrng"));
+            po.setSkeleRng(player.getConfigurationSection(".Slayers.Skeletor").getInt("skelerng"));
+            po.setTotalRng(player.getConfigurationSection(".Slayers.TotalStats").getInt("totalrng"));
+
+            po.setRevSpent(player.getConfigurationSection(".Slayers.Revenant").getDouble("revspent"));
+            po.setTaraSpent(player.getConfigurationSection(".Slayers.Tarantula").getDouble("taraspent"));
+            po.setSvenSpent(player.getConfigurationSection(".Slayers.Sven").getDouble("svenspent"));
+            po.setSkeleSpent(player.getConfigurationSection(".Slayers.Skeletor").getDouble("skelespent"));
+            po.setTotalSpent(player.getConfigurationSection(".Slayers.TotalStats").getDouble("totalspent"));
 
             ConfigurationSection farming = player.getConfigurationSection(".Skills.Farming");
             ConfigurationSection mining = player.getConfigurationSection(".Skills.Mining");
@@ -120,10 +146,6 @@ public class PlayerManager {
         }
     }
 
-//    gamemode:
-//    description: Change a players gamemode.
-//    aliases: [survival, creative, adventure, spectator, spec, gms, gmc, gma, gmsp, esurvival, ecreative, eadventure, espectator, espec]
-
     public void savePlayerData(Player plr) {
         FileConfiguration db = plugin.db.getPlayers();
         if (db.isConfigurationSection(plr.getUniqueId().toString())) {
@@ -137,6 +159,10 @@ public class PlayerManager {
         player.getConfigurationSection(".Information").set("bank", po.getBank());
         player.getConfigurationSection(".Information").set("gems", po.getGems());
 
+        player.getConfigurationSection(".Database").set("statOverride", po.isStatOverride());
+        player.getConfigurationSection(".Database").set("blockBreak", po.isBlockBreak());
+        player.getConfigurationSection(".Database").set("vanished", po.isVanished());
+
         player.getConfigurationSection(".Stats").set("health", po.getMaxHealth());
         player.getConfigurationSection(".Stats").set("defense", po.getDefense());
         player.getConfigurationSection(".Stats").set("strength", po.getStrength());
@@ -148,6 +174,34 @@ public class PlayerManager {
         player.getConfigurationSection(".Stats").set("seacreaturechance", po.getSea_creature_chance());
         player.getConfigurationSection(".Stats").set("magicfind", po.getMagic_find());
         player.getConfigurationSection(".Stats").set("petluck", po.getPet_luck());
+
+        player.getConfigurationSection(".Slayers.Revenant").set("revenantkills", po.getRevenantKills());
+        player.getConfigurationSection(".Slayers.Tarantula").set("tarantulakills", po.getTarantulaKills());
+        player.getConfigurationSection(".Slayers.Sven").set("svenkills", po.getSvenKills());
+        player.getConfigurationSection(".Slayers.Skeletor").set("skeletorkills", po.getSkeletorKills());
+        player.getConfigurationSection(".Slayers.TotalStats").set("totalkills", po.getTotalKills());
+
+        player.getConfigurationSection(".Slayers.Revenant").set("revtier", po.getRevTier());
+        player.getConfigurationSection(".Slayers.Tarantula").set("taratier", po.getTaraTier());
+        player.getConfigurationSection(".Slayers.Sven").set("sventier", po.getSvenTier());
+        player.getConfigurationSection(".Slayers.Skeletor").set("skeletier", po.getSkeleTier());
+
+        player.getConfigurationSection(".Slayers.Revenant").set("revlevel", po.getRevLevel());
+        player.getConfigurationSection(".Slayers.Tarantula").set("taralevel", po.getTaraLevel());
+        player.getConfigurationSection(".Slayers.Sven").set("svenlevel", po.getSvenLevel());
+        player.getConfigurationSection(".Slayers.Skeletor").set("skelelevel", po.getSkeleLevel());
+
+        player.getConfigurationSection(".Slayers.Revenant").set("revrng", po.getRevRng());
+        player.getConfigurationSection(".Slayers.Tarantula").set("tararng", po.getTaraRng());
+        player.getConfigurationSection(".Slayers.Sven").set("svenrng", po.getSvenRng());
+        player.getConfigurationSection(".Slayers.Skeletor").set("skelerng", po.getSkeleRng());
+        player.getConfigurationSection(".Slayers.TotalStats").set("totalrng", po.getTotalRng());
+
+        player.getConfigurationSection(".Slayers.Revenant").set("revspent", po.getRevSpent());
+        player.getConfigurationSection(".Slayers.Tarantula").set("taraspent", po.getTaraSpent());
+        player.getConfigurationSection(".Slayers.Sven").set("svenspent", po.getSvenSpent());
+        player.getConfigurationSection(".Slayers.Skeletor").set("skelespent", po.getSkeleSpent());
+        player.getConfigurationSection(".Slayers.TotalStats").set("totalspent", po.getTotalSpent());
 
         ConfigurationSection farming = player.getConfigurationSection(".Skills.Farming");
         ConfigurationSection mining = player.getConfigurationSection(".Skills.Mining");
@@ -203,6 +257,162 @@ public class PlayerManager {
 
         plugin.db.savePlayers();
         Utils.broadCast("Database saved for " + plr.getName());
+    }
+
+    public static boolean createPlayerData(Player plr, String uuid, FileConfiguration db) {
+
+        String[] profile_fruits = {"Grapes", "Watermelon", "Mango", "Peach", "Apple", "Pear", "Kiwi"};
+
+        if (!db.isConfigurationSection(uuid)) {
+            try {
+                db.createSection(uuid);
+                db.set(uuid + ".IGN", plr.getName());
+                db.getConfigurationSection(uuid).createSection("Information");
+                db.getConfigurationSection(uuid + ".Information").set("currentMinionsUsed", 0);
+                db.getConfigurationSection(uuid + ".Information").set("maxMinions", 3);
+                db.getConfigurationSection(uuid + ".Information").set("fairySouls", 0);
+                db.getConfigurationSection(uuid + ".Information").set("bank", (double) 0);
+                db.getConfigurationSection(uuid + ".Information").set("purse", (double) 0);
+
+                db.getConfigurationSection(uuid).createSection("Stats");
+                db.getConfigurationSection(uuid + ".Stats").set("health", 100);
+                db.getConfigurationSection(uuid + ".Stats").set("defense", 0);
+                db.getConfigurationSection(uuid + ".Stats").set("strength", 0);
+                db.getConfigurationSection(uuid + ".Stats").set("speed", 100);
+                db.getConfigurationSection(uuid + ".Stats").set("critchance", 30);
+                db.getConfigurationSection(uuid + ".Stats").set("critdamage", 50);
+                db.getConfigurationSection(uuid + ".Stats").set("atkSpeed", 0);
+                db.getConfigurationSection(uuid + ".Stats").set("intel", 100);
+                db.getConfigurationSection(uuid + ".Stats").set("seacreaturechance", 20);
+                db.getConfigurationSection(uuid + ".Stats").set("magicfind", 0);
+                db.getConfigurationSection(uuid + ".Stats").set("petluck", 0);
+
+                // Database Category Creation
+                db.getConfigurationSection(uuid).createSection("Database");
+                db.getConfigurationSection(uuid + ".Database").createSection("statOverride");
+                db.getConfigurationSection(uuid + ".Database").createSection("blockBreak");
+                db.getConfigurationSection(uuid + ".Database").createSection("vanished");
+
+                // Slayer Category Creation
+                db.getConfigurationSection(uuid).createSection("Slayers");
+                db.getConfigurationSection(uuid + ".Slayers").createSection("Revenant");
+                db.getConfigurationSection(uuid + ".Slayers").createSection("Tarantula");
+                db.getConfigurationSection(uuid + ".Slayers").createSection("Sven");
+                db.getConfigurationSection(uuid + ".Slayers").createSection("Skeletor");
+                db.getConfigurationSection(uuid + ".Slayers").createSection("TotalStats");
+
+                db.getConfigurationSection(uuid + ".Slayers.Revenant").set("revenantkills", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Tarantula").set("tarantulakills", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Sven").set("svenkills", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Skeletor").set("skeletorkills", 0);
+                db.getConfigurationSection(uuid + ".Slayers.TotalStats").set("totalkills", 0);
+
+                db.getConfigurationSection(uuid + ".Slayers.Revenant").set("revtier", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Tarantula").set("taratier", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Sven").set("sventier", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Skeletor").set("skeletier", 0);
+
+                db.getConfigurationSection(uuid + ".Slayers.Revenant").set("revlevel", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Tarantula").set("taralevel", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Sven").set("svenlevel", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Skeletor").set("skelelevel", 0);
+
+                db.getConfigurationSection(uuid + ".Slayers.Revenant").set("revrng", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Tarantula").set("tararng", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Sven").set("svenrng", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Skeletor").set("skelerng", 0);
+                db.getConfigurationSection(uuid + ".Slayers.TotalStats").set("totalrng", 0);
+
+                db.getConfigurationSection(uuid + ".Slayers.Revenant").set("revspent", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Tarantula").set("taraspent", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Sven").set("svenspent", 0);
+                db.getConfigurationSection(uuid + ".Slayers.Skeletor").set("skelespent", 0);
+                db.getConfigurationSection(uuid + ".Slayers.TotalStats").set("totalspent", 0);
+
+                db.set(uuid + ".Profile", profile_fruits[(int) Math.floor(Math.random() * profile_fruits.length)]);
+
+                db.getConfigurationSection(uuid).createSection("Skills");
+                String[] skills = {"Farming", "Mining", "Combat", "Foraging", "Fishing", "Enchanting", "Alchemy", "Carpentry", "Runecrafting", "Taming"};
+                for (String skill : skills) {
+                    db.getConfigurationSection(uuid + ".Skills").createSection(skill);
+                    db.getConfigurationSection(uuid + ".Skills." + skill).set("level", 0);
+                    db.getConfigurationSection(uuid + ".Skills." + skill).set("totalXP", 0);
+                    db.getConfigurationSection(uuid + ".Skills." + skill).set("currentXP", 0);
+                    db.getConfigurationSection(uuid + ".Skills." + skill).set("neededXP", 50);
+                }
+                db.getConfigurationSection(uuid).createSection("Collections");
+
+                String[] farmingCollection = {"Wheat", "Carrot", "Potato", "Pumpkin", "Melon", "Seeds", "Mushroom",
+                        "Cocoa Beans", "Cactus", "Sugar Cane", "Feather", "Leather", "Raw Porkchop", "Raw Chicken",
+                        "Mutton", "Raw Rabbit", "Nether Wart"};
+                db.getConfigurationSection(uuid + ".Collections").createSection("Farming");
+
+                for (String category : farmingCollection) {
+                    db.getConfigurationSection(uuid + ".Collections.Farming").createSection(category);
+                    db.getConfigurationSection(uuid + ".Collections.Farming." + category).set("level", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Farming." + category).set("totalXP", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Farming." + category).set("currentXP", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Farming." + category).set("neededXP", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Farming." + category).set("totalGathered", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Farming." + category).set("level", 0);
+                }
+
+                String[] miningCollection = {"Cobblestone", "Coal", "Iron Ingot", "Gold Ingot", "Diamond",
+                        "Lapis Lazuli", "Emerald", "Redstone", "Nether Quartz", "Obsidian", "Glowstone", "Gravel",
+                        "Ice", "Netherrack", "Sand", "Endstone"};
+                db.getConfigurationSection(uuid + ".Collections").createSection("Mining");
+
+                for (String category : miningCollection) {
+                    db.getConfigurationSection(uuid + ".Collections.Mining").createSection(category);
+                    db.getConfigurationSection(uuid + ".Collections.Mining." + category).set("level", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Mining." + category).set("totalXP", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Mining." + category).set("currentXP", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Mining." + category).set("neededXP", 0);
+                }
+
+                String[] combatCollection = {"Rotten Flesh", "Bone", "String", "Spider Eye", "Gunpowder",
+                        "Ender Pearl", "Ghast Tear", "Slimeball", "Blaze Rod", "Magma Cream"};
+                db.getConfigurationSection(uuid + ".Collections").createSection("Combat");
+
+                for (String category : combatCollection) {
+                    db.getConfigurationSection(uuid + ".Collections.Combat").createSection(category);
+                    db.getConfigurationSection(uuid + ".Collections.Combat." + category).set("level", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Combat." + category).set("totalXP", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Combat." + category).set("currentXP", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Combat." + category).set("neededXP", 0);
+                }
+
+                String[] foragingCollection = {"Oak Wood", "Spruce Wood", "Birch Wood", "Dark Oak Wood", "Acacia Wood",
+                        "Jungle Wood"};
+                db.getConfigurationSection(uuid + ".Collections").createSection("Foraging");
+
+                for (String category : foragingCollection) {
+                    db.getConfigurationSection(uuid + ".Collections.Foraging").createSection(category);
+                    db.getConfigurationSection(uuid + ".Collections.Foraging." + category).set("level", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Foraging." + category).set("totalXP", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Foraging." + category).set("currentXP", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Foraging." + category).set("neededXP", 0);
+                }
+
+                String[] fishingCollection = {"Raw Fish", "Raw Salmon", "Clownfish", "Pufferfish", "Prismarine Shard",
+                        "Prismarine Crystal", "Clay", "Lily Pad", "Ink Sack", "Sponge"};
+                db.getConfigurationSection(uuid + ".Collections").createSection("Fishing");
+
+                for (String category : fishingCollection) {
+                    db.getConfigurationSection(uuid + ".Collections.Fishing").createSection(category);
+                    db.getConfigurationSection(uuid + ".Collections.Fishing." + category).set("level", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Fishing." + category).set("totalXP", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Fishing." + category).set("currentXP", 0);
+                    db.getConfigurationSection(uuid + ".Collections.Fishing." + category).set("neededXP", 0);
+                }
+
+                return true;
+            } catch (Exception e) {
+                Bukkit.getConsoleSender().sendMessage(Utils.chat(e.toString()));
+                return false;
+            }
+        } else
+            return true;
     }
 
     public PlayerObject getPlayerData(Player plr) {

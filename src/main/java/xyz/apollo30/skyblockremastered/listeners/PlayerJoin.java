@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -25,7 +26,7 @@ public class PlayerJoin implements Listener {
 
         Player plr = e.getPlayer();
 
-        e.setJoinMessage(Utils.chat("&e" + plr.getName() + " has joined the game."));
+        e.setJoinMessage("");
 
         if (!plr.isOp()) {
             plr.setGameMode(GameMode.SURVIVAL);
@@ -33,8 +34,24 @@ public class PlayerJoin implements Listener {
 
         plr.sendMessage(Utils.chat("&8&m--------------------------------------------------"));
         plr.sendMessage(Utils.chat("&7Welcome to &6SkyblockRemastered&7, " + plr.getName() + "!"));
+        plr.sendMessage(Utils.chat("&6Discord: &bhttps://discord.gg/gbXcMta"));
+        plr.sendMessage(Utils.chat("&6IP: &bplay.apollo30.xyz"));
+        plr.sendMessage(Utils.chat("&6Store: &bhttp://store.apollo30.xyz/"));
         plr.sendMessage(Utils.chat("&8&m--------------------------------------------------"));
 
+        // Rank Joins
+        if (plr.hasPermission("groups.admin")) Utils.broadCast("&c[ADMIN] " + plr.getName() + "&7 has joined the server!");
+        else if (plr.hasPermission("groups.mod")) Utils.broadCast("&2[MOD] " + plr.getName() + "&7 has joined the server!");
+        else if (plr.hasPermission("groups.helper")) Utils.broadCast("&9[HELPER] " + plr.getName() + "&7 has joined the server!");
+        else if (plr.hasPermission("groups.builder")) Utils.broadCast("&d[BUILDER] " + plr.getName() + "&7 has joined the server!");
+        else if (plr.hasPermission("groups.tester")) Utils.broadCast("&9[BETA] " + plr.getName() + "&7 has joined the server!");
+        else if (plr.hasPermission("groups.youtuber")) Utils.broadCast("&c[&fYOUTUBE&c] " + plr.getName() + "&7 has joined the server!");
+        else if (plr.hasPermission("groups.mvp++")) Utils.broadCast("&e»» &6[MVP&0++&6] " + plr.getName() + "&7 has joined the server! &e««");
+        else if (plr.hasPermission("groups.mvp+")) Utils.broadCast("&b[MVP&0+&b] " + plr.getName() + "&7 has joined the server!");
+        else if (plr.hasPermission("groups.mvp")) Utils.broadCast("&b[MVP] " + plr.getName() + "&7 has joined the server!");
+        else if (plr.hasPermission("groups.vip+")) Utils.broadCast("&a[VIP&6+&a] " + plr.getName() + "&7 has joined the server!");
+        else if (plr.hasPermission("groups.vip")) Utils.broadCast("&a[VIP] " + plr.getName() + "&7 has joined the server!");
+        else Utils.broadCast("&7" + plr.getName() + " has joined the game.");
 
         ItemStack nether_star = Utils.createItem(null, "NETHER_STAR", 1, 9, "&aSkyBlock Menu &7(Right Click)",
                 "&7View all of your SkyBlock", "&7progress, including your Skills,",
@@ -56,7 +73,7 @@ public class PlayerJoin implements Listener {
         plr.teleport(loc);
 
         // Create Player.yml section for them
-        GuiUtils.createPlayerData(plr, plr.getUniqueId().toString(), plugin.db.getPlayers());
+        PlayerManager.createPlayerData(plr, plr.getUniqueId().toString(), plugin.db.getPlayers());
         plugin.db.savePlayers();
 
         // Give the player a temporary database.

@@ -2,6 +2,8 @@ package xyz.apollo30.skyblockremastered.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,22 +37,34 @@ public class BlockBreak implements Listener {
         if (plr.getWorld().getName().equals("hub")) {
             // Checking if their settings is allowed.
             if (!po.isBlockBreak()) {
-                e.setCancelled(true);
-                return;
-            }
-        }
+                // Wheat Detection
+                if(Utils.isInZone(plr.getLocation(), new Location(plr.getWorld(), 3, 255, -194), new Location(plr.getWorld(), 81, 0, -116))) {
+                    Utils.broadCast("yes.");
 
-        // If the player is in their island
-        if (!plr.getWorld().getName().replace("islands/", "").equals(plr.getUniqueId().toString())) {
+                    if (e.getBlock().getType() != Material.CROPS) {
+                        e.setCancelled(true);
+                        Utils.broadCast(e.getBlock().getType().toString());
+                    }
+
+                    // Oak Wood Detection
+                } else if (Utils.isInZone(plr.getLocation(), new Location(plr.getWorld(), -236, 255, -82), new Location(plr.getWorld(), -90, 0, 34))) {
+                    Utils.broadCast("yes2");
+                    if (e.getBlock().getType() != Material.LOG && e.getBlock().getTypeId() != 0) {
+                        e.setCancelled(true);
+                        Utils.broadCast(e.getBlock().getType().toString());
+                    }
+
+                }
+            }
+
+
+            // If the player is in their island
+        } else if (!plr.getWorld().getName().replace("islands/", "").equals(plr.getUniqueId().toString())) {
             if (!po.isBlockBreak()) {
                 e.setCancelled(true);
                 return;
             }
         }
-
-//        if (po.isBlockBreak()) return;
-//        Block block = e.getBlock();
-//        plugin.blockManager.addBlock(block, new Date().getTime() + (long) new Random().nextInt(60000) + 20000);
     }
 
 }

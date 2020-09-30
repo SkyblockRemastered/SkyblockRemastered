@@ -42,7 +42,6 @@ public class PlayerObject {
     int pet_luck = 0;
 
 
-
     // Island
     List<UUID> coop = new ArrayList<>();
     List<UUID> builders = new ArrayList<>();
@@ -93,6 +92,41 @@ public class PlayerObject {
     int tamingXP = 0;
     int tamingNeeded = 0;
     int tamingTotal = 0;
+
+    String currentSlayer = "none";
+
+    // kills for each slayer
+    int revenantKills = 0;
+    int tarantulaKills = 0;
+    int svenKills = 0;
+    int skeletorKills = 0;
+    int totalKills = revenantKills + tarantulaKills + svenKills + skeletorKills;
+
+    // highest tier of each slayer the player can do
+    int revTier = 0;
+    int taraTier = 0;
+    int svenTier = 0;
+    int skeleTier = 0;
+
+    // player's level for each slayer
+    int revLevel = 0;
+    int taraLevel = 0;
+    int svenLevel = 0;
+    int skeleLevel = 0;
+
+    // rng
+    int revRng = 0;
+    int taraRng = 0;
+    int svenRng = 0;
+    int skeleRng = 0;
+    int totalRng = revRng + taraRng + svenRng + skeleRng;
+
+    // money spent
+    double revSpent = 0;
+    double taraSpent = 0;
+    double svenSpent = 0;
+    double skeleSpent = 0;
+    double totalSpent = revSpent + taraSpent + svenSpent + skeleSpent;
 
     public void resetHealth() {
         health = maxHealth;

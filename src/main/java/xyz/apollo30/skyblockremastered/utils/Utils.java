@@ -48,6 +48,10 @@ public class Utils {
 
     }
 
+    public static String coinFormat(Double coins) {
+        return String.format("%,.0f", coins);
+    }
+
     public static String urlToBase64(String url) {
 
         URI actualUrl;

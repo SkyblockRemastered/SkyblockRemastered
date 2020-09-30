@@ -17,6 +17,32 @@ public class GuiUtils {
         this.plugin = plugin;
     }
 
+    public static void batphoneMenu(Player plr, String uuid, SkyblockRemastered plugin) {
+        PlayerObject player_data = plugin.playerManager.getPlayerData(plr);
+
+        Inventory inv = Bukkit.createInventory(plr, 54, Utils.chat("&8Slayers"));
+
+        Utils.createGlass(inv, "STAINED_GLASS_PANE", 15, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45);
+        Utils.createGlass(inv, "STAINED_GLASS_PANE", 11, 1, 46,48,50,52,54);
+        Utils.createGlass(inv, "STAINED_GLASS_PANE", 3, 1, 47,49,51,53);
+        // ill make this better later so make some backstory idk
+        Utils.createItemID(inv, 293, 1, 11, "&eRevenant Horror", "", "&7The Revenant Horror can", "&7be spawned by killing &fzombies.", "", "&eClick to view slayer!");
+        Utils.createItemID(inv, 30, 1, 13, "&eTarantula Broodfather", "", "&7The Tarantula Broodfather can", "&7be spawned by killing &fspiders.", "", "&eClick to view slayer!");
+        Utils.createItemID(inv, 352, 1, 15, "&eSven Packmaster", "", "&7The Sven Packmaster can", "&7be spawned by killing &fwolves.", "", "&eClick to view slayer!");
+        Utils.createItemID(inv, 261, 1, 17, "&eSkeletor Master", "", "&7The Skeletor Master can", "&7be spawned by killing &fskeletons.", "", "&eClick to view slayer!");
+        // ill name this coming soon l8r but yea
+        Utils.createGlass(inv,"BEDROCK", 0, 1, 29,31,33,35);
+        Utils.addItem(inv, Utils.addLore(Utils.getSkull(
+                "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTY0YTkxNDMzZDY2YmZjNmVmMWM5YWM0ZTM3MWE4ODZhMWM0NjJjOTc1ZmY4MTI3NzYxZDcwM2UwYTNlNzMwNiJ9fX0="),
+                "&aOver-All Slayer Stats:",
+                "&7Total Slayers Killed: &f" + player_data.getTotalKills(),
+                "&7Total Money Spent: &f" + Utils.coinFormat(player_data.getTotalSpent()),
+                "&7Total Amount of Crazy RNG Drops: &f" + player_data.getTotalRng()
+        ), 50);
+
+        plr.openInventory(inv);
+    }
+
     public static void bankMenu(Player plr, String uuid, SkyblockRemastered plugin) {
 
         PlayerObject player_data = plugin.playerManager.getPlayerData(plr);
@@ -338,130 +364,4 @@ public class GuiUtils {
         return unicode;
     }
 
-    public static int[] checkUpgrade(Player plr, String uuid, int level, short total, FileConfiguration db) {
-
-        int[] data = new int[2];
-
-        if (level == 1 && total > 50) {
-            data[0] = 2;
-            data[1] = 175;
-        }
-
-        return data;
-    }
-
-    public static boolean createPlayerData(Player plr, String uuid, FileConfiguration db) {
-
-        String[] profile_fruits = {"Grapes", "Watermelon", "Mango", "Peach", "Apple", "Pear", "Kiwi"};
-
-        if (!db.isConfigurationSection(uuid)) {
-            try {
-                db.createSection(uuid);
-                db.set(uuid + ".IGN", plr.getName());
-                db.getConfigurationSection(uuid).createSection("Information");
-                db.getConfigurationSection(uuid + ".Information").set("currentMinionsUsed", 0);
-                db.getConfigurationSection(uuid + ".Information").set("maxMinions", 3);
-                db.getConfigurationSection(uuid + ".Information").set("fairySouls", 0);
-                db.getConfigurationSection(uuid + ".Information").set("bank", (double) 0);
-                db.getConfigurationSection(uuid + ".Information").set("purse", (double) 0);
-
-                db.getConfigurationSection(uuid).createSection("Stats");
-                db.getConfigurationSection(uuid + ".Stats").set("health", 100);
-                db.getConfigurationSection(uuid + ".Stats").set("defense", 0);
-                db.getConfigurationSection(uuid + ".Stats").set("strength", 0);
-                db.getConfigurationSection(uuid + ".Stats").set("speed", 100);
-                db.getConfigurationSection(uuid + ".Stats").set("critchance", 30);
-                db.getConfigurationSection(uuid + ".Stats").set("critdamage", 50);
-                db.getConfigurationSection(uuid + ".Stats").set("atkSpeed", 0);
-                db.getConfigurationSection(uuid + ".Stats").set("intel", 100);
-                db.getConfigurationSection(uuid + ".Stats").set("seacreaturechance", 20);
-                db.getConfigurationSection(uuid + ".Stats").set("magicfind", 0);
-                db.getConfigurationSection(uuid + ".Stats").set("petluck", 0);
-
-
-                db.set(uuid + ".Profile", profile_fruits[(int) Math.floor(Math.random() * profile_fruits.length)]);
-
-                db.getConfigurationSection(uuid).createSection("Skills");
-                String[] skills = {"Farming", "Mining", "Combat", "Foraging", "Fishing", "Enchanting", "Alchemy", "Carpentry", "Runecrafting", "Taming"};
-                for (String skill : skills) {
-                    db.getConfigurationSection(uuid + ".Skills").createSection(skill);
-                    db.getConfigurationSection(uuid + ".Skills." + skill).set("level", 0);
-                    db.getConfigurationSection(uuid + ".Skills." + skill).set("totalXP", 0);
-                    db.getConfigurationSection(uuid + ".Skills." + skill).set("currentXP", 0);
-                    db.getConfigurationSection(uuid + ".Skills." + skill).set("neededXP", 50);
-                }
-                db.getConfigurationSection(uuid).createSection("Collections");
-
-                String[] farmingCollection = {"Wheat", "Carrot", "Potato", "Pumpkin", "Melon", "Seeds", "Mushroom",
-                        "Cocoa Beans", "Cactus", "Sugar Cane", "Feather", "Leather", "Raw Porkchop", "Raw Chicken",
-                        "Mutton", "Raw Rabbit", "Nether Wart"};
-                db.getConfigurationSection(uuid + ".Collections").createSection("Farming");
-
-                for (String category : farmingCollection) {
-                    db.getConfigurationSection(uuid + ".Collections.Farming").createSection(category);
-                    db.getConfigurationSection(uuid + ".Collections.Farming." + category).set("level", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Farming." + category).set("totalXP", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Farming." + category).set("currentXP", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Farming." + category).set("neededXP", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Farming." + category).set("totalGathered", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Farming." + category).set("level", 0);
-                }
-
-                String[] miningCollection = {"Cobblestone", "Coal", "Iron Ingot", "Gold Ingot", "Diamond",
-                        "Lapis Lazuli", "Emerald", "Redstone", "Nether Quartz", "Obsidian", "Glowstone", "Gravel",
-                        "Ice", "Netherrack", "Sand", "Endstone"};
-                db.getConfigurationSection(uuid + ".Collections").createSection("Mining");
-
-                for (String category : miningCollection) {
-                    db.getConfigurationSection(uuid + ".Collections.Mining").createSection(category);
-                    db.getConfigurationSection(uuid + ".Collections.Mining." + category).set("level", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Mining." + category).set("totalXP", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Mining." + category).set("currentXP", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Mining." + category).set("neededXP", 0);
-                }
-
-                String[] combatCollection = {"Rotten Flesh", "Bone", "String", "Spider Eye", "Gunpowder",
-                        "Ender Pearl", "Ghast Tear", "Slimeball", "Blaze Rod", "Magma Cream"};
-                db.getConfigurationSection(uuid + ".Collections").createSection("Combat");
-
-                for (String category : combatCollection) {
-                    db.getConfigurationSection(uuid + ".Collections.Combat").createSection(category);
-                    db.getConfigurationSection(uuid + ".Collections.Combat." + category).set("level", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Combat." + category).set("totalXP", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Combat." + category).set("currentXP", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Combat." + category).set("neededXP", 0);
-                }
-
-                String[] foragingCollection = {"Oak Wood", "Spruce Wood", "Birch Wood", "Dark Oak Wood", "Acacia Wood",
-                        "Jungle Wood"};
-                db.getConfigurationSection(uuid + ".Collections").createSection("Foraging");
-
-                for (String category : foragingCollection) {
-                    db.getConfigurationSection(uuid + ".Collections.Foraging").createSection(category);
-                    db.getConfigurationSection(uuid + ".Collections.Foraging." + category).set("level", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Foraging." + category).set("totalXP", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Foraging." + category).set("currentXP", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Foraging." + category).set("neededXP", 0);
-                }
-
-                String[] fishingCollection = {"Raw Fish", "Raw Salmon", "Clownfish", "Pufferfish", "Prismarine Shard",
-                        "Prismarine Crystal", "Clay", "Lily Pad", "Ink Sack", "Sponge"};
-                db.getConfigurationSection(uuid + ".Collections").createSection("Fishing");
-
-                for (String category : fishingCollection) {
-                    db.getConfigurationSection(uuid + ".Collections.Fishing").createSection(category);
-                    db.getConfigurationSection(uuid + ".Collections.Fishing." + category).set("level", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Fishing." + category).set("totalXP", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Fishing." + category).set("currentXP", 0);
-                    db.getConfigurationSection(uuid + ".Collections.Fishing." + category).set("neededXP", 0);
-                }
-
-                return true;
-            } catch (Exception e) {
-                Bukkit.getConsoleSender().sendMessage(Utils.chat(e.toString()));
-                return false;
-            }
-        } else
-            return true;
-    }
 }
