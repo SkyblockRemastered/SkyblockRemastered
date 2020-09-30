@@ -6,7 +6,7 @@ import org.bukkit.inventory.Inventory;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
-public class CraftingMenu {
+public class CraftingMenu implements Listener {
 
     public SkyblockRemastered plugin;
 
