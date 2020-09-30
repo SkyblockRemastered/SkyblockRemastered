@@ -6,10 +6,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import org.bukkit.event.Listener;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
-public class Bank {
+public class Bank implements Listener {
     public SkyblockRemastered plugin;
 
     public Bank(final SkyblockRemastered plugin) {
