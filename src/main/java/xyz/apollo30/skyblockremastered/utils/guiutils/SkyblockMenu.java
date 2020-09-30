@@ -105,6 +105,7 @@ public class SkyblockMenu implements Listener {
                 "&eClick to alter!");
         plr.openInventory(inv);
     }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         Player plr = (Player) e.getWhoClicked();
