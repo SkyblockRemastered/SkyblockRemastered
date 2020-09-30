@@ -99,7 +99,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new Bank(this);
         new CraftingMenu(this);
         new MaddoxBatphone(this);
-        new SkillMenu();
+        new SkillMenu(this);
         new SkyblockMenu(this);
         new TradeMenu(this);
         new VisitMenu(this);
