@@ -109,7 +109,8 @@ public class SkyblockMenu {
         String item = e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() ? e.getCurrentItem().getItemMeta().getDisplayName() : null;
         String invName = e.getInventory().getTitle();
         // Inv is named skyblock menu
-        if (invName.equalsIgnoreCase(Utils.chat("&aSkyBlock Menu &7(Right Click)")) || invName.equalsIgnoreCase(Utils.chat("&aSkyblock Menu"))) {
+        if (invName.equalsIgnoreCase(Utils.chat("&aSkyblock Menu"))) { e.setCancelled(true); }
+        if (item.equalsIgnoreCase(Utils.chat("&aSkyBlock Menu &7(Right Click)")) {
             FileConfiguration db = plugin.db.getPlayers();
             SkyblockMenu.skyblockMenu(plr, plr.getUniqueId().toString(), db, plugin);
             assert item != null;
