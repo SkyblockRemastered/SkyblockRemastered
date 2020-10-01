@@ -6,10 +6,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.ResponsesUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
-import xyz.apollo30.skyblockremastered.utils.guiutils.Bank;
 
 public class SkyblockRemastered implements CommandExecutor {
 
@@ -94,7 +94,7 @@ public class SkyblockRemastered implements CommandExecutor {
             ItemStack item = new ItemStack(Material.MONSTER_EGG, 1, (short) 0);
             plr.getInventory().addItem(item);
         } else if (args[0].equalsIgnoreCase("bank")) {
-            Bank.mainMenu(plr, plr.getUniqueId().toString(), plugin);
+            GuiUtils.bankMenu(plr, plr.getUniqueId().toString(), plugin);
         } else if (args[0].equalsIgnoreCase("dialogs")) {
             if (args[1].equalsIgnoreCase("clerk")) {
                 ResponsesUtils.villagerDialog(plr, plugin, "&e[NPC] Clerk Seraphine:", "&fOh hello! You're here for the mayor elections?", "&fWell, this server ain't pay to win, &c&lGET OUTTA HERE!");

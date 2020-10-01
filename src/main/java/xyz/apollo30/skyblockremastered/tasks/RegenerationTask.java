@@ -36,7 +36,6 @@ public class RegenerationTask extends BukkitRunnable {
                 int mana_regen = po.getIntelligence() + (int) ((po.getMaxIntelligence() * 0.01) + 1.5);
                 po.setIntelligence(Math.min(mana_regen, po.getMaxIntelligence()));
             }
-
             // Checking if the player's inventory is full.
             for (Player player : Bukkit.getOnlinePlayers()) {
 
@@ -47,8 +46,8 @@ public class RegenerationTask extends BukkitRunnable {
                 }
 
             }
-
         }
     }
+
 
 }

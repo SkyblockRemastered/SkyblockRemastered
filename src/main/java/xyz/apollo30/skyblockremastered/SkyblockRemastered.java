@@ -14,14 +14,16 @@ import xyz.apollo30.skyblockremastered.commands.Gamemode;
 import xyz.apollo30.skyblockremastered.commands.Hub;
 import xyz.apollo30.skyblockremastered.commands.Visit;
 import xyz.apollo30.skyblockremastered.listeners.*;
-import xyz.apollo30.skyblockremastered.managers.BlockManager;
-import xyz.apollo30.skyblockremastered.managers.ConfigManager;
-import xyz.apollo30.skyblockremastered.managers.MobManager;
-import xyz.apollo30.skyblockremastered.managers.PlayerManager;
+import xyz.apollo30.skyblockremastered.managers.*;
 import xyz.apollo30.skyblockremastered.tasks.*;
-import xyz.apollo30.skyblockremastered.utils.guiutils.*;
 
 import java.util.HashMap;
+import xyz.apollo30.skyblockremastered.utils.GuiUtils;
+import xyz.apollo30.skyblockremastered.utils.Utils;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SkyblockRemastered extends JavaPlugin {
 
@@ -42,8 +44,6 @@ public class SkyblockRemastered extends JavaPlugin {
         db.saveDefaultMinions();
         db.saveDefaultSpawns();
 
-        registerGuis();
-
         // Listener
         new BlockFade(this);
         new BlockForm(this);
@@ -56,6 +56,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new EntityDeath(this);
         new EntitySpawn(this);
         new EntityTeleport(this);
+        new InventoryClick(this);
         new InventoryItemMove(this);
         new ItemDamage(this);
         new ItemDrag(this);
@@ -96,7 +97,6 @@ public class SkyblockRemastered extends JavaPlugin {
         this.playerManager = new PlayerManager(this);
         this.mobManager = new MobManager(this);
 
-
         // When reloaded and the players still exist, it just recreates their database again.
         for (Player plr : Bukkit.getOnlinePlayers()) {
             if (playerManager.getPlayerData(plr) == null) playerManager.createPlayerData(plr);
@@ -108,6 +108,8 @@ public class SkyblockRemastered extends JavaPlugin {
                 if (entity.getType() != EntityType.PLAYER) entity.remove();
             }
         }
+
+
 
         // Inits the timer for all managers.
         blockManager.initTimer();
@@ -128,13 +130,6 @@ public class SkyblockRemastered extends JavaPlugin {
             playerManager.savePlayerData(plr);
         }
 
-    }
-    // eventually add all the Listeners here but i cba rn
-    public void registerGuis() {
-        Bukkit.getServer().getPluginManager().registerEvents(new Bank(this), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new MaddoxBatphone(this), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new SkyblockMenu(this), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new TradeMenu(this), this);
     }
 
     // Overflux

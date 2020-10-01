@@ -95,7 +95,8 @@ public class EntityDamageByEntity implements Listener {
                         type = "crithit";
                     } else type = "normal";
 
-//                    // Defense Calculation
+
+                      // Defense Calculation
 //                    double defense = po.getDefense();
 //                    damage = (int) (damage - (damage * (1 - (defense / (defense + 100)))));
 

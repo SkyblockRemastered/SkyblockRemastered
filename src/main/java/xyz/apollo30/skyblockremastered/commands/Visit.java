@@ -26,21 +26,21 @@ public class Visit implements CommandExecutor {
 
         Player plr = (Player) sender;
 
+
         if (args.length <= 0) {
             plr.sendMessage(Utils.chat("&cInsufficient arguments! Please supply a player name to visit!"));
             return true;
         }
 
         String uuid = Utils.getUuid(args[0]);
+        Utils.broadCast(plr.getUniqueId().toString());
         String name = Utils.getName(uuid) != null ? Utils.getName(uuid) : args[0];
 
         if (Bukkit.getServer().getWorld("islands/" + uuid) == null) {
             plr.sendMessage(Utils.chat("&cCouldn't find that player/island! Maybe a typo?"));
             return true;
         }
-
-//        PlayerObject pot = plugin.playerManager.playerObjects.get()
-
+        //        PlayerObject pot = plugin.playerManager.playerObjects.get()
         plr.sendMessage(Utils.chat("&7Sending you to " + name + "'s Island"));
 
         World island = Bukkit.getServer().createWorld(new WorldCreator("islands/" + uuid));

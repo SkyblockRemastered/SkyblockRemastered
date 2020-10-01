@@ -34,18 +34,26 @@ public class BlockPlace implements Listener {
         Player plr = e.getPlayer();
         PlayerObject po = plugin.playerManager.playerObjects.get(plr);
 
-        // Player is on island
+        // Island Border
         if (plr.getWorld().getName().startsWith("islands/")) {
-            // unplaceable items
-            if (e.getPlayer().getItemInHand().getItemMeta().getEnchants().size() > 0) { e.setCancelled(true); }
-            if (e.getPlayer().getItemInHand().getType().equals(Material.SKULL) || e.getPlayer().getItemInHand().equals(Material.SKULL_ITEM)) { e.setCancelled(true); }
 
-            // border
-            if (!Utils.isInZone(e.getBlock().getLocation(), new Location(plr.getWorld(), -80, 255, -80), new Location(plr.getWorld(), 80, 0, 80))){
+            if (!Utils.isInZone(e.getBlock().getLocation(), new Location(plr.getWorld(), -80, 255, -80), new Location(plr.getWorld(), 80, 0, 80))) {
                 plr.sendMessage(Utils.chat("&cYou've reached the world border.\n&aTo expand it, you can use your &2gems&a by heading to the Community Center!"));
+                e.setCancelled(true);
+                return;
+            }
+
+
+            // unplaceable items
+            if (e.getPlayer().getItemInHand().getItemMeta().getEnchants().size() > 0) {
+                e.setCancelled(true);
+            }
+            if (e.getPlayer().getItemInHand().getType().equals(Material.SKULL) || e.getPlayer().getItemInHand().equals(Material.SKULL_ITEM)) {
                 e.setCancelled(true);
             }
         }
+
+
 
         // Check if the player is in the hub or not.
         if (plr.getWorld().getName().equals("hub")) {
@@ -65,3 +73,4 @@ public class BlockPlace implements Listener {
         }
     }
 }
+
