@@ -270,9 +270,10 @@ public class MobManager {
             mo.setName("Old Wolf");
         } else {
             mo.setName(entity.getName());
-            mo.setLevel(300000);
             mo.setLocation("???");
             mo.setMaxHealth(100);
+            // mo.setLevel((int) Math.floor(Math.random() * 100000));
+            mo.setLevel(2147483647);
         }
 
         ArmorStand armorStand = entity.getWorld().spawn(entity.getLocation(), ArmorStand.class);

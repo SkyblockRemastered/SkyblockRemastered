@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.managers.MobManager;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 public class EntitySpawn implements Listener {
@@ -48,6 +49,8 @@ public class EntitySpawn implements Listener {
                     e.setCancelled(true);
             }
         }
+
+        plugin.mobManager.createMob(e.getEntity(), e.getEntity().getName());
 
     }
 

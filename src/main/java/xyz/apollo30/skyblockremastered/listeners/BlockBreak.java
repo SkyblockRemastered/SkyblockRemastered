@@ -55,7 +55,6 @@ public class BlockBreak implements Listener {
         } else if (!plr.getWorld().getName().replace("islands/", "").equals(plr.getUniqueId().toString())) {
             if (!po.isBlockBreak()) {
                 e.setCancelled(true);
-                return;
             }
         }
     }

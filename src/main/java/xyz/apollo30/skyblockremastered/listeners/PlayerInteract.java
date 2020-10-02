@@ -1,7 +1,9 @@
 package xyz.apollo30.skyblockremastered.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -34,20 +36,43 @@ public class PlayerInteract implements Listener {
         String action = e.getAction().toString();
         String item = e.getItem().getItemMeta().getDisplayName();
 
-        if (item == null || action == null)
-            return;
+        Utils.broadCast(action);
 
         if (action.contains("LEFT_CLICK")) {
-            if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)")))
-                GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
-        } else if (action.contains("RIGHT_CLICK")) {
-            if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)")))
-                GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
-            else if (item.contains(Utils.chat("&9Aspect of The End")))
-                plugin.weaponAbilities.aspect_of_the_end(plr);
-            else if (item.equals(Utils.chat("&aMaddox Batphone")))
-                plugin.miscAbilities.maddox_batphone(plr);
+            personalVault(plr, e.getClickedBlock());
 
+            if (item != null) {
+                if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
+                    GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+                    e.setCancelled(true);
+                }
+            }
+        } else if (action.contains("RIGHT_CLICK")) {
+            personalVault(plr, e.getClickedBlock());
+
+            if (item != null) {
+                if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
+                    GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+                    e.setCancelled(true);
+                }
+                else if (item.contains(Utils.chat("&9Aspect of The End"))) {
+                    plugin.weaponAbilities.aspect_of_the_end(plr);
+                    e.setCancelled(true);
+                }
+                else if (item.equals(Utils.chat("&aMaddox Batphone"))) {
+                    plugin.miscAbilities.maddox_batphone(plr);
+                    e.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    private void personalVault(Player plr, Block block) {
+        if (block == null || block.getType() == Material.AIR) return;
+        Location loc = block.getLocation();
+
+        if (Utils.isInZone(loc, new Location(loc.getWorld(), 30, 75, -53), new Location(loc.getWorld(), 32, 72, -49))) {
+            plr.openInventory(plr.getEnderChest());
         }
     }
 }

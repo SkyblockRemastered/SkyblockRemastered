@@ -17,14 +17,12 @@ public class PlayerObject {
     String uuid;
 
     // Settings
-    boolean statOverride = false;
-    boolean blockBreak = false;
-    boolean vanished = false;
+    String pickup_rarity = "All";
+    boolean full_inventory_notification = true;
 
     double purse = 100;
     double bank = 0;
     double gems = 0;
-
 
     // Stats
     int health = 100;
@@ -48,12 +46,12 @@ public class PlayerObject {
     boolean visit_public = true;
     boolean visit_friend = true;
 
-    String pickup_rarity = "All";
-    boolean full_inventory_notification = true;
-
     // Database
     int zealot_kills = 0;
     double coins_gained = 0;
+    boolean statOverride = false;
+    boolean blockBreak = false;
+    boolean vanished = false;
 
     // Skills
     int farmingLevel = 0;

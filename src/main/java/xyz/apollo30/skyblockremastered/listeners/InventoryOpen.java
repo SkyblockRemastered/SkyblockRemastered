@@ -10,6 +10,10 @@ import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class InventoryOpen implements Listener {
 
     private final SkyblockRemastered plugin;
@@ -26,21 +30,18 @@ public class InventoryOpen implements Listener {
         Player plr = (Player) e.getPlayer();
         PlayerObject po = plugin.playerManager.playerObjects.get(plr);
 
-        // Check if the player is in the hub or not.
-        if (plr.getWorld().getName().equals("hub")) {
-            // Checking if their settings is allowed.
-            if (!po.isBlockBreak()) {
+        // If the player is in their island or not.
+        if (!plr.getWorld().getName().equals("islands/" + plr.getUniqueId().toString())) {
+            // Do a little checcing
+            List<String> containers = new ArrayList<>();
+            containers.add("container.dropper");
+            containers.add("container.chest");
+            containers.add("container.dispenser");
+
+            if (!po.isBlockBreak() && containers.contains(e.getInventory().getName())) {
                 e.setCancelled(true);
-                return;
             }
         }
 
-        // If the player is in their island
-        if (!plr.getWorld().getName().replace("islands/", "").equals(plr.getUniqueId().toString())) {
-            if (!po.isBlockBreak()) {
-                e.setCancelled(true);
-                return;
-            }
-        }
     }
 }

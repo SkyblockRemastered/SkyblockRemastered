@@ -8,7 +8,7 @@ public class ResponsesUtils {
 
     public static String callSuccess(){
         String[] responses = {"✆ Hello?", "✆ Someone answers!", "✆ How does a lobster answer? Shello!", "✆ Hey what you do you need?", "✆ You hear the line pick up...", "✆ You again? What do you want this time?"};
-        return Utils.chat("&a" + responses[(int) Math.floor(Math.random() * responses.length)] + "\n&2&lA menu has been opened for you.");
+        return Utils.chat("&a" + responses[(int) Math.floor(Math.random() * responses.length)]);
     }
 
     public static String callFailed(){

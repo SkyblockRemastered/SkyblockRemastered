@@ -18,12 +18,6 @@ import xyz.apollo30.skyblockremastered.managers.*;
 import xyz.apollo30.skyblockremastered.tasks.*;
 
 import java.util.HashMap;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
-import xyz.apollo30.skyblockremastered.utils.Utils;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SkyblockRemastered extends JavaPlugin {
 
@@ -77,7 +71,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new WeatherChange(this);
         new PlayerBucketEmpty(this);
         new PlayerBucketFill(this);
-        new PlayerPickupItem(this);
+        new PlayerPickup(this);
         new InventoryOpen(this);
         new ServerListPing(this);
 

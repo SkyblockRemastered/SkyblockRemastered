@@ -1,6 +1,7 @@
 package xyz.apollo30.skyblockremastered.tasks;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -49,20 +50,21 @@ public class ScoreboardTask extends BukkitRunnable {
             String coins_gained = "";
             if (po.getCoins_gained() > 0) {
                 coins_gained = " &e(+" + String.format("%,.0f", po.getCoins_gained()) + ")";
-                plr.playSound(plr.getLocation(), Sound.ANVIL_LAND, 1F, 50F);
+                plr.playSound(plr.getLocation(), Sound.ORB_PICKUP, 1F, 5F);
                 po.setPurse(po.getPurse() + po.getCoins_gained());
             }
 
             String purse = "&fPurse: &6" + Utils.coinFormat(po.getPurse()) + coins_gained;
             String gems = "&fGems: &a" + Utils.coinFormat(po.getGems());
 
+            String number = d.format(now).startsWith("0") ? d.format(now) : d.format(now);
             List<String> contents = new ArrayList<>();
             contents.add("&7" + dtf.format(now));
             contents.add("&f&7 ");
-            contents.add(" &f" + names[dayOfWeek - 1] + " " + d.format(now) + Utils.getDayOfMonthSuffix(Integer.parseInt(d.format(now))));
+            contents.add(" &f" + names[dayOfWeek - 1] + " " + number + Utils.getDayOfMonthSuffix(Integer.parseInt(d.format(now))));
             contents.add(" &7⋄ " + Utils.getLocation(plr));
             contents.add("&2&8 ");
-            contents.add(purse);
+            contents.add(purse.length() > 40 ? purse.substring(0, 40) : purse);
             contents.add(gems);
             contents.add("&2&5");
             contents.add("&eplay.apollo30.xyz");
@@ -73,7 +75,6 @@ public class ScoreboardTask extends BukkitRunnable {
                 cycle--;
             }
             plr.setScoreboard(sb);
-
             po.setCoins_gained(0);
 
         }

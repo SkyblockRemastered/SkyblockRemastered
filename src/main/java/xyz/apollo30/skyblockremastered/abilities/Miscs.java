@@ -1,6 +1,7 @@
 package xyz.apollo30.skyblockremastered.abilities;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.GuiUtils;
@@ -31,7 +32,6 @@ public class Miscs {
                 // more than 3 attempts
                 if (bcd.get(plr.getUniqueId()).equals(3)) {
                     plr.sendMessage(Utils.chat("&c✆ HEY IT'S NOT PICKING UP STOP TRYING!"));
-                    return;
                 }
                 // on cooldown, less than 3 attempts
                 else {
@@ -40,16 +40,15 @@ public class Miscs {
                     failNum++;
                     bcd.remove(plr.getUniqueId());
                     bcd.put(plr.getUniqueId(), failNum);
-                    return;
                 }
             }
             // not on cooldown, add to cooldown list.
             else {
                 plr.sendMessage(ResponsesUtils.callSuccess());
+                plr.playSound(plr.getLocation(), Sound.CLICK, 1F, 1F);
                 GuiUtils.batphoneMenu(plr, plr.getUniqueId().toString(), plugin);
                 bcd.put(plr.getUniqueId(), 0);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> bcd.remove(plr.getUniqueId()), 600L);
-                return;
             }
         }, 60L);
 

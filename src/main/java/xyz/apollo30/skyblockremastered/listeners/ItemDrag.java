@@ -23,6 +23,7 @@ public class ItemDrag implements Listener {
     public void onPlayerDrag(InventoryDragEvent e) {
         Player plr = (Player) e.getView().getPlayer();
         String title = e.getInventory().getTitle();
+        if (e.getCursor() == null) return;
         String item = e.getCursor().getItemMeta().getDisplayName();
 
         if (title == null || item == null)

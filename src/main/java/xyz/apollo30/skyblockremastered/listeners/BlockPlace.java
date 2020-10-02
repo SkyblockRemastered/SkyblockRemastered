@@ -45,10 +45,9 @@ public class BlockPlace implements Listener {
 
 
             // unplaceable items
-            if (e.getPlayer().getItemInHand().getItemMeta().getEnchants().size() > 0) {
+            if (e.getPlayer().getItemInHand() != null && e.getPlayer().getItemInHand().getItemMeta().getEnchants().size() > 0) {
                 e.setCancelled(true);
-            }
-            if (e.getPlayer().getItemInHand().getType().equals(Material.SKULL) || e.getPlayer().getItemInHand().equals(Material.SKULL_ITEM)) {
+            } else if (e.getPlayer().getItemInHand().getType().equals(Material.SKULL)) {
                 e.setCancelled(true);
             }
         }
@@ -60,15 +59,10 @@ public class BlockPlace implements Listener {
             // Checking if their settings is allowed.
             if (!po.isBlockBreak()) {
                 e.setCancelled(true);
-                return;
             }
-        }
-
-        // If the player is in their island
-        if (!plr.getWorld().getName().replace("islands/", "").equals(plr.getUniqueId().toString())) {
+        } else if (!plr.getWorld().getName().replace("islands/", "").equals(plr.getUniqueId().toString())) {
             if (!po.isBlockBreak()) {
                 e.setCancelled(true);
-                return;
             }
         }
     }

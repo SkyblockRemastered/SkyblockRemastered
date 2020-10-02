@@ -36,18 +36,15 @@ public class RegenerationTask extends BukkitRunnable {
                 int mana_regen = po.getIntelligence() + (int) ((po.getMaxIntelligence() * 0.01) + 1.5);
                 po.setIntelligence(Math.min(mana_regen, po.getMaxIntelligence()));
             }
+
             // Checking if the player's inventory is full.
-            for (Player player : Bukkit.getOnlinePlayers()) {
-
-                if ((player.getInventory().firstEmpty() == -1)) {
-                    player.sendMessage(Utils.chat("&cYour inventory is full!"));
-                    PacketManager.sendTitle(plr, 0, 180, 40, Utils.chat("&cInventory Full!"),Utils.chat("&cTime to clear it out."));
-                    player.playSound(player.getLocation(), Sound.NOTE_PLING, 1L, 3L);
-                }
-
+            if ((plr.getInventory().firstEmpty() == -1)) {
+                plr.sendMessage(Utils.chat("&cYour inventory is full!"));
+                PacketManager.sendTitle(plr, 0, 180, 40, Utils.chat("&cInventory Full!"), Utils.chat("&cTime to clear it out."));
+                plr.playSound(plr.getLocation(), Sound.NOTE_PLING, 1L, 3L);
             }
         }
     }
-
-
 }
+
+

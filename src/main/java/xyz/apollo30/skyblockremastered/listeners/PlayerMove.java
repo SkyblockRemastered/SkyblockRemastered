@@ -53,9 +53,7 @@ public class PlayerMove implements Listener {
                 plr.playSound(plr.getLocation(), Sound.ANVIL_LAND, 1F, 10F);
                 double purse = po.getPurse();
                 po.setPurse(po.getPurse() / 2);
-
-                plr.sendMessage(Utils.chat("&cYou died and lost " + String.format("%,.1f", purse / 2) + " coins!"));
-                plr.playSound(plr.getLocation(), Sound.ANVIL_LAND, 1F, 10F);
+                plr.sendMessage(Utils.chat("&cYou died and lost " + String.format("%,.0f", purse / 2) + " coins!"));
             } else plr.sendMessage(Utils.chat("&cYou fell into the void"));
         }
 
@@ -76,6 +74,11 @@ public class PlayerMove implements Listener {
                 plr.teleport(loc);
             }
         }
+
+        // Health / Speed / Saturation Editor
+        plr.setSaturation(20);
+        plr.setWalkSpeed(po.getSpeed() > 500 ? 1.0f : po.getSpeed() <= 0 ? 0.0f : (float) po.getSpeed() / 500);
+        plr.setFlySpeed(po.getSpeed() / 2 > 500 ? 1.0f : po.getSpeed() / 2 <= 0 ? 0.0f : (float) po.getSpeed() / 2 / 500);
     }
 
 }

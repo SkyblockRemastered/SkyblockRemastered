@@ -61,15 +61,6 @@ public class GuiUtils {
         plr.openInventory(inv);
     }
 
-    public static void visitMenu(Player plr, String uuid) {
-
-        Inventory inv = Bukkit.createInventory(plr, 36, "Visit " + plr.getName());
-
-        Utils.createGlass(inv, "STAINED_GLASS_PANE", 15, 1, 1, 1,2,3,4,5,6,7,8,9,10,11,13,14,15,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,33,34,35,36);
-
-        plr.openInventory(inv);
-    }
-
     public static void craftingMenu(Player plr, String uuid, String type) {
 
         if (type == "empty") {
@@ -136,88 +127,90 @@ public class GuiUtils {
 
     public static void skyblockMenu(Player plr, String uuid, FileConfiguration db, SkyblockRemastered plugin) {
 
-        PlayerObject player_data = plugin.playerManager.getPlayerData(plr);
+        try {
 
-        int health = player_data.getMaxHealth();
-        int defense = player_data.getDefense();
-        int strength = player_data.getStrength();
-        int speed = player_data.getSpeed();
-        int critdamage = player_data.getCrit_damage();
-        int critchance = player_data.getCrit_chance();
-        int atkspeed = player_data.getAtk_speed();
-        int intel = player_data.getMaxIntelligence();
-        int seacreaturechance = player_data.getSea_creature_chance();
-        int magicfind = player_data.getMagic_find();
-        int petluck = player_data.getPet_luck();
+            PlayerObject po = plugin.playerManager.getPlayerData(plr);
 
-        Inventory inv = Bukkit.createInventory(plr, 54, Utils.chat("SkyBlock Menu"));
+            int health = po.getMaxHealth();
+            int defense = po.getDefense();
+            int strength = po.getStrength();
+            int speed = po.getSpeed();
+            int critdamage = po.getCrit_damage();
+            int critchance = po.getCrit_chance();
+            int atkspeed = po.getAtk_speed();
+            int intel = po.getMaxIntelligence();
+            int seacreaturechance = po.getSea_creature_chance();
+            int magicfind = po.getMagic_find();
+            int petluck = po.getPet_luck();
 
-        Utils.createItemID(inv, 130, 1, 26, "&aEnder Chest", "&7Store global items that you want",
-                "&7to access at any time from", "&7anywhere right here.", " ", "&eClick to view!");
-        Utils.createItemID(inv, 276, 1, 20, "&aYour Skills", "&7View your Skill progression", "&7rewards.", " ",
-                "&eClick to view!");
-        Utils.createItemID(inv, 321, 1, 21, "&aCollection", "&7View all of the items availiable",
-                "&7in SkyBlock. Collect more of an", "&7item to unlock rewards on your",
-                "&7way to becoming an Expert in Skyblock!", " ", "&eClick to view!");
-        Utils.createItemID(inv, 340, 1, 22, "&aRecipe Book", "&7Through your adventure, you will",
-                "&7unlock recipes for all kinds of", "&7special items! You can view how",
-                "&7to craft these items here.", " ", "&eClick to view!");
-        Utils.createItemID(inv, 388, 1, 23, "&aTrades", "&7View your available trades.",
-                "&7These trades are always", "&7availiable and accessible through", "&7the Skyblock Menu.", " ",
-                "&eClick to view!");
-        Utils.createItemID(inv, 386, 1, 24, "&aQuest Log", "&7Not Coming Soon", " ", "&eClick to view!");
-        Utils.addItem(inv, Utils.addLore(Utils.getSkull(
-                "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjk2OTIzYWQyNDczMTAwMDdmNmFlNWQzMjZkODQ3YWQ1Mzg2NGNmMTZjMzU2NWExODFkYzhlNmIyMGJlMjM4NyJ9fX0="),
-                "&dFairy Soul", "&7Collect the souls of dead fairies", "&7around the map, for permanent stats.", "",
-                " &c✖ &eFound: &d"
-                        + db.getConfigurationSection(plr.getUniqueId().toString() + ".Information")
-                        .getInt("fairySouls")
-                        + "&7/&d0"),
-                25);
-
-        Utils.createItemID(inv, 352, 1, 31, "&aPets", "&7View and manager all of your Pets.", " ",
-                "&7Level up your pets faster by", "&7gaining xp in their favorite", "&7skill!", " ",
-                "&7Selected pet: &fNone", " ", "&eClick to view!");
-        Utils.createItemID(inv, 299, 1, 33, "&aWardrobe", "&7Store armor sets and quickly", "&7swap between them!",
-                "", "&eClick to view!");
-        Utils.addItem(inv, Utils.addLore(Utils.getSkull(
-                "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTM2ZTk0ZjZjMzRhMzU0NjVmY2U0YTkwZjJlMjU5NzYzODllYjk3MDlhMTIyNzM1NzRmZjcwZmQ0ZGFhNjg1MiJ9fX0"),
-                "&aPersonal Bank", "&7Contact your Banker from", "&7anywhere.", "&7Cooldown: &e-", " ",
-                "&7Banker Status:", "&a-", " ", "&eClick to open!"), 34);
-        Utils.createItemID(inv, 345, 1, 46, "&aPlugin Developer Menu",
-                "&7View the Plugin Developer Menu, only availiable", "&7to the plugin developers.", " ",
-                plr.getName().equalsIgnoreCase("apollo30") ? "&aACCESS GRANTED" : "&cACCESS DENIED");
-        Utils.createItemID(inv, 166, 1, 50, "&cClose");
-        Utils.createItemID(inv, 58, 1, 32, "&aCrafting Table", "&7Opens the crafting grid", " ", "&eClick to use!");
-        Utils.createGlass(inv, "STAINED_GLASS_PANE", 15, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17,
-                18, 19, 27, 28, 29, 30, 35, 36, 38, 39, 40, 41, 42, 43, 44, 45, 47, 52, 53, 54);
-        Utils.addItem(inv, Utils.addLore(Utils.getSkull(
-                "ewogICJ0aW1lc3RhbXAiIDogMTU5OTQ2Nzk1ODg0NSwKICAicHJvZmlsZUlkIiA6ICIwMWIzZWY3YmQzOWI0OGFiOTc0YmE1NTdiMzFhMDczOSIsCiAgInByb2ZpbGVOYW1lIiA6ICJBcG9sbG8zMCIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS85YmM2ZjczM2Q0NTIyZTMwMTdmZjAyNGY0NWIxZjc5OGY2Nzc0YTU5N2Q3ZGFlZTljNzkxNWVkNDEyZGVkZDJjIgogICAgfQogIH0KfQ"),
-                "&aCredits", "&fPlugin created by: &aApollo#6000"), 37);
-        Utils.createSkull(inv, plr.getName(), 1, 14, "&aYour Skyblock Profile",
-                "  &c" + getUnicode("heart") + " Health &f" + health + " HP",
-                "  &a" + getUnicode("defense") + " Defense &f" + defense,
-                "  &c" + getUnicode("strength") + " Strength &f" + strength,
-                "  &f" + getUnicode("speed") + " Speed " + speed,
-                "  &9" + getUnicode("cc") + " Crit Chance &f" + critchance + "%",
-                "  &9" + getUnicode("cd") + " Crit Damage &f" + critdamage + "%",
-                "  &e" + getUnicode("atkspeed") + " Bonus Attack Speed &f" + atkspeed + "%",
-                "  &b" + getUnicode("intel") + " Intelligence &f" + intel,
-                "  &3" + getUnicode("seacreature") + "&3 Sea Creature Chance &f" + seacreaturechance + "%",
-                "  &b" + getUnicode("mf") + " Magic Find &f" + magicfind,
-                "  &d" + getUnicode("petluck") + " Pet Luck &f" + petluck,
-                " ", "&eClick to view your profile!");
-
-        Utils.addItem(inv, Utils.addLore(Utils.getSkull(
-                "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2Y0MDk0MmYzNjRmNmNiY2VmZmNmMTE1MTc5NjQxMDI4NmE0OGIxYWViYTc3MjQzZTIxODAyNmMwOWNkMSJ9fX0="),
-                "&bFast Travel", "&7Teleport to islands you've", "&7already visited.", "",
-                "&bRight-click to warp home!", "&eClick to pick a location!"), 48);
-        Utils.createItemID(inv, 421, 1, 49, "&aProfile Management", "&7You are limited to &c1 &7profile in this",
-                "&7plugin.", " ", "&7Profiles: &e1&6/&e1",
-                "&7Playing on: " + db.getConfigurationSection(plr.getUniqueId().toString()).getString("Profile"));
-        Utils.createItemID(inv, 76, 1, 51, "&aSettings", "&7View and edit your SkyBlock settings.", " ",
-                "&eClick to alter!");
-        plr.openInventory(inv);
+            Inventory inv = Bukkit.createInventory(plr, 54, Utils.chat("SkyBlock Menu"));
+            Utils.createItemID(inv, 54, 1, 26, "&aPersonal Vault", "&7Store global items that you want",
+                    "&7to access at any time from", "&7anywhere right here.", " ", "&eClick to open!");
+            Utils.createItemID(inv, 276, 1, 20, "&aYour Skills", "&7View your Skill progression", "&7rewards.", " ",
+                    "&eClick to view!");
+            Utils.createItemID(inv, 321, 1, 21, "&aCollection", "&7View all of the items availiable",
+                    "&7in SkyBlock. Collect more of an", "&7item to unlock rewards on your",
+                    "&7way to becoming an Expert in Skyblock!", " ", "&eClick to view!");
+            Utils.createItemID(inv, 340, 1, 22, "&aRecipe Book", "&7Through your adventure, you will",
+                    "&7unlock recipes for all kinds of", "&7special items! You can view how",
+                    "&7to craft these items here.", " ", "&eClick to view!");
+            Utils.createItemID(inv, 388, 1, 23, "&aTrades", "&7View your available trades.",
+                    "&7These trades are always", "&7availiable and accessible through", "&7the Skyblock Menu.", " ",
+                    "&eClick to view!");
+            Utils.createItemID(inv, 386, 1, 24, "&aQuest Log", "&7Not Coming Soon", " ", "&eClick to view!");
+            Utils.addItem(inv, Utils.addLore(Utils.getSkull(
+                    "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjk2OTIzYWQyNDczMTAwMDdmNmFlNWQzMjZkODQ3YWQ1Mzg2NGNmMTZjMzU2NWExODFkYzhlNmIyMGJlMjM4NyJ9fX0="),
+                    "&dFairy Soul", "&7Collect the souls of dead fairies", "&7around the map, for permanent stats.", "",
+                    " &c✖ &eFound: &d"
+                            + db.getConfigurationSection(plr.getUniqueId().toString() + ".Information")
+                            .getInt("fairySouls")
+                            + "&7/&d0"),
+                    25);
+            Utils.createItemID(inv, 352, 1, 31, "&aPets", "&7View and manager all of your Pets.", " ",
+                    "&7Level up your pets faster by", "&7gaining xp in their favorite", "&7skill!", " ",
+                    "&7Selected pet: &fNone", " ", "&eClick to view!");
+            Utils.createItemID(inv, 299, 1, 33, "&aWardrobe", "&7Store armor sets and quickly", "&7swap between them!",
+                    "", "&eClick to view!");
+            Utils.addItem(inv, Utils.addLore(Utils.getSkull(
+                    "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTM2ZTk0ZjZjMzRhMzU0NjVmY2U0YTkwZjJlMjU5NzYzODllYjk3MDlhMTIyNzM1NzRmZjcwZmQ0ZGFhNjg1MiJ9fX0"),
+                    "&aPersonal Bank", "&7Contact your Banker from", "&7anywhere.", "&7Cooldown: &e-", " ",
+                    "&7Banker Status:", "&a-", " ", "&eClick to open!"), 34);
+//            Utils.createItemID(inv, 345, 1, 46, "&aPlugin Developer Menu",
+//                    "&7View the Plugin Developer Menu, only availiable", "&7to the plugin developers.", " ",
+//                    plr.getName().equalsIgnoreCase("apollo30") ? "&aACCESS GRANTED" : "&cACCESS DENIED");
+            Utils.createItemID(inv, 166, 1, 50, "&cClose");
+            Utils.createItemID(inv, 58, 1, 32, "&aCrafting Table", "&7Opens the crafting grid", " ", "&eClick to use!");
+            Utils.createGlass(inv, "STAINED_GLASS_PANE", 15, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17,
+                    18, 19, 27, 28, 29, 30, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 47, 52, 53, 54);
+            Utils.addItem(inv, Utils.addLore(Utils.getSkull(
+                    "ewogICJ0aW1lc3RhbXAiIDogMTU5OTQ2Nzk1ODg0NSwKICAicHJvZmlsZUlkIiA6ICIwMWIzZWY3YmQzOWI0OGFiOTc0YmE1NTdiMzFhMDczOSIsCiAgInByb2ZpbGVOYW1lIiA6ICJBcG9sbG8zMCIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS85YmM2ZjczM2Q0NTIyZTMwMTdmZjAyNGY0NWIxZjc5OGY2Nzc0YTU5N2Q3ZGFlZTljNzkxNWVkNDEyZGVkZDJjIgogICAgfQogIH0KfQ"),
+                    "&aCredits", "&7Click to view credits for this project!"), 46);
+            Utils.createSkull(inv, plr.getName(), 1, 14, "&aYour Skyblock Profile",
+                    "  &c" + getUnicode("heart") + " Health &f" + health + " HP",
+                    "  &a" + getUnicode("defense") + " Defense &f" + defense,
+                    "  &c" + getUnicode("strength") + " Strength &f" + strength,
+                    "  &f" + getUnicode("speed") + " Speed " + speed,
+                    "  &9" + getUnicode("cc") + " Crit Chance &f" + critchance + "%",
+                    "  &9" + getUnicode("cd") + " Crit Damage &f" + critdamage + "%",
+                    "  &e" + getUnicode("atkspeed") + " Bonus Attack Speed &f" + atkspeed + "%",
+                    "  &b" + getUnicode("intel") + " Intelligence &f" + intel,
+                    "  &3" + getUnicode("seacreature") + "&3 Sea Creature Chance &f" + seacreaturechance + "%",
+                    "  &b" + getUnicode("mf") + " Magic Find &f" + magicfind,
+                    "  &d" + getUnicode("petluck") + " Pet Luck &f" + petluck,
+                    " ", "&eClick to view your profile!");
+            Utils.addItem(inv, Utils.addLore(Utils.getSkull(
+                    "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2Y0MDk0MmYzNjRmNmNiY2VmZmNmMTE1MTc5NjQxMDI4NmE0OGIxYWViYTc3MjQzZTIxODAyNmMwOWNkMSJ9fX0="),
+                    "&bFast Travel", "&7Teleport to the hub or", "&7your island!", "",
+                    "&bLeft-Click to warp home.", "&eRight-Click to warp to hub."), 48);
+            Utils.createItemID(inv, 421, 1, 49, "&aProfile Management", "&7You are limited to &c1 &7profile in this",
+                    "&7plugin.", " ", "&7Profiles: &e1&6/&e1",
+                    "&7Playing on: " + db.getConfigurationSection(plr.getUniqueId().toString()).getString("Profile"));
+            Utils.createItemID(inv, 76, 1, 51, "&aSettings", "&7View and edit your SkyBlock settings.", " ",
+                    "&eClick to alter!");
+            plr.openInventory(inv);
+        } catch (Exception e) {
+            Utils.broadCast(e.toString());
+        }
     }
 
     public static void skillMenu(Player plr, String uuid, FileConfiguration db) {
@@ -299,7 +292,7 @@ public class GuiUtils {
     }
 
     public static void adminPanel(Player plr, String uuid) {
-        Inventory inv = Bukkit.createInventory(plr, 54, Utils.chat("&aPlugin Developer Menu"));
+        Inventory inv = Bukkit.createInventory(plr, 54, Utils.chat("Items"));
         Utils.createItemByte(inv, 276, 0, 1, 11, "&9Aspect of The End", "&7Damage: &c+1", "&7Strength: &c+12", "&7Crit Chance: &c+9%", "&7Crit Damage: &c+15%", "&7Bonus Attack Speed: &c+5%", "", "&7Intelligence: &a+12", "", "&6Item Ability: Instant Transmission &a&lRIGHT CLICK", "&7Teleport &a8 blocks&7 ahead of", "&7you and again &a+50 &f" + getUnicode("speed") + " Speed", "&7for &a3 seconds&7.", "&8Mana Cost: &b50");
         Utils.createItemByte(inv, 276, 0, 1, 12, "&9Aspect of The End", "&7Damage: &c+110", "&7Strength: &c+112", "&7Crit Chance: &c+9%", "&7Crit Damage: &c+15%", "&7Bonus Attack Speed: &c+5%", "", "&7Intelligence: &a+12", "", "&6Item Ability: Instant Transmission &a&lRIGHT CLICK", "&7Teleport &a8 blocks&7 ahead of", "&7you and again &a+50 &f" + getUnicode("speed") + " Speed", "&7for &a3 seconds&7.", "&8Mana Cost: &b50");
         Utils.createItemByte(inv, 276, 0, 1, 13, "&6Aspect of the Dragons", "&7Damage: &c+225", "&7Strength: &c+100", "", "&6Item Ability: Dragon Rage &a&lRIGHT CLICK", "&7All Monsters in front of you", "&7take &a&l1,050 &r&7damage. Hit", "&7monsters take large knockback.", "&8Mana Cost: &b100", "&8Cooldown: &a5s");

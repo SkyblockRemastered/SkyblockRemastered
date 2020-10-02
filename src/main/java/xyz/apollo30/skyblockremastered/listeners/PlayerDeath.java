@@ -45,7 +45,7 @@ public class PlayerDeath implements Listener {
         double purse = po.getPurse();
         po.setPurse(po.getPurse() / 2);
 
-        plr.sendMessage(Utils.chat("&cYou died and lost " + String.format("%,.1f", purse / 2) + " coins!"));
+        plr.sendMessage(Utils.chat("&cYou died and lost " + String.format("%,.0f", purse / 2) + " coins!"));
         plr.playSound(plr.getLocation(), Sound.ANVIL_LAND, 1F, 10F);
         plugin.getServer().getScheduler()
                 .scheduleSyncDelayedTask(plugin, () -> {

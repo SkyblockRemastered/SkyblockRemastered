@@ -20,7 +20,7 @@ public class UnloadChunk implements Listener {
     @EventHandler
     public void onUnloadChunk(ChunkUnloadEvent e) {
         for (Entity entity : e.getChunk().getEntities()) {
-            if (entity.getPassenger() != null) entity.getPassenger().remove();
+            if (entity.getPassenger() != null) entity.remove();
         }
     }
 

@@ -19,10 +19,11 @@ public class ServerListPing implements Listener {
     }
 
     @EventHandler
-    public void onServerListPing(ServerListPingEvent event) {
+    public void onServerListPing(ServerListPingEvent e) {
 
-        event.setMotd(Utils.chat("&fSkyblock&0Remastered &7- &8[&71.8&8]\n&f&k|&r &6Beta Release Coming Soon &f&k|&r"));
-        event.setMaxPlayers(500);
+        e.setMotd(Utils.chat("&6SkyblockRemastered &7- &8[&71.8&8]\n&b&k|&r &9Beta Release Coming Soon &b&k|&r"));
+        e.setMaxPlayers(100);
+
     }
 
 }

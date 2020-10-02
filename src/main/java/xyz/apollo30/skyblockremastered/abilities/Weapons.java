@@ -62,6 +62,7 @@ public class Weapons {
         location.setYaw(plr.getLocation().getYaw());
         location.setPitch(plr.getLocation().getPitch());
         plr.teleport(location);
+        plr.sendMessage(Utils.chat(""));
     }
 
 }

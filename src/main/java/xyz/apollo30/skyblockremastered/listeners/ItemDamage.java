@@ -18,6 +18,7 @@ public class ItemDamage implements Listener {
 
     @EventHandler
     public void onItemDamage(PlayerItemDamageEvent e) {
+        // Cancels out all item damage.
         e.setCancelled(true);
     }
 
