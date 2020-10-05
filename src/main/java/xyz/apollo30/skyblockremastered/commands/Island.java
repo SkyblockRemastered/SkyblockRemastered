@@ -26,12 +26,12 @@ public class Island implements CommandExecutor {
 
         Player plr = (Player) sender;
 
-        if (plr.getWorld().getName().equals("islands/" + plr.getUniqueId().toString())) {
+        if (plr.getWorld().getName().equals("playerislands/" + plr.getUniqueId().toString())) {
             plr.sendMessage(Utils.chat("You are already at your island"));
             return true;
         } else {
             plr.sendMessage(Utils.chat("&7Sending you to your island."));
-            World island = Bukkit.getServer().createWorld(new WorldCreator("islands/" + plr.getUniqueId().toString()));
+            World island = Bukkit.getServer().createWorld(new WorldCreator("playerislands/" + plr.getUniqueId().toString()));
             Location loc = new Location(island, island.getSpawnLocation().getX(), island.getSpawnLocation().getY(), island.getSpawnLocation().getZ());
             plr.teleport(loc);
         }

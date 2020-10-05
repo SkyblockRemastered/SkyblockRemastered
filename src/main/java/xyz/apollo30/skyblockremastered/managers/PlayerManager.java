@@ -50,14 +50,14 @@ public class PlayerManager {
             po.setDefense(player.getConfigurationSection(".Stats").getInt("defense"));
             po.setStrength(player.getConfigurationSection(".Stats").getInt("strength"));
             po.setSpeed(player.getConfigurationSection(".Stats").getInt("speed"));
-            po.setCrit_chance(player.getConfigurationSection(".Stats").getInt("critchance"));
-            po.setCrit_damage(player.getConfigurationSection(".Stats").getInt("critdamage"));
-            po.setAtk_speed(player.getConfigurationSection(".Stats").getInt("atkSpeed"));
+            po.setCritChance(player.getConfigurationSection(".Stats").getInt("critchance"));
+            po.setCritDamage(player.getConfigurationSection(".Stats").getInt("critdamage"));
+            po.setAtkSpeed(player.getConfigurationSection(".Stats").getInt("atkSpeed"));
             po.setIntelligence(player.getConfigurationSection(".Stats").getInt("intel"));
             po.setMaxIntelligence(player.getConfigurationSection(".Stats").getInt("intel"));
-            po.setSea_creature_chance(player.getConfigurationSection(".Stats").getInt("seacreaturechance"));
-            po.setMagic_find(player.getConfigurationSection(".Stats").getInt("magicfind"));
-            po.setPet_luck(player.getConfigurationSection(".Stats").getInt("petluck"));
+            po.setSeaCreatureChance(player.getConfigurationSection(".Stats").getInt("seacreaturechance"));
+            po.setMagicFind(player.getConfigurationSection(".Stats").getInt("magicfind"));
+            po.setPetLuck(player.getConfigurationSection(".Stats").getInt("petluck"));
 
             po.setRevenantKills(player.getConfigurationSection(".Slayers.Revenant").getInt("revenantkills"));
             po.setTarantulaKills(player.getConfigurationSection(".Slayers.Tarantula").getInt("tarantulakills"));
@@ -167,13 +167,13 @@ public class PlayerManager {
         player.getConfigurationSection(".Stats").set("defense", po.getDefense());
         player.getConfigurationSection(".Stats").set("strength", po.getStrength());
         player.getConfigurationSection(".Stats").set("speed", po.getSpeed());
-        player.getConfigurationSection(".Stats").set("critchance", po.getCrit_chance());
-        player.getConfigurationSection(".Stats").set("critdamage", po.getCrit_damage());
-        player.getConfigurationSection(".Stats").set("atkSpeed", po.getAtk_speed());
+        player.getConfigurationSection(".Stats").set("critchance", po.getCritChance());
+        player.getConfigurationSection(".Stats").set("critdamage", po.getCritDamage());
+        player.getConfigurationSection(".Stats").set("atkSpeed", po.getAtkSpeed());
         player.getConfigurationSection(".Stats").set("intel", po.getMaxIntelligence());
-        player.getConfigurationSection(".Stats").set("seacreaturechance", po.getSea_creature_chance());
-        player.getConfigurationSection(".Stats").set("magicfind", po.getMagic_find());
-        player.getConfigurationSection(".Stats").set("petluck", po.getPet_luck());
+        player.getConfigurationSection(".Stats").set("seacreaturechance", po.getSeaCreatureChance());
+        player.getConfigurationSection(".Stats").set("magicfind", po.getMagicFind());
+        player.getConfigurationSection(".Stats").set("petluck", po.getPetLuck());
 
         player.getConfigurationSection(".Slayers.Revenant").set("revenantkills", po.getRevenantKills());
         player.getConfigurationSection(".Slayers.Tarantula").set("tarantulakills", po.getTarantulaKills());

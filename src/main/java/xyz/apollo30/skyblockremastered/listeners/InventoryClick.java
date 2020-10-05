@@ -30,7 +30,6 @@ public class InventoryClick implements Listener {
         Player plr = (Player) e.getView().getPlayer();
         String title = e.getInventory().getTitle();
         String item = e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() ? e.getCurrentItem().getItemMeta().getDisplayName() : null;
-        ItemStack itemObj = e.getCurrentItem();
         String clickType = e.getClick().toString();
 
         if (title == null || item == null)
@@ -40,36 +39,35 @@ public class InventoryClick implements Listener {
         if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
             GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
             e.setCancelled(true);
-        // Personal Vault
+            // Personal Vault
         } else if (item.equals(Utils.chat("&aPersonal Vault"))) {
-            plr.openInventory(plr.getEnderChest().set);
-            plr.playSound(plr.getLocation(), Sound.CHEST_OPEN, 0.05F, 1F);
+            plr.openInventory(plr.getEnderChest());
+            plr.playSound(plr.getLocation(), Sound.CHEST_OPEN, 1F, 0.3F);
             e.setCancelled(true);
-        // Crafting Table
+            // Crafting Table
         } else if (item.equals(Utils.chat("&aCrafting Table"))) {
             GuiUtils.craftingMenu(plr, plr.getUniqueId().toString(), "empty");
             e.setCancelled(true);
-        // Trade Menu
+            // Trade Menu
         } else if (item.equals(Utils.chat("&aTrades"))) {
             GuiUtils.tradeMenu(plr, plr.getUniqueId().toString());
             e.setCancelled(true);
-        // Close Button
+            // Close Button
         } else if (item.equals(Utils.chat("&cClose"))) {
             plr.closeInventory();
             e.setCancelled(true);
-        // Personal Bank
+            // Personal Bank
         } else if (item.equals(Utils.chat("&aPersonal Bank"))) {
             GuiUtils.bankMenu(plr, plr.getUniqueId().toString(), plugin);
             e.setCancelled(true);
         } else if (item.equals(Utils.chat("&bFast Travel"))) {
-            Utils.broadCast(clickType);
             if (clickType.equals("RIGHT")) {
-                if (plr.getWorld().getName().equals("islands/" + plr.getUniqueId().toString())) {
+                if (plr.getWorld().getName().equals("playerislands/" + plr.getUniqueId().toString())) {
                     plr.sendMessage(Utils.chat("&cYou are already at your island"));
                     e.setCancelled(true);
                 } else {
                     plr.sendMessage(Utils.chat("&7Sending you to your island."));
-                    World island = Bukkit.getServer().createWorld(new WorldCreator("islands/" + plr.getUniqueId().toString()));
+                    World island = Bukkit.getServer().createWorld(new WorldCreator("playerislands/" + plr.getUniqueId().toString()));
                     Location loc = new Location(island, island.getSpawnLocation().getX(), island.getSpawnLocation().getY(), island.getSpawnLocation().getZ());
                     plr.teleport(loc);
                     e.setCancelled(true);
@@ -99,6 +97,9 @@ public class InventoryClick implements Listener {
 
         // Trade Menu
         switch (title) {
+            case "SkyBlock Menu":
+                if (e.isShiftClick() || e.isRightClick() || e.isLeftClick())
+                    e.setCancelled(true);
             case "Trades":
                 e.setCancelled(true);
                 Inventory inv = plr.getInventory();

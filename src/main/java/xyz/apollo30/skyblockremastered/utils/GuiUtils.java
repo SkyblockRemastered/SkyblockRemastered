@@ -135,13 +135,13 @@ public class GuiUtils {
             int defense = po.getDefense();
             int strength = po.getStrength();
             int speed = po.getSpeed();
-            int critdamage = po.getCrit_damage();
-            int critchance = po.getCrit_chance();
-            int atkspeed = po.getAtk_speed();
+            int critdamage = po.getCritDamage();
+            int critchance = po.getCritChance();
+            int atkspeed = po.getAtkSpeed();
             int intel = po.getMaxIntelligence();
-            int seacreaturechance = po.getSea_creature_chance();
-            int magicfind = po.getMagic_find();
-            int petluck = po.getPet_luck();
+            int seacreaturechance = po.getSeaCreatureChance();
+            int magicfind = po.getMagicFind();
+            int petluck = po.getPetLuck();
 
             Inventory inv = Bukkit.createInventory(plr, 54, Utils.chat("SkyBlock Menu"));
             Utils.createItemID(inv, 54, 1, 26, "&aPersonal Vault", "&7Store global items that you want",

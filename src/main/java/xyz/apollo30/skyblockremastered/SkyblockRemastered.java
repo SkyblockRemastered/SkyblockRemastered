@@ -9,12 +9,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.apollo30.skyblockremastered.abilities.Miscs;
 import xyz.apollo30.skyblockremastered.abilities.Weapons;
-import xyz.apollo30.skyblockremastered.commands.Build;
-import xyz.apollo30.skyblockremastered.commands.Gamemode;
-import xyz.apollo30.skyblockremastered.commands.Hub;
-import xyz.apollo30.skyblockremastered.commands.Visit;
+import xyz.apollo30.skyblockremastered.commands.*;
+import xyz.apollo30.skyblockremastered.events.Dragon;
 import xyz.apollo30.skyblockremastered.listeners.*;
 import xyz.apollo30.skyblockremastered.managers.*;
+import xyz.apollo30.skyblockremastered.objects.ServerObject;
 import xyz.apollo30.skyblockremastered.tasks.*;
 
 import java.util.HashMap;
@@ -29,6 +28,8 @@ public class SkyblockRemastered extends JavaPlugin {
     public HashMap<Entity, Long> indicator = new HashMap<>();
     public Miscs miscAbilities;
     public Weapons weaponAbilities;
+    public Dragon dragonEvent;
+    public ServerObject so = new ServerObject();
 
     @Override
     public void onEnable() {
@@ -74,6 +75,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new PlayerPickup(this);
         new InventoryOpen(this);
         new ServerListPing(this);
+        new PlayerItemHeld(this);
 
         // Command
         new Gamemode(this);
@@ -81,10 +83,12 @@ public class SkyblockRemastered extends JavaPlugin {
         new Visit(this);
         new Hub(this);
         new Build(this);
+        new SpawnEgg(this);
 
         // Abilities
         this.miscAbilities = new Miscs(this);
         this.weaponAbilities = new Weapons(this);
+        this.dragonEvent = new Dragon(this);
 
         // Managers
         this.blockManager = new BlockManager(this);

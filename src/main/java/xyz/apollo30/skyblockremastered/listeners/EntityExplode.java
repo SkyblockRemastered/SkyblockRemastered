@@ -22,9 +22,9 @@ public class EntityExplode implements Listener {
 
         if (e.getEntity().getWorld().getName().equals("hub")) {
             e.setCancelled(true);
-        } else if (e.getEntity().getWorld().getName().startsWith("islands/")) {
+        } else if (e.getEntity().getWorld().getName().startsWith("playerislands/")) {
             if (e.getEntityType() != EntityType.PRIMED_TNT) e.setCancelled(true);
-        }
+        } else e.setCancelled(true);
 
     }
 }

@@ -26,7 +26,7 @@ public class Hub implements CommandExecutor {
 
         Player plr = (Player) sender;
 
-        if (plr.getWorld().getName().equals("islands/" + plr.getUniqueId().toString())) {
+        if (plr.getWorld().getName().equals("playerislands/" + plr.getUniqueId().toString())) {
             plr.sendMessage(Utils.chat("You are already at the hub."));
             return true;
         } else {

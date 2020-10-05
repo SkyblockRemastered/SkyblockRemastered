@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.utils.GuiUtils;
+import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 public class PlayerJoin implements Listener {
@@ -40,18 +41,7 @@ public class PlayerJoin implements Listener {
         plr.sendMessage(Utils.chat("&8&m--------------------------------------------------"));
 
         // Rank Joins
-        if (plr.hasPermission("groups.admin")) Utils.broadCast("&c[ADMIN] " + plr.getName() + "&7 has joined the server!");
-        else if (plr.hasPermission("groups.mod")) Utils.broadCast("&2[MOD] " + plr.getName() + "&7 has joined the server!");
-        else if (plr.hasPermission("groups.helper")) Utils.broadCast("&9[HELPER] " + plr.getName() + "&7 has joined the server!");
-        else if (plr.hasPermission("groups.builder")) Utils.broadCast("&d[BUILDER] " + plr.getName() + "&7 has joined the server!");
-        else if (plr.hasPermission("groups.tester")) Utils.broadCast("&9[BETA] " + plr.getName() + "&7 has joined the server!");
-        else if (plr.hasPermission("groups.youtuber")) Utils.broadCast("&c[&fYOUTUBE&c] " + plr.getName() + "&7 has joined the server!");
-        else if (plr.hasPermission("groups.mvp++")) Utils.broadCast("&e»» &6[MVP&0++&6] " + plr.getName() + "&7 has joined the server! &e««");
-        else if (plr.hasPermission("groups.mvp+")) Utils.broadCast("&b[MVP&0+&b] " + plr.getName() + "&7 has joined the server!");
-        else if (plr.hasPermission("groups.mvp")) Utils.broadCast("&b[MVP] " + plr.getName() + "&7 has joined the server!");
-        else if (plr.hasPermission("groups.vip+")) Utils.broadCast("&a[VIP&6+&a] " + plr.getName() + "&7 has joined the server!");
-        else if (plr.hasPermission("groups.vip")) Utils.broadCast("&a[VIP] " + plr.getName() + "&7 has joined the server!");
-        else Utils.broadCast("&7" + plr.getName() + " has joined the game.");
+        Utils.broadCast(Helper.getRank(plr) + " &ehas joined the game!");
 
         ItemStack nether_star = Utils.createItem(null, "NETHER_STAR", 1, 9, "&aSkyBlock Menu &7(Right Click)",
                 "&7View all of your SkyBlock", "&7progress, including your Skills,",
@@ -64,10 +54,10 @@ public class PlayerJoin implements Listener {
         World clone = Bukkit.getServer().createWorld(new WorldCreator("private_island_template"));
 
         // Now we copi pasta
-        Utils.copyWorld(clone, "islands/" + plr.getUniqueId().toString());
+        Utils.copyWorld(clone, "playerislands/" + plr.getUniqueId().toString());
 
         // Define Variables
-        World island = Bukkit.getServer().getWorld("islands/" + plr.getUniqueId().toString());
+        World island = Bukkit.getServer().getWorld("playerislands/" + plr.getUniqueId().toString());
         // Teleport them
         Location loc = new Location(island, island.getSpawnLocation().getX(), island.getSpawnLocation().getY(), island.getSpawnLocation().getZ());
         plr.teleport(loc);

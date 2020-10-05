@@ -1,15 +1,18 @@
 package xyz.apollo30.skyblockremastered.listeners;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.constants.Constants;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
+
+import java.util.List;
+
 
 public class PlayerPickup implements Listener {
 
@@ -24,85 +27,77 @@ public class PlayerPickup implements Listener {
     @EventHandler
     public void onPlayerPickup(PlayerPickupItemEvent e) {
 
-        e.setCancelled(true);
-
         Player plr = e.getPlayer();
         PlayerObject po = plugin.playerManager.playerObjects.get(plr);
         ItemStack item = e.getItem().getItemStack();
 
-        // Coins
-        if (item.hasItemMeta() && item.getItemMeta().getDisplayName() != null) {
-            if (item.getItemMeta().getDisplayName().equals(Utils.chat("&f"))) {
-                po.setCoins_gained(po.getCoins_gained() + item.getAmount() * 1000);
-                e.setCancelled(true);
-                e.getItem().remove();
-            } else if (item.getItemMeta().getDisplayName().equals(Utils.chat("&f&f"))) {
-                po.setCoins_gained(po.getCoins_gained() + item.getAmount() * 100);
-                e.setCancelled(true);
-                e.getItem().remove();
-            } else if (item.getItemMeta().getDisplayName().equals(Utils.chat("&f&f&f"))) {
-                po.setCoins_gained(po.getCoins_gained() + item.getAmount() * 50);
-                e.setCancelled(true);
-                e.getItem().remove();
-            } else if (item.getItemMeta().getDisplayName().equals(Utils.chat("&f&f&f&f"))) {
-                po.setCoins_gained(po.getCoins_gained() + item.getAmount());
-                e.setCancelled(true);
-                e.getItem().remove();
-            }
+        if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().startsWith("Coin")) {
+            int coin = Integer.parseInt(item.getItemMeta().getDisplayName().split(" ")[item.getItemMeta().getDisplayName().split(" ").length - 1]);
+            po.setCoins_gained(po.getCoins_gained() + item.getAmount() * coin);
+            e.setCancelled(true);
+            e.getItem().remove();
+            plr.getInventory().remove(item);
         }
 
-        switch (po.getPickup_rarity()) {
-            case "All":
-                e.setCancelled(false);
+        assert item != null;
+        checkPickupRarity(e, item.getItemMeta().getLore(), po.getSelectedRarity());
+
+    }
+
+    public void checkPickupRarity(PlayerPickupItemEvent e, List<String> lores, Constants.Rarities selected_rarity) {
+
+        Constants.Rarities item_rarity = Constants.Rarities.NONE;
+
+        for (String lore : lores) {
+            item_rarity = lore.contains("COMMON") ? Constants.Rarities.COMMON :
+                            lore.contains("UNCOMMON") ? Constants.Rarities.UNCOMMON :
+                                    lore.contains("RARE") ? Constants.Rarities.RARE :
+                                            lore.contains("EPIC") ? Constants.Rarities.EPIC : lore.equals("LEGENDARY") ? Constants.Rarities.LEGENDARY :
+                                                    lore.contains("SPECIAL") ? Constants.Rarities.SPECIAL :
+                                                            lore.contains("VERY SPECIAL") ? Constants.Rarities.VERY_SPECIAL :
+                                                                    Constants.Rarities.CELESTIAL;
+        }
+
+        Utils.broadCast(item_rarity.toString());
+
+        switch (selected_rarity) {
+
+            // item_rarity is the item rarity
+            // selected_rarity is the players rarity selection
+
+            case CELESTIAL:
+                if (item_rarity == Constants.Rarities.COMMON ||
+                        item_rarity == Constants.Rarities.UNCOMMON ||
+                        item_rarity == Constants.Rarities.RARE ||
+                        item_rarity == Constants.Rarities.EPIC ||
+                        item_rarity == Constants.Rarities.LEGENDARY) e.setCancelled(true);
                 break;
-            case "Uncommon":
-                if (item.getItemMeta().getLore().contains("COMMON")) e.setCancelled(true);
+            case LEGENDARY:
+                if (item_rarity == Constants.Rarities.COMMON ||
+                        item_rarity == Constants.Rarities.UNCOMMON ||
+                        item_rarity == Constants.Rarities.RARE ||
+                        item_rarity == Constants.Rarities.EPIC) e.setCancelled(true);
                 break;
-            case "Rare":
-                if (item.getItemMeta().getLore().contains("COMMON")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("UNCOMMON")) e.setCancelled(true);
+            case EPIC:
+                if (item_rarity == Constants.Rarities.COMMON ||
+                        item_rarity == Constants.Rarities.UNCOMMON ||
+                        item_rarity == Constants.Rarities.RARE) e.setCancelled(true);
+
                 break;
-            case "Epic":
-                if (item.getItemMeta().getLore().contains("COMMON")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("UNCOMMON")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("RARE")) e.setCancelled(true);
-                break;
-            case "Legendary":
-                if (item.getItemMeta().getLore().contains("COMMON")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("UNCOMMON")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("RARE")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("EPIC")) e.setCancelled(true);
-                break;
-            case "Special":
-                if (item.getItemMeta().getLore().contains("COMMON")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("UNCOMMON")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("RARE")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("EPIC")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("LEGENDARY")) e.setCancelled(true);
-                break;
-            case "Very Special":
-                if (item.getItemMeta().getLore().contains("COMMON")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("UNCOMMON")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("RARE")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("EPIC")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("LEGENDARY")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("SPECIAL")) e.setCancelled(true);
-                break;
-            case "Celestial":
-                if (item.getItemMeta().getLore().contains("COMMON")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("UNCOMMON")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("RARE")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("EPIC")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("LEGENDARY")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("SPECIAL")) e.setCancelled(true);
-                else if (item.getItemMeta().getLore().contains("VERY SPECIAL"))
+            case RARE:
+                if (item_rarity == Constants.Rarities.COMMON || item_rarity == Constants.Rarities.UNCOMMON)
                     e.setCancelled(true);
                 break;
-            case "None":
+            case UNCOMMON:
+                if (item_rarity == Constants.Rarities.COMMON) e.setCancelled(true);
+                break;
+            case COMMON:
+                e.setCancelled(false);
+                break;
+            case NONE:
                 e.setCancelled(true);
                 break;
         }
 
     }
-
 }

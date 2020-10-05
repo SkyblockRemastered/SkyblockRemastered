@@ -3,6 +3,7 @@ package xyz.apollo30.skyblockremastered.objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
+import xyz.apollo30.skyblockremastered.constants.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,8 @@ public class PlayerObject {
     String uuid;
 
     // Settings
-    String pickup_rarity = "All";
-    boolean full_inventory_notification = true;
+    Constants.Rarities selectedRarity = Constants.Rarities.COMMON;
+    boolean fullInventoryAlert = true;
 
     double purse = 100;
     double bank = 0;
@@ -30,24 +31,25 @@ public class PlayerObject {
     int defense = 0;
     int strength = 0;
     int speed = 100;
-    int crit_chance = 20;
-    int crit_damage = 50;
-    int atk_speed = 0;
+    int critChance = 20;
+    int critDamage = 50;
+    int atkSpeed = 0;
     int intelligence = 100;
     int maxIntelligence = 100;
-    int sea_creature_chance = 0;
-    int magic_find = 0;
-    int pet_luck = 0;
+    int seaCreatureChance = 0;
+    int magicFind = 0;
+    int petLuck = 0;
+    int trueDamage = 0;
 
 
     // Island
     List<UUID> coop = new ArrayList<>();
     List<UUID> builders = new ArrayList<>();
-    boolean visit_public = true;
-    boolean visit_friend = true;
+    boolean visitPublic = true;
+    boolean visitFriend = true;
 
     // Database
-    int zealot_kills = 0;
+    int zealotKills = 0;
     double coins_gained = 0;
     boolean statOverride = false;
     boolean blockBreak = false;
@@ -143,10 +145,10 @@ public class PlayerObject {
     }
 
     public void addZealotKill() {
-        zealot_kills += 1;
+        zealotKills += 1;
     }
 
     public void resetZealotKills() {
-        zealot_kills = 0;
+        zealotKills = 0;
     }
 }

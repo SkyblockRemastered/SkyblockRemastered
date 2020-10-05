@@ -48,38 +48,35 @@ public class EntityDeath implements Listener {
 
         // Special Zealot
         if (e.getEntity().getPassenger().getCustomName().contains(Utils.chat("&cZealot"))) {
-            double random = po.getZealot_kills() > 420 ? 0.00476190476 : 1;
+
+            if (mo.getName().contains("Special Zealot")) return;
+
+            double random = po.getZealotKills() > 420 ? 0.00476190476 : 1;
             if (Math.random() > random) {
                 po.addZealotKill();
             } else {
-                int x = new Random().nextInt(10 - -10) + -10;
-                int z = new Random().nextInt(10 - -10) + -10;
-
                 plr.playSound(plr.getLocation(), Sound.WITHER_SPAWN, 1F, 1F);
-                plr.sendMessage(Utils.chat("&aA special &5Zealot &ahas spawned nearby. &7(" + po.getZealot_kills() + ")"));
+                plr.sendMessage(Utils.chat("&aA special &5Zealot &ahas spawned nearby. &7(" + po.getZealotKills() + ")"));
 
-                Location loc;
+                Location loc = e.getEntity().getLocation().add(Math.random() * 5, Math.random() * 2, Math.random() * 5);
 
-                List<Location> list = new ArrayList<>(plugin.mobManager.zealotSpawnPoints);
-                list = (List<Location>) list.stream().filter(a -> e.getEntity().getKiller() != null && Math.abs(e.getEntity().getKiller().getLocation().getZ() + a.getZ()) <= 10 && Math.abs(e.getEntity().getKiller().getLocation().getX() + a.getX()) <= 10);
-
-                if (list.size() == 0) loc = e.getEntity().getLocation();
-                else {
-                    loc = list.get((int) Math.floor(Math.random() * list.size()));
-                }
-
-                Utils.broadCast(loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
-
-                Enderman enderman = (Enderman) Bukkit.getWorld("hub").spawnEntity(loc, EntityType.ENDERMAN);
-                enderman.setCarriedMaterial(new MaterialData(Material.ENDER_PORTAL_FRAME));
+                Enderman enderman = (Enderman) e.getEntity().getWorld().spawnEntity(loc, EntityType.ENDERMAN);
                 plugin.mobManager.createMob(enderman, "Special Zealot");
 
                 po.resetZealotKills();
             }
+
         } else if (e.getEntityType() == EntityType.ENDERMAN && e.getEntity().getPassenger().getCustomName().contains(Utils.chat("Special Zealot"))) {
             plr.sendMessage(Utils.chat("&6&lRARE DROP!&r &5Summoning Eye&7!"));
-            PacketManager.sendTitle(plr, 1, 15, 1, Utils.chat("&cSpecial Zealot!"), "");
-            e.getEntity().getWorld().dropItem(e.getEntity().getLocation(), new ItemStack(Material.LEATHER, 1, (byte) 69));
+            PacketManager.sendTitle(plr, 0, 15, 1, Utils.chat("&cSpecial Zealot!"), "");
+            e.getEntity().getWorld().dropItem(e.getEntity().getLocation(), Utils.addLore(
+                    Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGFhOGZjOGRlNjQxN2I0OGQ0OGM4MGI0NDNjZjUzMjZlM2Q5ZGE0ZGJlOWIyNWZjZDQ5NTQ5ZDk2MTY4ZmMwIn19fQ=="),
+                    "&5Summoning Eye",
+                    "&7Use this at the &5Ender Altar",
+                    "&7in the &5Dragon's Nest&7 to",
+                    "&7summon Ender Dragons!",
+                    "",
+                    "&5&lEPIC"));
             plr.playSound(plr.getLocation(), Sound.SUCCESSFUL_HIT, 1F, .5F);
         }
 
@@ -98,7 +95,7 @@ public class EntityDeath implements Listener {
         int thousand_coins = 0;
         int hundred_coins = 0;
         int fifty_coins = 0;
-        int one_coins = 0;
+        int one_coins;
 
         if ((level / 10) > 1) {
             int coins = level / 10;
@@ -117,33 +114,28 @@ public class EntityDeath implements Listener {
             one_coins = coins;
         } else one_coins = 1;
 
-        Utils.broadCast(one_coins + " Coins of 1");
-        Utils.broadCast(thousand_coins + " Coins of 1000");
-        Utils.broadCast(hundred_coins + " Coins of 100");
-        Utils.broadCast(fifty_coins + " Coins of 50");
-
         ItemStack thousand_coin = Utils.getSkull(Utils.urlToBase64("http://textures.minecraft.net/texture/d7c4f6630597a49ad223d12cf648af2283d34a65bf9dd057d198d2980779c34"));
         thousand_coin.setAmount(thousand_coins);
         ItemMeta meta = thousand_coin.getItemMeta();
-        meta.setDisplayName(Utils.chat("&f"));
+        meta.setDisplayName(Utils.chat("Coin 1000"));
         thousand_coin.setItemMeta(meta);
 
         ItemStack hundred_coin = Utils.getSkull(Utils.urlToBase64("http://textures.minecraft.net/texture/1c0e914476e1b15da2a91f45696dd217669d4dac4fa621650929bace03de2254"));
         hundred_coin.setAmount(hundred_coins);
         ItemMeta meta1 = hundred_coin.getItemMeta();
-        meta1.setDisplayName(Utils.chat("&f&f"));
+        meta1.setDisplayName(Utils.chat("Coin 100"));
         hundred_coin.setItemMeta(meta1);
 
         ItemStack fifty_coin = Utils.getSkull(Utils.urlToBase64("http://textures.minecraft.net/texture/c43f12c8369f9c3888a45aaf6d7761578402b4241958f7d4ae4eceb56a867d2a"));
         fifty_coin.setAmount(fifty_coins);
         ItemMeta meta2 = fifty_coin.getItemMeta();
-        meta2.setDisplayName(Utils.chat("&f&f&f"));
+        meta2.setDisplayName(Utils.chat("Coin 50"));
         fifty_coin.setItemMeta(meta2);
 
         ItemStack one_coin = Utils.getSkull(Utils.urlToBase64("http://textures.minecraft.net/texture/740d6e362bc7eee4f911dbd0446307e7458d1050d09aee538ebcb0273cf75742"));
         one_coin.setAmount(one_coins);
         ItemMeta meta3 = one_coin.getItemMeta();
-        meta3.setDisplayName(Utils.chat("&f&f&f&f"));
+        meta3.setDisplayName(Utils.chat("Coin 1"));
         one_coin.setItemMeta(meta3);
 
         if (thousand_coins > 0) e.getWorld().dropItem(e.getLocation(), thousand_coin);

@@ -8,6 +8,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
@@ -39,9 +40,41 @@ public class MobManager {
     public void createMob(LivingEntity entity, String name) {
 
         MobObject mo = new MobObject();
+        name = name.toLowerCase();
 
-        // Vanilla Mobs
-        if (name.equalsIgnoreCase("zombie villager")) {
+        if (name.equalsIgnoreCase("protector dragon")) {
+            mo.setHealth(9000000);
+            mo.setLevel(1000);
+            mo.setName("Protector Dragon");
+        } else if (name.equalsIgnoreCase("old dragon")) {
+            mo.setHealth(15000000);
+            mo.setLevel(1000);
+            mo.setName("Old Dragon");
+        } else if (name.equalsIgnoreCase("wise dragon")) {
+            mo.setHealth(9000000);
+            mo.setLevel(1000);
+            mo.setName("Wise Dragon");
+        } else if (name.equalsIgnoreCase("unstable dragon")) {
+            mo.setHealth(9000000);
+            mo.setLevel(1000);
+            mo.setName("Unstable Dragon");
+        } else if (name.equalsIgnoreCase("young dragon")) {
+            mo.setHealth(7500000);
+            mo.setLevel(1000);
+            mo.setName("Young Dragon");
+        } else if (name.equalsIgnoreCase("strong dragon")) {
+            mo.setHealth(9000000);
+            mo.setLevel(1000);
+            mo.setName("Strong Dragon");
+        } else if (name.equalsIgnoreCase("superior dragon")) {
+            mo.setHealth(12000000);
+            mo.setLevel(1000);
+            mo.setName("Superior Dragon");
+        } else if (name.equalsIgnoreCase("holy dragon")) {
+            mo.setHealth(20000000);
+            mo.setLevel(1000);
+            mo.setName("Holy Dragon");
+        } else if (name.equalsIgnoreCase("zombie villager")) {
             mo.setMaxHealth(120);
             mo.setLocation("Graveyard");
             mo.setDamage(24);
@@ -193,7 +226,9 @@ public class MobManager {
             mo.setXpGain(10);
             mo.setDamage(1250);
             mo.setLevel(55);
-            mo.setName("Zealot");
+            mo.setName("Special Zealot");
+            Enderman enderman = (Enderman) entity;
+            enderman.setCarriedMaterial(new MaterialData(Material.ENDER_PORTAL_FRAME, (byte) 6));
         } else if (name.equalsIgnoreCase("crypt ghoul")) {
             mo.setMaxHealth(2000);
             mo.setLocation("Graveyard");
@@ -247,7 +282,7 @@ public class MobManager {
             mo.setDamage(160);
             mo.setLevel(10);
             mo.setName("Wither Skeleton");
-        } else if (name.equalsIgnoreCase("Zombie Pigman")) {
+        } else if (name.equalsIgnoreCase("zombie pigman")) {
             mo.setMaxHealth(240);
             mo.setLocation("Graveyard");
             mo.setXpGain(10);
@@ -286,7 +321,7 @@ public class MobManager {
         entity.setPassenger(armorStand);
         plugin.health_indicator.put(entity, armorStand);
         mobObjects.put(entity, mo);
-
+Utils.broadCast("._.");
     }
 
     public void initBloccCheck() {

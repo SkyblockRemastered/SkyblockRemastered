@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
@@ -33,6 +34,7 @@ public class BlockPlace implements Listener {
         // Fetching the player's data
         Player plr = e.getPlayer();
         PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+        ItemStack item = plr.getItemInHand();
 
         // Island Border
         if (plr.getWorld().getName().startsWith("islands/")) {
@@ -42,17 +44,17 @@ public class BlockPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
+        }
 
-
-            // unplaceable items
-            if (e.getPlayer().getItemInHand() != null && e.getPlayer().getItemInHand().getItemMeta().getEnchants().size() > 0) {
-                e.setCancelled(true);
-            } else if (e.getPlayer().getItemInHand().getType().equals(Material.SKULL)) {
+        // unplaceable items
+        if (item != null && item.getItemMeta().getEnchants().size() > 0) {
+            e.setCancelled(true);
+        } else {
+            assert item != null;
+            if (item.getType().equals(Material.SKULL) || item.getType().equals(Material.SKULL_ITEM)) {
                 e.setCancelled(true);
             }
         }
-
-
 
         // Check if the player is in the hub or not.
         if (plr.getWorld().getName().equals("hub")) {

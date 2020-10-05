@@ -25,7 +25,7 @@ public class EntitySpawn implements Listener {
     @EventHandler
     public void onEntitySpawn(CreatureSpawnEvent e) {
 
-        if (e.getEntity() instanceof LivingEntity) {
+        if (e.getEntity() != null) {
             Entity entity = e.getEntity();
             EntityType type = e.getEntityType();
 
@@ -50,7 +50,7 @@ public class EntitySpawn implements Listener {
             }
         }
 
-        plugin.mobManager.createMob(e.getEntity(), e.getEntity().getName());
+        // plugin.mobManager.createMob(e.getEntity(), e.getEntity().getName());
 
     }
 

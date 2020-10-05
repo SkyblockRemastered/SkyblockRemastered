@@ -329,9 +329,9 @@ public class Utils {
         Location loc = plr.getLocation();
         String location = "&7None";
 
-        if (world.getName().equals("islands/" + plr.getUniqueId().toString())) location = "&aYour Island";
-        else if (world.getName().startsWith("islands/") && !world.getName().equals("islands/" + plr.getUniqueId().toString())) {
-            String islandOwner = Utils.getName(world.getName().replace("islands/", ""));
+        if (world.getName().equals("playerislands/" + plr.getUniqueId().toString())) location = "&aYour Island";
+        else if (world.getName().startsWith("playerislands/") && !world.getName().equals("playerislands/" + plr.getUniqueId().toString())) {
+            String islandOwner = Utils.getName(world.getName().replace("playerislands/", ""));
             location = "&a" + islandOwner + "'s Island";
         } else if (world.getName().equals("hub")) {
             if (Utils.isInZone(loc, new Location(loc.getWorld(), 27, 81, -59), new Location(plr.getWorld(), 35, 69, -52))) location = "&6Bank";
@@ -554,7 +554,7 @@ public class Utils {
     public static String getDisplayHP(int level, String mobname, int current_health, int max_health) {
         double percent = current_health / (double) max_health;
         String color = percent < .30 ? "&c" : percent < .50 ? "&e" : "&a";
-        return "&8[&7Lv" + level + "&8] &c" + mobname + " " + color + (current_health < 0 ? 0 : (double) current_health) + "&f/&a" + max_health + "&c" + GuiUtils.getUnicode("heart");
+        return "&8[&7Lv" + level + "&8] &c" + mobname + " " + color + (Math.max(current_health, 0)) + "&f/&a" + max_health + "&c" + GuiUtils.getUnicode("heart");
     }
 
     public static String intToRoman(int level) {

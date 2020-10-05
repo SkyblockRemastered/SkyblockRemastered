@@ -61,17 +61,17 @@ public class SkyblockRemastered implements CommandExecutor {
                 player_data.setDefense(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Defense set to " + args[2]));
             } else if (args[1].equalsIgnoreCase("cd")) {
-                player_data.setCrit_damage(Integer.parseInt(args[2]));
+                player_data.setCritDamage(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Crit Damage set to " + args[2]));
             } else if (args[1].equalsIgnoreCase("cc")) {
-                player_data.setCrit_chance(Integer.parseInt(args[2]));
+                player_data.setCritChance(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Crit Chance set to " + args[2]));
             } else if (args[1].equalsIgnoreCase("intel")) {
                 player_data.setMaxIntelligence(Integer.parseInt(args[2]));
                 player_data.resetIntelligence();
                 plr.sendMessage(Utils.chat(prefix + "Intelligence set to " + args[2]));
             } else if (args[1].equalsIgnoreCase("mf")) {
-                player_data.setMagic_find(Integer.parseInt(args[2]));
+                player_data.setMagicFind(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Magic Find set to " + args[2]));
             } else if (args[1].equalsIgnoreCase("str")) {
                 player_data.setStrength(Integer.parseInt(args[2]));

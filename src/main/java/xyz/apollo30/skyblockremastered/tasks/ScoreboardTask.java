@@ -50,7 +50,7 @@ public class ScoreboardTask extends BukkitRunnable {
             String coins_gained = "";
             if (po.getCoins_gained() > 0) {
                 coins_gained = " &e(+" + String.format("%,.0f", po.getCoins_gained()) + ")";
-                plr.playSound(plr.getLocation(), Sound.ORB_PICKUP, 1F, 5F);
+                plr.playSound(plr.getLocation(), Sound.ORB_PICKUP, 1F, 10F);
                 po.setPurse(po.getPurse() + po.getCoins_gained());
             }
 
