@@ -483,7 +483,7 @@ public class Dragon implements Listener {
             int totalFrags = 0;
             if (playerDamage < 100000) {
                 totalFrags = 3;
-                broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &63 " + WordUtils.capitalizeFully(dragon) + " Fragments");
+                broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &63 " + WordUtils.capitalizeFully(dragon) + " Dragon Fragments");
             } else if (playerDamage >= 1000000) {
                 totalFrags = (int) Math.floor(playerDamage / 1000000D);
                 broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + totalFrags + " " + WordUtils.capitalizeFully(dragon) + " Fragments");
