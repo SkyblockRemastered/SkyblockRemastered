@@ -2,6 +2,7 @@ package xyz.apollo30.skyblockremastered.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -45,35 +46,29 @@ public class DamageEvents implements Listener {
 
         // Player (Projectile) to Mob
         if (e.getDamager().getType() == EntityType.ARROW && e.getEntity() instanceof LivingEntity) {
+
             Arrow arrow = (Arrow) e.getDamager();
             Player plr = (Player) arrow.getShooter();
 
             ItemStack bow = plr.getInventory().getItemInHand();
 
-            Utils.broadCast("[DEBUG] 1");
+            Player damager = (Player) arrow.getShooter();
+            LivingEntity target = (LivingEntity) e.getEntity();
+
+            PlayerObject po = plugin.playerManager.playerObjects.get(damager);
+            MobObject mo = plugin.mobManager.mobObjects.get(target);
+
+            plr.playSound(plr.getLocation(), Sound.ORB_PICKUP, 1000F, .8F);
+
+            // Defining the player's stats
+            int strength = po.getStrength();
+            int weaponDamage = 0;
+            int critDamage = po.getCritDamage();
+            int critChance = po.getCritChance();
+            int atkSpeed = po.getAtkSpeed();
+            int intelligence = po.getIntelligence();
 
             if (bow.hasItemMeta() && bow.getItemMeta().hasLore()) {
-
-                Utils.broadCast("[DEBUG] 2");
-
-                Player damager = (Player) arrow.getShooter();
-                LivingEntity target = (LivingEntity) e.getEntity();
-
-                PlayerObject po = plugin.playerManager.playerObjects.get(damager);
-                MobObject mo = plugin.mobManager.mobObjects.get(target);
-
-                Utils.broadCast("[DEBUG] 3");
-                // Defining the player's stats
-                int strength = po.getStrength();
-                int weaponDamage = 0;
-                int critDamage = po.getCritDamage();
-                int critChance = po.getCritChance();
-                int atkSpeed = po.getAtkSpeed();
-                int intelligence = po.getIntelligence();
-
-                Utils.broadCast("[DEBUG] 4");
-
-                Utils.broadCast("[DEBUG] 5");
 
                 // Fetching the Weapon's Stats.
                 if (damager.getItemInHand().hasItemMeta() && damager.getItemInHand().getItemMeta().hasLore()) {
@@ -87,49 +82,43 @@ public class DamageEvents implements Listener {
                         if (lore.startsWith(Utils.chat("&7Intelligence"))) intelligence += parseLore(lore);
                     }
                 }
-
-                Utils.broadCast("[DEBUG] 6");
-
-                // Attack Speed
-                attackSpeed(atkSpeed, target);
-
-                // Adding Crit Chance
-                critChance += po.getCombatLevel() * .05;
-
-                // Base Formula
-                int base_damage = (int) ((5 + weaponDamage + (Math.floor(strength) / 5)) * (1 + strength / 100));
-
-                // Final Damage
-                int final_damage = (int) (base_damage + (base_damage * .04));
-
-                String type = "normal";
-
-                if ((Math.random() * 100) < critChance) {
-                    final_damage = final_damage * (1 + critDamage / 100);
-                    type = "crithit";
-                }
-
-                e.setDamage(0);
-                mo.setHealth((mo.getHealth() - final_damage));
-
-                Utils.broadCast("[DEBUG] 7");
-
-                if (e.getEntityType() == EntityType.ENDER_DRAGON) {
-                    Utils.broadCast("[DEBUG] " + ((mo.getHealth() / (double) mo.getMaxHealth()) * target.getMaxHealth()));
-                    target.setHealth(((mo.getHealth() / (double) mo.getMaxHealth()) * target.getMaxHealth() > 0 ? (mo.getHealth() / (double) mo.getMaxHealth()) * target.getMaxHealth() : 0));
-                    plugin.dragonEvent.playerDamage.put(damager, plugin.dragonEvent.playerDamage.get(damager) + (double) final_damage);
-                    plugin.so.setLastDragonHit(damager);
-                }
-
-                if (mo.getHealth() <= 0 && !target.isDead())
-                    target.setHealth(0);
-
-                Utils.broadCast("[DEBUG] 8");
-
-                Utils.damageIndicator(target, final_damage, type, plugin);
-                if (!target.isDead())
-                    e.getEntity().getPassenger().setCustomName(Utils.chat(Utils.getDisplayHP(mo.getLevel(), mo.getName(), mo.getHealth(), mo.getMaxHealth())));
             }
+
+            // Attack Speed
+            attackSpeed(atkSpeed, target);
+
+            // Adding Crit Chance
+            critChance += po.getCombatLevel() * .05;
+
+            // Base Formula
+            int base_damage = (int) ((5 + weaponDamage + (Math.floor(strength) / 5)) * (1 + strength / 100));
+
+            // Final Damage
+            int final_damage = (int) (base_damage + (base_damage * .04));
+
+            String type = "normal";
+
+            if ((Math.random() * 100) < critChance) {
+                final_damage = final_damage * (1 + critDamage / 100);
+                type = "crithit";
+            }
+
+            e.setDamage(0);
+            mo.setHealth((mo.getHealth() - final_damage));
+
+            if (e.getEntityType() == EntityType.ENDER_DRAGON) {
+                // Utils.broadCast("[DEBUG] " + ((mo.getHealth() / (double) mo.getMaxHealth()) * target.getMaxHealth()));
+                target.setHealth(((mo.getHealth() / (double) mo.getMaxHealth()) * target.getMaxHealth() > 0 ? (mo.getHealth() / (double) mo.getMaxHealth()) * target.getMaxHealth() : 0));
+                plugin.dragonEvent.playerDamage.put(damager, plugin.dragonEvent.playerDamage.get(damager) + (double) final_damage);
+                plugin.so.setLastDragonHit(damager);
+            }
+
+            if (mo.getHealth() <= 0 && !target.isDead())
+                target.setHealth(0);
+
+            Utils.damageIndicator(target, final_damage, type, plugin);
+            if (!target.isDead())
+                e.getEntity().getPassenger().setCustomName(Utils.chat(Utils.getDisplayHP(mo.getLevel(), mo.getName(), mo.getHealth(), mo.getMaxHealth())));
         }
 
         // Player (Melee) to Mob

@@ -1,6 +1,7 @@
 package xyz.apollo30.skyblockremastered.listeners;
 
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,10 +14,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.constants.Enchantments;
 import xyz.apollo30.skyblockremastered.managers.PacketManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.objects.MobObject;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -185,10 +188,42 @@ public class SpawnEvents implements Listener {
         plr.sendMessage(Utils.chat("&6Discord: &bhttps://discord.gg/gbXcMta"));
         plr.sendMessage(Utils.chat("&6IP: &bplay.apollo30.xyz"));
         plr.sendMessage(Utils.chat("&6Store: &bhttp://store.apollo30.xyz/"));
+        plr.sendMessage(Utils.chat(" "));
+        plr.sendMessage(Utils.chat("&aYou can change your skyblock stats using the /sr set command!"));
+        plr.sendMessage(Utils.chat("/sr set [stat] [amount]"));
+        plr.sendMessage(Utils.chat("Stats: health, intelligence, defense, critdamage, critchance, magicfind, speed"));
         plr.sendMessage(Utils.chat("&8&m--------------------------------------------------"));
 
         // Rank Joins
         Utils.broadCast(Helper.getRank(plr) + " &7has joined the game!");
+
+        plr.getInventory().clear();
+
+        ItemStack midas = new ItemStack(Material.WOOD_SWORD, 1);
+        plr.getInventory().addItem(
+                Utils.addLore(
+                        midas,
+                        "&dMythic Aspect of the Jerry",
+                        "&7Damage: &c+69,420",
+                        "&7Strength: &c+69,420",
+                        "&7Crit Damage: &c+3000%",
+                        "",
+                        "&7Item Ability: &6Inner Jerry",
+                        "&7WE LIKE FORTNITE",
+                        "&7WE LIKE FORTNITE",
+                        "&7WE LIKE FORTNITE",
+                        "&7WE LIKE FORTNITE",
+                        "&7WE LIKE FORTNITE",
+                        "",
+                        "&8This item can be reforged!",
+                        "&d&kL&r &d&lMYTHIC SWORD &r&d&kL&r"));
+
+        plr.getInventory().addItem(Utils.addLore(new ItemStack(Material.DIAMOND_SWORD),"&9Aspect of The End", "&7Damage: &c+110", "&7Strength: &c+112", "&7Crit Chance: &c+9%", "&7Crit Damage: &c+15%", "&7Bonus Attack Speed: &c+5%", "", "&7Intelligence: &a+12", "", "&6Item Ability: Instant Transmission &a&lRIGHT CLICK", "&7Teleport &a8 blocks&7 ahead of", "&7you and again &a+50 &f" + GuiUtils.getUnicode("speed") + " Speed", "&7for &a3 seconds&7.", "&8Mana Cost: &b50", "", "&9&lRARE"));
+        ItemStack bow = Utils.addLore(new ItemStack(Material.BOW),"&6ITS A BOW :O", "&7Damage: &c+110", "&7Strength: &c+112", "&7Crit Chance: &c+9%", "&7Crit Damage: &c+15%", "", "&6&lLEGENDARY");
+        bow.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 69);
+        plr.getInventory().addItem(bow);
+        plr.getInventory().addItem(new ItemStack(Material.ARROW, 1));
+
 
         ItemStack nether_star = Utils.createItem(null, "NETHER_STAR", 1, 9, "&aSkyBlock Menu &7(Right Click)",
                 "&7View all of your SkyBlock", "&7progress, including your Skills,",
@@ -217,7 +252,7 @@ public class SpawnEvents implements Listener {
         if (plugin.playerManager.getPlayerData(plr) == null) plugin.playerManager.createPlayerData(plr);
 
         // If a player joins during a dragon fight
-        plugin.dragonEvent.playerDamage.put(plr, (double) 0);
+        plugin.dragonEvent.playerDamage.computeIfAbsent(plr, k -> (double) 0);
     }
 
     private void coinDrop(Entity e, int level) {

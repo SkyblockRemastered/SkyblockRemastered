@@ -26,16 +26,16 @@ public class PlayerObject {
     double gems = 0;
 
     // Stats
-    int health = 100;
-    int maxHealth = 100;
+    int health = 1000;
+    int maxHealth = 1000;
     int defense = 0;
-    int strength = 0;
-    int speed = 100;
-    int critChance = 20;
-    int critDamage = 50;
-    int atkSpeed = 0;
-    int intelligence = 100;
-    int maxIntelligence = 100;
+    int strength = 1000;
+    int speed = 300;
+    int critChance = 100;
+    int critDamage = 1000;
+    int atkSpeed = 10;
+    int intelligence = 2000;
+    int maxIntelligence = 200;
     int seaCreatureChance = 0;
     int magicFind = 0;
     int petLuck = 0;

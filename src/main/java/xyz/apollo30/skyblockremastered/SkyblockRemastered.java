@@ -56,6 +56,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new PlayerEvents(this);
         new ProtectionEvents(this);
         new SpawnEvents(this);
+        new EnchantEvents(this);
 
         // Command
         new Gamemode(this);

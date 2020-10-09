@@ -13,25 +13,13 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.customMobs.CustomEntityEnderDragon;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.*;
-
-enum CommonDragons {
-    STRONG,
-    YOUNG,
-    UNSTABLE,
-    WISE,
-    PROTECTOR,
-    OLD
-}
 
 public class Dragon implements Listener {
 
@@ -41,6 +29,15 @@ public class Dragon implements Listener {
         this.plugin = plugin;
 
         Bukkit.getPluginManager().registerEvents(this, plugin);
+    }
+
+    enum CommonDragons {
+        STRONG,
+        YOUNG,
+        UNSTABLE,
+        WISE,
+        PROTECTOR,
+        OLD
     }
 
     private final HashMap<Location, UUID> placedEyes = new HashMap<>();
@@ -82,7 +79,6 @@ public class Dragon implements Listener {
                             "&5&lEPIC");
 
                     e.getPlayer().getInventory().remove(e.getItem());
-                    playerEyes.put(e.getPlayer(), sleepingEye);
                     e.getPlayer().getInventory().addItem(sleepingEye);
 
 
@@ -95,22 +91,11 @@ public class Dragon implements Listener {
                         for (Player plr : e.getPlayer().getWorld().getPlayers()) {
                             plr.sendMessage(Utils.chat(Helper.getRank(e.getPlayer()) + " &dplaced a Summoning Eye! Brace Yourselves! &7(&e" + plugin.so.getPlacedSummoningEye() + "&7/&a8&7)"));
                             plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1.5F);
-                        }
-
-                        for (Player player : playerEyes.keySet()) {
-                            player.getInventory().remove(playerEyes.get(player));
-                            player.getInventory().addItem(Utils.addLore(
-                                    Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODlkMDc0YWQ5Yjk5NzE4NzllYjMyNWJkZGZmMzY3NWY3MjI0ODU2YmQ2ZDU2OWZjOGQ0ODNjMTMzZDczMDA1ZCJ9fX0"),
-                                    "&5Remnant of the Eye",
-                                    "&7Keep you alive when you are on",
-                                    "&7death's door, granting a short",
-                                    "&7period of invincibility.",
-                                    "&7Consumed on use",
-                                    " ",
-                                    "&cNote: This item only works while you're",
-                                    "&cin the end island.",
-                                    "",
-                                    "&5&lEPIC"));
+                            for (ItemStack item : plr.getInventory().getContents()) {
+                                if (item.hasItemMeta() && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().contains("Sleeping Eye")) {
+                                    plr.getInventory().remove(item);
+                                }
+                            }
                         }
                     } else {
                         placedEyes.put(blocc.getLocation(), e.getPlayer().getUniqueId());
@@ -289,15 +274,12 @@ public class Dragon implements Listener {
                             plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1000, 1.25F);
                         }
 
-                        for (Player plr : playerDamage.keySet()) {
-                            playerDamage.remove(plr);
-                            placedPlayerEyes.remove(plr);
-                        }
-
-                        for (Location loc : dragonEggRegeneration.keySet()) {
-                            blockDatabase.remove(loc);
-                            dragonEggRegeneration.remove(loc);
-                        }
+                        playerDamage.clear();
+                        placedEyes.clear();
+                        placedPlayerEyes.clear();
+                        blockDatabase.clear();
+                        dragonEggRegeneration.clear();
+                        plugin.so.setRiggedDragon(null);
                     } catch (Exception ignore) {
                     }
                 }
@@ -356,8 +338,9 @@ public class Dragon implements Listener {
 
     private void getLoot(Player plr) {
 
-        double pD = plugin.dragonEvent.playerDamage.get(plr);
-        int placedEyes = plugin.dragonEvent.placedPlayerEyes.get(plr);
+        double pD = 0;
+        pD = plugin.dragonEvent.playerDamage.get(plr) != null ? plugin.dragonEvent.playerDamage.get(plr) : 0;
+        int placedEyes = plugin.dragonEvent.placedPlayerEyes.get(plr) != null ? plugin.dragonEvent.placedPlayerEyes.get(plr) : 0;
 
         int weight = 0;
 
@@ -553,7 +536,15 @@ public class Dragon implements Listener {
                     inv.addItem(fragment8);
                     break;
             }
-         }
+        }
+    }
+
+    private static List<Map.Entry<String, Double>> sortByValues(HashMap<String, Double> map) {
+        List<Map.Entry<String, Double>> list = new ArrayList<>(map.entrySet());
+
+        list.sort((e1, e2) -> -e1.getValue().compareTo(e2.getValue()));
+
+        return list;
     }
 
     private void broadcastWorld(Player plr, String msg) {
@@ -563,7 +554,9 @@ public class Dragon implements Listener {
     }
 
     private String chooseDragon() {
-        if (Math.random() > .99) return "HOLY";
+        if (plugin.so.getRiggedDragon() != null) return plugin.so.getRiggedDragon();
+        if (Math.random() > .999) return "CELESTIAL";
+        else if (Math.random() > .99) return "HOLY";
         else if (Math.random() > .96) return "SUPERIOR";
         else return CommonDragons.values()[(int) (Math.random() * CommonDragons.values().length)].toString();
     }
@@ -642,9 +635,9 @@ public class Dragon implements Listener {
                 endCrystal.remove();
             }
 
+            endCrystals.clear();
+
             for (Player plr : Bukkit.getOnlinePlayers()) {
-                PlayerObject poa = plugin.playerManager.playerObjects.get(plr);
-                poa.setDamageToDragon(0);
 
                 String numberOne = null;
                 String numberTwo = null;
@@ -655,9 +648,7 @@ public class Dragon implements Listener {
                     playerDamage2.put(Helper.getRank(player), plugin.dragonEvent.playerDamage.get(player));
                 }
 
-                TreeMap<String, Double> sorted = new TreeMap<>(playerDamage2);
-
-                for (Map.Entry<String, Double> entry : sorted.descendingMap().entrySet()) {
+                for (Map.Entry<String, Double> entry : sortByValues(playerDamage2)) {
                     if (numberOne == null && entry.getKey() != null)
                         numberOne = entry.getKey() + " &7- &e" + Utils.coinFormat(entry.getValue());
                     else if (numberTwo == null && entry.getKey() != null)
@@ -666,13 +657,13 @@ public class Dragon implements Listener {
                         numberThree = entry.getKey() + " &7- &c" + Utils.coinFormat(entry.getValue());
                 }
 
-                if (numberOne == null) numberOne = "&7[N/A] Not Applicable - &e0";
-                if (numberTwo == null) numberTwo = "&7[N/A] Not Applicable - &60";
-                if (numberThree == null) numberThree = "&7[N/A] Not Applicable - &c0";
+                if (numberOne == null) numberOne = "&7&kWE LIKE FORTNITE&r - &e0";
+                if (numberTwo == null) numberTwo = "&7&kWE LIKE FORTNITE&r - &60";
+                if (numberThree == null) numberThree = "&7&kWE LIKE FORTNITE&r - &c0";
 
                 int position = 0;
-                for (int i = 0; i < sorted.keySet().size(); i++) {
-                    if (sorted.descendingMap().keySet().toArray()[i] != null) position = i + 1;
+                for (int i = 0; i < sortByValues(playerDamage2).size(); i++) {
+                    if (sortByValues(playerDamage2).get(i).getValue().equals(playerDamage.get(plr))) position = i + 1;
                 }
 
                 plr.sendMessage(Utils.chat(centerDefaultText("&a&l&m------------------------------------------------")));
@@ -684,7 +675,7 @@ public class Dragon implements Listener {
                 plr.sendMessage(Utils.chat(centerDefaultText("        &6&l2nd Damager &7- " + numberTwo + "        ")));
                 plr.sendMessage(Utils.chat(centerDefaultText("              &c&l3rd Damager &7- " + numberThree + "           ")));
                 plr.sendMessage(Utils.chat(centerDefaultText("                                                                ")));
-                plr.sendMessage(Utils.chat(centerDefaultText("              &eYour Damage: &a" + Utils.coinFormat(plugin.dragonEvent.playerDamage.get(plr)) + " &7(Position #" + position + ")                         ")));
+                plr.sendMessage(Utils.chat(centerDefaultText("                   &eYour Damage: &a" + Utils.coinFormat(plugin.dragonEvent.playerDamage.get(plr)) + " &7(Position #" + position + ")                         ")));
                 plr.sendMessage(Utils.chat(centerDefaultText("                                                                ")));
                 plr.sendMessage(Utils.chat(centerDefaultText("&a&l&m------------------------------------------------")));
             }

@@ -16,4 +16,5 @@ public class ServerObject {
     MobObject enderDragon;
     Player lastDragonHit = null;
     String dragonName = null;
+    String riggedDragon = null;
 }
