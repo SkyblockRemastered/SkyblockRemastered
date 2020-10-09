@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
@@ -20,6 +21,8 @@ public class SpawnEgg implements CommandExecutor {
         plugin.getCommand("spawnegg").setExecutor(this);
     }
 
+    public ItemStack Draconis;
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -28,10 +31,9 @@ public class SpawnEgg implements CommandExecutor {
         }
 
         Player plr = (Player) sender;
+        PlayerObject po = plugin.playerManager.playerObjects.get(plr);
 
-
-        plr.getInventory().setHelmet(plr.getItemInHand());
-
+        //plr.getInventory().setHelmet(plr.getItemInHand());
 
         switch (args[0].toLowerCase()) {
             case "zealot":
@@ -71,6 +73,7 @@ public class SpawnEgg implements CommandExecutor {
                                 "",
                                 "&8This item can be reforged!",
                                 "&d&kL&r &d&lMYTHIC SWORD &r&d&kL&r"));
+                break;
             case "dragon":
                 for (int i = 0; i < 8; i++) {
                     plr.getInventory().addItem(Utils.addLore(
@@ -82,16 +85,48 @@ public class SpawnEgg implements CommandExecutor {
                             "",
                             "&5&lEPIC"));
                 }
-                plugin.so.setDragonFight(false);
-                plugin.so.setPlacedSummoningEye(0);
-                for (int i = -674; i < -279; i++) {
+                for (int i = -674; i < -668; i++) {
                     for (int j = 8; j < 15; j++) {
-                        for (int k = -668; k < -273; k++) {
+                        for (int k = -279; k < -273; k++) {
                             Block blocc = plr.getWorld().getBlockAt(i, j, k);
                             if (blocc.getData() == 6) blocc.setData((byte) 0);
                         }
                     }
                 }
+                break;
+            case "batphone":
+                plr.getInventory().addItem(Utils.addLore(
+                        Utils.getSkull(Utils.urlToBase64("https://textures.minecraft.net/texture/9336d7cc95cbf6689f5e8c954294ec8d1efc494a4031325bb427bc81d56a484d")),
+                        "&aMaddox Batphone",
+                        "&6Item Ability: Whassup? &e&lRIGHT CLICK",
+                        "&7Lets you call &dMaddox&7, when",
+                        "&7he's not busy.",
+                        "",
+                        "&a&lUNCOMMON"));
+                break;
+            case "inkwand":
+                Utils.createInvisibleEnchantedItemByte(plr.getInventory(), 280, 0, 1, 1,
+                        "&5Ink Wand",
+                        "&7Damage: &c+130",
+                        "&7Sterngth: &c+122",
+                        "&7Crit Damage: &c+27%",
+                        "&7Bonus Attack Speed: &c+7%",
+                        "",
+                        "&7Item Ability: Ink Bomb &e&lRIGHT CLICK",
+                        "&7Shoot an ink bomb in front of",
+                        "&7you dealing, &c" + Utils.coinFormat((double) (po.getIntelligence() * 100)) + " &7damage",
+                        "&7and giving blindness!",
+                        "&8Mana Cost:& &360",
+                        "&8Cooldown: &a30s",
+                        "",
+                        "&5&lEPIC SWORD");
+            case "draconis":
+                Draconis = new ItemStack(Material.MONSTER_EGG, 1, (short) 53);
+                ItemMeta meta = Draconis.getItemMeta();
+
+                meta.setDisplayName(Utils.chat("&c&lDraconis Spawn Egg"));
+                Draconis.setItemMeta(meta);
+                plr.getInventory().addItem(Draconis);
         }
 
         return false;

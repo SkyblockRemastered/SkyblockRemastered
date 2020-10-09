@@ -140,7 +140,7 @@ public class PlayerManager {
             po.setTamingTotal(taming.getInt("totalXP"));
 
             playerObjects.put(plr, po);
-            Utils.broadCast("Database created for " + plr.getName());
+            Utils.broadCast("[DEBUG] Database created for " + plr.getName());
         } catch (Exception ignored) {
 
         }
@@ -256,7 +256,7 @@ public class PlayerManager {
         taming.set("totalXP", po.getTamingTotal());
 
         plugin.db.savePlayers();
-        Utils.broadCast("Database saved for " + plr.getName());
+        Utils.broadCast("[DEBUG] Database saved for " + plr.getName());
     }
 
     public static boolean createPlayerData(Player plr, String uuid, FileConfiguration db) {

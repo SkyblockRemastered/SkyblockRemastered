@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class MobManager {
 
     private SkyblockRemastered plugin;
+
     public MobManager(final SkyblockRemastered plugin) {
         this.plugin = plugin;
     }
@@ -33,48 +34,14 @@ public class MobManager {
     public HashMap<LivingEntity, MobObject> mobObjects = new HashMap<>();
     public HashSet<Location> zealotSpawnPoints = new HashSet<>();
 
-    public MobObject getMob(LivingEntity entity) {
-        return mobObjects.get(entity);
-    }
-
     public void createMob(LivingEntity entity, String name) {
 
         MobObject mo = new MobObject();
-        name = name.toLowerCase();
 
-        if (name.equalsIgnoreCase("protector dragon")) {
-            mo.setHealth(9000000);
-            mo.setLevel(1000);
-            mo.setName("Protector Dragon");
-        } else if (name.equalsIgnoreCase("old dragon")) {
-            mo.setHealth(15000000);
-            mo.setLevel(1000);
-            mo.setName("Old Dragon");
-        } else if (name.equalsIgnoreCase("wise dragon")) {
-            mo.setHealth(9000000);
-            mo.setLevel(1000);
-            mo.setName("Wise Dragon");
-        } else if (name.equalsIgnoreCase("unstable dragon")) {
-            mo.setHealth(9000000);
-            mo.setLevel(1000);
-            mo.setName("Unstable Dragon");
-        } else if (name.equalsIgnoreCase("young dragon")) {
-            mo.setHealth(7500000);
-            mo.setLevel(1000);
-            mo.setName("Young Dragon");
-        } else if (name.equalsIgnoreCase("strong dragon")) {
-            mo.setHealth(9000000);
-            mo.setLevel(1000);
-            mo.setName("Strong Dragon");
-        } else if (name.equalsIgnoreCase("superior dragon")) {
-            mo.setHealth(12000000);
-            mo.setLevel(1000);
-            mo.setName("Superior Dragon");
-        } else if (name.equalsIgnoreCase("holy dragon")) {
-            mo.setHealth(20000000);
-            mo.setLevel(1000);
-            mo.setName("Holy Dragon");
-        } else if (name.equalsIgnoreCase("zombie villager")) {
+        Utils.broadCast(name);
+
+        // Custom Mobs
+        if (name.equalsIgnoreCase("zombie villager")) {
             mo.setMaxHealth(120);
             mo.setLocation("Graveyard");
             mo.setDamage(24);
@@ -212,8 +179,7 @@ public class MobManager {
             zombie.getEquipment().setHelmetDropChance(0F);
             zombie.getEquipment().setChestplateDropChance(0F);
             zombie.getEquipment().setLeggingsDropChance(0F);
-        }
-        if (name.equalsIgnoreCase("zealot")) {
+        } else if (name.equalsIgnoreCase("zealot")) {
             mo.setMaxHealth(13000);
             mo.setLocation("The End");
             mo.setXpGain(10);
@@ -303,6 +269,54 @@ public class MobManager {
             mo.setDamage(800);
             mo.setLevel(55);
             mo.setName("Old Wolf");
+        }
+
+        // Dragon
+        else if (name.equalsIgnoreCase("celestial")) {
+            mo.setMaxHealth(1000000000);
+            mo.setLevel(69420);
+            mo.setName("Celestial Draconis");
+            plugin.so.setEnderDragon(mo);
+        } else if (name.equalsIgnoreCase("protector")) {
+            mo.setMaxHealth(9000000);
+            mo.setLevel(1000);
+            mo.setName("Protector Dragon");
+            plugin.so.setEnderDragon(mo);
+        } else if (name.equalsIgnoreCase("old")) {
+            mo.setMaxHealth(15000000);
+            mo.setLevel(1000);
+            mo.setName("Old Dragon");
+            plugin.so.setEnderDragon(mo);
+        } else if (name.equalsIgnoreCase("wise")) {
+            mo.setMaxHealth(9000000);
+            mo.setLevel(1000);
+            mo.setName("Wise Dragon");
+            plugin.so.setEnderDragon(mo);
+        } else if (name.equalsIgnoreCase("unstable")) {
+            mo.setMaxHealth(9000000);
+            mo.setLevel(1000);
+            mo.setName("Unstable Dragon");
+            plugin.so.setEnderDragon(mo);
+        } else if (name.equalsIgnoreCase("young")) {
+            mo.setMaxHealth(7500000);
+            mo.setLevel(1000);
+            mo.setName("Young Dragon");
+            plugin.so.setEnderDragon(mo);
+        } else if (name.equalsIgnoreCase("strong")) {
+            mo.setMaxHealth(9000000);
+            mo.setLevel(1000);
+            mo.setName("Strong Dragon");
+            plugin.so.setEnderDragon(mo);
+        } else if (name.equalsIgnoreCase("superior")) {
+            mo.setMaxHealth(12000000);
+            mo.setLevel(1000);
+            mo.setName("Superior Dragon");
+            plugin.so.setEnderDragon(mo);
+        } else if (name.equalsIgnoreCase("holy")) {
+            mo.setMaxHealth(20000000);
+            mo.setLevel(1000);
+            mo.setName("Holy Dragon");
+            plugin.so.setEnderDragon(mo);
         } else {
             mo.setName(entity.getName());
             mo.setLocation("???");
@@ -310,6 +324,7 @@ public class MobManager {
             // mo.setLevel((int) Math.floor(Math.random() * 100000));
             mo.setLevel(2147483647);
         }
+
 
         ArmorStand armorStand = entity.getWorld().spawn(entity.getLocation(), ArmorStand.class);
         armorStand.setGravity(false);
@@ -321,7 +336,6 @@ public class MobManager {
         entity.setPassenger(armorStand);
         plugin.health_indicator.put(entity, armorStand);
         mobObjects.put(entity, mo);
-Utils.broadCast("._.");
     }
 
     public void initBloccCheck() {

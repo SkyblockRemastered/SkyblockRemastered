@@ -1,5 +1,6 @@
 package xyz.apollo30.skyblockremastered;
 
+import net.minecraft.server.v1_8_R3.EntityEnderDragon;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -10,11 +11,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 import xyz.apollo30.skyblockremastered.abilities.Miscs;
 import xyz.apollo30.skyblockremastered.abilities.Weapons;
 import xyz.apollo30.skyblockremastered.commands.*;
+import xyz.apollo30.skyblockremastered.customMobs.CustomEntityEnderDragon;
 import xyz.apollo30.skyblockremastered.events.Dragon;
 import xyz.apollo30.skyblockremastered.listeners.*;
-import xyz.apollo30.skyblockremastered.managers.*;
+import xyz.apollo30.skyblockremastered.managers.BlockManager;
+import xyz.apollo30.skyblockremastered.managers.ConfigManager;
+import xyz.apollo30.skyblockremastered.managers.MobManager;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.objects.ServerObject;
 import xyz.apollo30.skyblockremastered.tasks.*;
+import xyz.apollo30.skyblockremastered.utils.NMSUtil;
 
 import java.util.HashMap;
 
@@ -30,9 +36,13 @@ public class SkyblockRemastered extends JavaPlugin {
     public Weapons weaponAbilities;
     public Dragon dragonEvent;
     public ServerObject so = new ServerObject();
+    public NMSUtil nmsu = new NMSUtil();
 
     @Override
     public void onEnable() {
+
+        // Registering Custom Dragons
+        nmsu.registerEntity("Dragon", 63, EntityEnderDragon.class, CustomEntityEnderDragon.class);
 
         db = new ConfigManager(this);
         db.saveDefaultPlayers();
@@ -40,42 +50,12 @@ public class SkyblockRemastered extends JavaPlugin {
         db.saveDefaultSpawns();
 
         // Listener
-        new BlockFade(this);
-        new BlockForm(this);
-        new BlockIgnite(this);
-        new BlockSpread(this);
-        new EndermanPickup(this);
-        new EntityCombust(this);
-        new EntityDamage(this);
-        new EntityDamageByEntity(this);
-        new EntityDeath(this);
-        new EntitySpawn(this);
-        new EntityTeleport(this);
-        new InventoryClick(this);
-        new InventoryItemMove(this);
-        new ItemDamage(this);
-        new ItemDrag(this);
-        new PlayerDeath(this);
-        new PlayerDrop(this);
-        new PlayerInteract(this);
-        new PlayerJoin(this);
-        new PlayerLeave(this);
-        new PlayerPortal(this);
-        new RegainHealth(this);
-        new SlimeSplit(this);
-        new UnloadChunk(this);
-        new LeavesDecay(this);
-        new BlockBreak(this);
-        new PlayerMove(this);
-        new BlockPlace(this);
-        new EntityExplode(this);
-        new WeatherChange(this);
-        new PlayerBucketEmpty(this);
-        new PlayerBucketFill(this);
-        new PlayerPickup(this);
-        new InventoryOpen(this);
-        new ServerListPing(this);
-        new PlayerItemHeld(this);
+        new DamageEvents(this);
+        new InventoryEvents(this);
+        new MiscEvents(this);
+        new PlayerEvents(this);
+        new ProtectionEvents(this);
+        new SpawnEvents(this);
 
         // Command
         new Gamemode(this);

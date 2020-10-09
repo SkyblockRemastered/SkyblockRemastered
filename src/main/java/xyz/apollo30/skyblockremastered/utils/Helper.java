@@ -21,7 +21,7 @@ public class Helper {
         else if (plr.hasPermission("groups.mvp")) return "&b[MVP] " + plr.getName();
         else if (plr.hasPermission("groups.vip+")) return "&a[VIP&6+&a] " + plr.getName();
         else if (plr.hasPermission("groups.vip")) return "&a[VIP] " + plr.getName();
-        else return "&7" + plr.getName() + " has joined the game.";
+        else return "&7" + plr.getName();
     }
 
     public static void removeItem(Player plr, Material material) {

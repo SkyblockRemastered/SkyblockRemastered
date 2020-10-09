@@ -54,6 +54,8 @@ public class PlayerObject {
     boolean statOverride = false;
     boolean blockBreak = false;
     boolean vanished = false;
+    double damageToDragon = 0;
+    long lastDeath = 0;
 
     // Skills
     int farmingLevel = 0;

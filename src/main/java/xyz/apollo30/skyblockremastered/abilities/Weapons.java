@@ -66,4 +66,8 @@ public class Weapons {
         plr.sendMessage(Utils.chat(""));
     }
 
+    public void inkWank(Player plr) {
+
+    }
+
 }
