@@ -99,6 +99,8 @@ public class SkyblockRemastered extends JavaPlugin {
         new RegenerationTask(this).runTaskTimer(this, 30, 30);
         new WheatCrystalTask(this).runTaskTimer(this, 1, 1);
         new LagPreventerTask(this).runTaskTimer(this, 0, 20);
+        new EnchantEvents(this).runTaskTimer(this, 0, 1);
+
     }
 
     @Override

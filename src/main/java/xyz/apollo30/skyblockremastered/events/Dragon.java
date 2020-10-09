@@ -1,10 +1,8 @@
 package xyz.apollo30.skyblockremastered.events;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -92,6 +90,7 @@ public class Dragon implements Listener {
                             plr.sendMessage(Utils.chat(Helper.getRank(e.getPlayer()) + " &dplaced a Summoning Eye! Brace Yourselves! &7(&e" + plugin.so.getPlacedSummoningEye() + "&7/&a8&7)"));
                             plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1.5F);
                             for (ItemStack item : plr.getInventory().getContents()) {
+                                if (item == null || item.getType() == Material.AIR) break;
                                 if (item.hasItemMeta() && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().contains("Sleeping Eye")) {
                                     plr.getInventory().remove(item);
                                 }
@@ -336,62 +335,80 @@ public class Dragon implements Listener {
         }
     }
 
-    private void getLoot(Player plr) {
-
-        double pD = 0;
-        pD = plugin.dragonEvent.playerDamage.get(plr) != null ? plugin.dragonEvent.playerDamage.get(plr) : 0;
+    private void getLoot(Player plr, int position) {
+        
         int placedEyes = plugin.dragonEvent.placedPlayerEyes.get(plr) != null ? plugin.dragonEvent.placedPlayerEyes.get(plr) : 0;
 
         int weight = 0;
 
-        // With the reforge update, they changed that Helmet and boots require same weight to drop, which is 1300 weight
-        // For leggings, it requires 1600 weight to drop, and 1800 for chestplate.
-        // An AOTD / Dragon pet / Dragon Claw / Draogn Horn requires 2000 weight to drop.
-        // A dragon scale requires 1300 weight to drop on a Young Dragon.
-        // A Travel scroll to dragon's nest requires 1100 weight to drop on an Unstable dragon.
+        // default to 3 frags if weight is >= 22 but there isn't enough weight to fulfill other prizes. Subtract weight once loot is chosen, then divide the remaining weight by 22. Give player that amount of frags.
 
-        // Next is how the loot is actually rolled and determined.
-        // The sword can be "given" at 450 weight, the chestplate is 400 weight,
-        // the leggings are 350 weight, the helmet is 350 weight and the boots are 300 weight.
-        // Which is why you have a chance to get the boots even if you place no eyes but come in 1st place.
+        /* Stat Weight */
+        // 1 eye = 100w, caps at 4 eyes.
+        // 1st in dmg = 300w
+        // 2nd in dmg = 250w
+        // 2nd in dmg = 200w
+        // 2nd in dmg = 250w
+        // 4th to 7th = 125w
+        // 8th to 15th = 100w
+        // 16th or below = 75w
 
-        weight += 100 * placedEyes;
+        /* Drops (Calculated in order. Once one drop is chosen, return and give frags for extras */
+        // AOTD = 450w, shouldn't drop from superior because nobody wants that
+        // Dragon Scale (Spiked) = 450w, shouldn't drop from superior because nobody wants that (wont subtract, you can still get frags)
+        // Dragon Claw (Fabled) = 450w, shouldn't drop from superior because nobody wants that (wont subtract, you can still get frags)
+        // Dragon Horn (Renowned) = 450w, only from sup (wont subtract, you can still get frags)
+        // Pet = 450w 1/300 chance, then once that is passed, 1/5 for legendary & 4/5 for epic
+        // Scroll = 250w, only from unstable (wont subtract, you can still get frags)
+        // Chest = 400w
+        // Helm = 325w
+        // Legs = 350w
+        // Boots = 300w
 
-        // Add weight for the position they got.
-        // Note: I have no idea on how to do this.
+        // Weight for the eye placement
+        if (placedEyes >= 4) {
+            weight += 400;
+        } else weight += placedEyes * 100;
 
-        switch (plugin.so.getDragonName()) {
-            case "SUPERIOR":
-                getItem(pD, weight, plr, plugin.so.getDragonName(), .8, .7, .7, .6, .6);
-                break;
-            case "UNSTABLE":
-                getItem(pD, weight, plr, plugin.so.getDragonName(), .5, .75, .7, .65, .6);
-                break;
-            case "YOUNG":
-            case "WISE":
-            case "OLD":
-            case "PROTECTOR":
-                getItem(pD, weight, plr, plugin.so.getDragonName(), .9, .65, .6, .55, .50);
-                break;
-            case "STRONG":
-                getItem(pD, weight, plr, plugin.so.getDragonName(), .7, .65, .6, .55, .50);
-                break;
-            case "HOLY":
-                getItem(pD, weight, plr, plugin.so.getDragonName(), .8, .7, .7, .50, .50);
-                break;
-            case "CELESTIAL":
-                getItem(pD, weight, plr, plugin.so.getDragonName(), .99, .7, .7, .6, .6);
-                break;
-        }
+        // Position
+        if (position == 1) weight += 300;
+        else if (position == 2) weight += 250;
+        else if (position == 3) weight += 200;
+        else if (position >= 4 && position <= 7) weight += 125;
+        else if (position >= 8 && position <= 15) weight += 100;
+        else if (position >= 16) weight += 75;
 
+        getItem(weight, plr, plugin.so.getDragonName(), 1 - (placedEyes * .05));
     }
 
-    private void getItem(double playerDamage, int weight, Player plr, String dragon, double aotd, double chestplate, double leggings, double helmet, double boots) {
+    private void getItem(int weight, Player plr, String dragon, double aotd) {
         Inventory inv = plr.getInventory();
         if (weight >= 450 && Math.random() > aotd) {
+            weight -= 450;
+            giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
+
             inv.addItem(Utils.addLore(new ItemStack(Material.DIAMOND_SWORD), "&6Aspect of the Dragons", "&7Damage: &c+225", "&7Strength: &c+100", "", "&6Item Ability: Dragon Rage &a&lRIGHT CLICK", "&7All Monsters in front of you", "&7take &a&l1,050 &r&7damage. Hit", "&7monsters take large knockback.", "&8Mana Cost: &b100", "&8Cooldown: &a5s"));
             broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6Aspect of the Dragons");
-        } else if (weight >= 400 && Math.random() > chestplate) {
+        } else if (weight >= 450 && Math.random() > .95 && !dragon.equalsIgnoreCase("superior")) {
+            giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
+            broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6Dragon Scale");
+        } else if (weight >= 450 && Math.random() > .80 && dragon.equalsIgnoreCase("superior")) {
+            giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
+            broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &5Dragon Horn");
+        } else if (weight >= 450 && Math.random() > .95) {
+            giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
+            broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &9Dragon Claw");
+        } else if (weight >= 450 && Math.random() > 0.996) {
+            weight -= 450;
+            String rarity = "";
+            if (Math.random() > .8) rarity = "Legendary";
+            else rarity = "Epic";
+
+            String color = rarity.equalsIgnoreCase("legendary") ? "&6" : "&5";
+            giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
+            broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained a &7[Lvl 1] " + color + "Ender Dragon");
+        } else if (weight >= 400 && Math.random() > 0.5) {
+            weight -= 400;
             broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Chestplate");
             switch (dragon) {
                 case "SUPERIOR":
@@ -413,7 +430,9 @@ public class Dragon implements Listener {
                 case "CELESTIAL":
 
             }
-        } else if (weight >= 350 && Math.random() > leggings) {
+            giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
+        } else if (weight >= 350 && Math.random() > 0.5) {
+            weight -= 350;
             broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Leggings");
             switch (dragon) {
                 case "SUPERIOR":
@@ -435,7 +454,9 @@ public class Dragon implements Listener {
                 case "CELESTIAL":
 
             }
-        } else if (weight >= 350 && Math.random() > helmet) {
+            giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
+        } else if (weight >= 325 && Math.random() > 0.5) {
+            weight -= 325;
             broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Helmet");
             switch (dragon) {
                 case "SUPERIOR":
@@ -457,7 +478,9 @@ public class Dragon implements Listener {
                 case "CELESTIAL":
 
             }
-        } else if (weight >= 300 && Math.random() > boots) {
+            giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
+        } else if (weight >= 300 && Math.random() > 0.5) {
+            weight -= 300;
             broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Boots");
             switch (dragon) {
                 case "SUPERIOR":
@@ -479,63 +502,60 @@ public class Dragon implements Listener {
                 case "CELESTIAL":
 
             }
-        } else {
-            int totalFrags = 0;
-            if (playerDamage < 100000) {
-                totalFrags = 3;
-                broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &63 " + WordUtils.capitalizeFully(dragon) + " Dragon Fragments");
-            } else if (playerDamage >= 1000000) {
-                totalFrags = (int) Math.floor(playerDamage / 1000000D);
-                broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + totalFrags + " " + WordUtils.capitalizeFully(dragon) + " Fragments");
-            }
+            giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
+        } else if (weight >= 22) {
+            giveFrags(inv, dragon, 3);
+        }
 
-            switch (dragon) {
-                case "SUPERIOR": //
-                    ItemStack fragment = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmY4OWIxNTBiZTljNGM1MjQ5ZjM1NWY2OGVhMGM0MzkxMzAwYTliZTFmMjYwZDc1MGZjMzVhMTgxN2FkNzk2ZSJ9fX0="), "&5Superior Dragon Fragment", "&eRight-click to view recipes!", "", "&5&lEPIC");
-                    fragment.setAmount(totalFrags);
-                    inv.addItem(fragment);
-                    break;
-                case "UNSTABLE": //
-                    ItemStack fragment1 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTgyMjhjMjM0YzM5MDNjNTEyYTVhMGFhNDUyNjBlN2I1NjdlMGUyMGVlZmM3ZDU2MWNjZWM5N2IyOTU4NzFhZiJ9fX0="), "&5Unstable Dragon Fragment", "&eRight-click to view recipes!", "", "&5&lEPIC");
-                    fragment1.setAmount(totalFrags);
-                    inv.addItem(fragment1);
-                    break;
-                case "YOUNG": //
-                    ItemStack fragment2 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGI1YmQ2YjY0ZThiZDZjNThmNWNkMWU3OWE1NTAyZDQ0NDhiYWZjMDA2ZDJmZTA1NjhmNmEwZDZiODZkNDQ5ZSJ9fX0="), "&5Young Dragon Fragment", "&eRight-click to view recipes!", "", "&5&lEPIC");
-                    fragment2.setAmount(totalFrags);
-                    inv.addItem(fragment2);
-                    break;
-                case "OLD": //
-                    ItemStack fragment3 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2FhMDlhZDE3N2ZiY2NjNTNmYTMxNmNjMDRiZGQyYzkzNjZiYWVkODg5ZGY3NmM1YTI5ZGVmZWE4MTcwZGVmNSJ9fX0="), "&5Old Dragon Fragment", "&eRight-click to view recipes!", "", "&5&lEPIC");
-                    fragment3.setAmount(totalFrags);
-                    inv.addItem(fragment3);
-                    break;
-                case "PROTECTOR":
-                    ItemStack fragment4 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDhkZTMzOWFmNjNhMjI5YzkyMzhkMDI3ZTQ3ZjUzZWViNTYxNDFhNDE5ZjUxYjM1YzMxZWExNDk0YjQzNWRkMyJ9fX0="), "&5Protector Dragon Fragment", "&eRight-click to view recipes!", "", "&5&lEPIC");
-                    fragment4.setAmount(totalFrags);
-                    inv.addItem(fragment4);
-                    break;
-                case "STRONG": //
-                    ItemStack fragment5 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmVlMzJmYmQ0YzdiMDNiODY5MDc4YWExZjQ5M2EzOTBlNmUxM2I0NjFkNjEzNzA3ZWFmYjMyNmRiY2QyYjRiNSJ9fX0="), "&5Strong Dragon Fragment", "&eRight-click to view recipes!", "", "&5&lEPIC");
-                    fragment5.setAmount(totalFrags);
-                    inv.addItem(fragment5);
-                    break;
-                case "HOLY": //
-                    ItemStack fragment6 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDU5NGVkNDY3YjZiM2ZjODlkZTE3OTZlYzJiMjM3NGI5MjAwNmUzZTMwMTY2YzMxMDc0ODdjNmE3YTMzNTg0NSJ9fX0="), "&6Holy Dragon Fragment", "&eRight-click to view recipes!", "", "&6&lLEGENDARY");
-                    fragment6.setAmount(totalFrags);
-                    inv.addItem(fragment6);
-                    break;
-                case "WISE": //
-                    ItemStack fragment7 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWQ3NjIwYjJlNDkzNDk2M2JiMTI1MDgzMTBkMDU0OTRjMDY3ZGMzM2UwMDhjZWNmMmNkN2I0NTQ5NjU0ZmFiMyJ9fX0="), "&5Wise Dragon Fragment", "&eRight-click to view recipes!", "", "&5&lEPIC");
-                    fragment7.setAmount(totalFrags);
-                    inv.addItem(fragment7);
-                    break;
-                case "CELESTIAL":
-                    ItemStack fragment8 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmIzOWMwZTUzZTc5ZTdlYmQ0ZGI2YzZkMDk2YzlkOWExNjBjZmYyNzgyMmMwNzdmYjhmNWQ0NTk2OWNjNDk3MiJ9fX0="), "&6Celestial Dragon Fragment", "&eRight-click to view recipes!", "", "&6&lLEGENDARY");
-                    fragment8.setAmount(totalFrags);
-                    inv.addItem(fragment8);
-                    break;
-            }
+    }
+
+    private void giveFrags(Inventory inv, String dragon, int totalFrags) {
+        switch (dragon) {
+            case "SUPERIOR": //
+                ItemStack fragment = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmY4OWIxNTBiZTljNGM1MjQ5ZjM1NWY2OGVhMGM0MzkxMzAwYTliZTFmMjYwZDc1MGZjMzVhMTgxN2FkNzk2ZSJ9fX0="), "&5Superior Dragon Fragment", "&eRight-click to view recipes!", "", "&5&lEPIC");
+                fragment.setAmount(totalFrags);
+                inv.addItem(fragment);
+                break;
+            case "UNSTABLE": //
+                ItemStack fragment1 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTgyMjhjMjM0YzM5MDNjNTEyYTVhMGFhNDUyNjBlN2I1NjdlMGUyMGVlZmM3ZDU2MWNjZWM5N2IyOTU4NzFhZiJ9fX0="), "&5Unstable Dragon Fragment", "&eRight-click to view recipes!", "", "&5&lEPIC");
+                fragment1.setAmount(totalFrags);
+                inv.addItem(fragment1);
+                break;
+            case "YOUNG": //
+                ItemStack fragment2 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGI1YmQ2YjY0ZThiZDZjNThmNWNkMWU3OWE1NTAyZDQ0NDhiYWZjMDA2ZDJmZTA1NjhmNmEwZDZiODZkNDQ5ZSJ9fX0="), "&5Young Dragon Fragment", "&eRight-click to view recipes!", "", "&5&lEPIC");
+                fragment2.setAmount(totalFrags);
+                inv.addItem(fragment2);
+                break;
+            case "OLD": //
+                ItemStack fragment3 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2FhMDlhZDE3N2ZiY2NjNTNmYTMxNmNjMDRiZGQyYzkzNjZiYWVkODg5ZGY3NmM1YTI5ZGVmZWE4MTcwZGVmNSJ9fX0="), "&5Old Dragon Fragment", "&eRight-click to view recipes!", "", "&5&lEPIC");
+                fragment3.setAmount(totalFrags);
+                inv.addItem(fragment3);
+                break;
+            case "PROTECTOR":
+                ItemStack fragment4 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDhkZTMzOWFmNjNhMjI5YzkyMzhkMDI3ZTQ3ZjUzZWViNTYxNDFhNDE5ZjUxYjM1YzMxZWExNDk0YjQzNWRkMyJ9fX0="), "&5Protector Dragon Fragment", "&eRight-click to view recipes!", "", "&5&lEPIC");
+                fragment4.setAmount(totalFrags);
+                inv.addItem(fragment4);
+                break;
+            case "STRONG": //
+                ItemStack fragment5 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmVlMzJmYmQ0YzdiMDNiODY5MDc4YWExZjQ5M2EzOTBlNmUxM2I0NjFkNjEzNzA3ZWFmYjMyNmRiY2QyYjRiNSJ9fX0="), "&5Strong Dragon Fragment", "&eRight-click to view recipes!", "", "&5&lEPIC");
+                fragment5.setAmount(totalFrags);
+                inv.addItem(fragment5);
+                break;
+            case "HOLY": //
+                ItemStack fragment6 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDU5NGVkNDY3YjZiM2ZjODlkZTE3OTZlYzJiMjM3NGI5MjAwNmUzZTMwMTY2YzMxMDc0ODdjNmE3YTMzNTg0NSJ9fX0="), "&6Holy Dragon Fragment", "&eRight-click to view recipes!", "", "&6&lLEGENDARY");
+                fragment6.setAmount(totalFrags);
+                inv.addItem(fragment6);
+                break;
+            case "WISE": //
+                ItemStack fragment7 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWQ3NjIwYjJlNDkzNDk2M2JiMTI1MDgzMTBkMDU0OTRjMDY3ZGMzM2UwMDhjZWNmMmNkN2I0NTQ5NjU0ZmFiMyJ9fX0="), "&5Wise Dragon Fragment", "&eRight-click to view recipes!", "", "&5&lEPIC");
+                fragment7.setAmount(totalFrags);
+                inv.addItem(fragment7);
+                break;
+            case "CELESTIAL":
+                ItemStack fragment8 = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmIzOWMwZTUzZTc5ZTdlYmQ0ZGI2YzZkMDk2YzlkOWExNjBjZmYyNzgyMmMwNzdmYjhmNWQ0NTk2OWNjNDk3MiJ9fX0="), "&6Celestial Dragon Fragment", "&eRight-click to view recipes!", "", "&6&lLEGENDARY");
+                fragment8.setAmount(totalFrags);
+                inv.addItem(fragment8);
+                break;
         }
     }
 
@@ -573,6 +593,12 @@ public class Dragon implements Listener {
 
     private double negativeOrPositive(double num) {
         return Math.random() > .5 ? num - (num * 2) : num;
+    }
+
+    private String centerText(String text) {
+        int maxWidth = 80,
+                spaces = (int) Math.round((maxWidth - 1.4 * ChatColor.stripColor(text).length()) / 2);
+        return StringUtils.repeat(" ", spaces) + text;
     }
 
     private void bounceBlock(Block b) {
@@ -637,16 +663,18 @@ public class Dragon implements Listener {
 
             endCrystals.clear();
 
+            String numberOne = null;
+            String numberTwo = null;
+            String numberThree = null;
+
+            HashMap<String, Double> playerDamage2 = new HashMap<>();
+            for (Player player : plugin.dragonEvent.playerDamage.keySet()) {
+                playerDamage2.put(Helper.getRank(player), plugin.dragonEvent.playerDamage.get(player));
+            }
+
+            int position = 0;
+
             for (Player plr : Bukkit.getOnlinePlayers()) {
-
-                String numberOne = null;
-                String numberTwo = null;
-                String numberThree = null;
-
-                HashMap<String, Double> playerDamage2 = new HashMap<>();
-                for (Player player : plugin.dragonEvent.playerDamage.keySet()) {
-                    playerDamage2.put(Helper.getRank(player), plugin.dragonEvent.playerDamage.get(player));
-                }
 
                 for (Map.Entry<String, Double> entry : sortByValues(playerDamage2)) {
                     if (numberOne == null && entry.getKey() != null)
@@ -661,40 +689,30 @@ public class Dragon implements Listener {
                 if (numberTwo == null) numberTwo = "&7&kWE LIKE FORTNITE&r - &60";
                 if (numberThree == null) numberThree = "&7&kWE LIKE FORTNITE&r - &c0";
 
-                int position = 0;
                 for (int i = 0; i < sortByValues(playerDamage2).size(); i++) {
                     if (sortByValues(playerDamage2).get(i).getValue().equals(playerDamage.get(plr))) position = i + 1;
                 }
 
-                plr.sendMessage(Utils.chat(centerDefaultText("&a&l&m------------------------------------------------")));
-                plr.sendMessage(Utils.chat(centerDefaultText("                       &6&l" + plugin.so.getDragonName().toUpperCase() + " DRAGON DOWN!                    ")));
-                plr.sendMessage(Utils.chat(centerDefaultText("                                                                ")));
-                plr.sendMessage(Utils.chat(centerDefaultText("              " + Helper.getRank(plugin.so.getLastDragonHit()) + " &7dealt the final blow.         ")));
-                plr.sendMessage(Utils.chat(centerDefaultText("                                                                ")));
-                plr.sendMessage(Utils.chat(centerDefaultText("            &e&l1st Damager &7- " + numberOne + "           ")));
-                plr.sendMessage(Utils.chat(centerDefaultText("        &6&l2nd Damager &7- " + numberTwo + "        ")));
-                plr.sendMessage(Utils.chat(centerDefaultText("              &c&l3rd Damager &7- " + numberThree + "           ")));
-                plr.sendMessage(Utils.chat(centerDefaultText("                                                                ")));
-                plr.sendMessage(Utils.chat(centerDefaultText("                   &eYour Damage: &a" + Utils.coinFormat(plugin.dragonEvent.playerDamage.get(plr)) + " &7(Position #" + position + ")                         ")));
-                plr.sendMessage(Utils.chat(centerDefaultText("                                                                ")));
-                plr.sendMessage(Utils.chat(centerDefaultText("&a&l&m------------------------------------------------")));
+                plr.sendMessage(Utils.chat(centerText("&a&l&m------------------------------------------------")));
+                plr.sendMessage(Utils.chat(centerText("                       &6&l" + plugin.so.getDragonName().toUpperCase() + " DRAGON DOWN!                    ")));
+                plr.sendMessage(Utils.chat(centerText("                                                                ")));
+                plr.sendMessage(Utils.chat(centerText("              " + Helper.getRank(plugin.so.getLastDragonHit()) + " &7dealt the final blow.         ")));
+                plr.sendMessage(Utils.chat(centerText("                                                                ")));
+                plr.sendMessage(Utils.chat(centerText("            &e&l1st Damager &7- " + numberOne + "           ")));
+                plr.sendMessage(Utils.chat(centerText("        &6&l2nd Damager &7- " + numberTwo + "        ")));
+                plr.sendMessage(Utils.chat(centerText("              &c&l3rd Damager &7- " + numberThree + "           ")));
+                plr.sendMessage(Utils.chat(centerText("                                                                ")));
+                plr.sendMessage(Utils.chat(centerText("                   &eYour Damage: &a" + Utils.coinFormat(plugin.dragonEvent.playerDamage.get(plr)) + " &7(Position #" + position + ")                         ")));
+                plr.sendMessage(Utils.chat(centerText("                                                                ")));
+                plr.sendMessage(Utils.chat(centerText("&a&l&m------------------------------------------------")));
             }
 
             for (Player playa : playerDamage.keySet()) {
-                getLoot(playa);
+                getLoot(playa, position);
             }
 
             plugin.so.setDragonName(null);
         }
-    }
-
-    private static String centerText(String text) {
-        int spaces = (int) Math.round((80 - 1.4 * text.length()) / 2);
-        return repeat(spaces) + text + repeat(spaces);
-    }
-
-    public static String centerDefaultText(String text) {
-        return centerText(text);
     }
 
     private static String repeat(int amount) {

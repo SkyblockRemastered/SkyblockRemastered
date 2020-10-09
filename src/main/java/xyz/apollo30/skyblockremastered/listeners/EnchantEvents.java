@@ -1,24 +1,19 @@
 package xyz.apollo30.skyblockremastered.listeners;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.Location;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
 
-public class EnchantEvents implements Listener {
+public class EnchantEvents extends BukkitRunnable implements Listener {
 
     private final SkyblockRemastered plugin;
 
@@ -47,40 +42,30 @@ public class EnchantEvents implements Listener {
         }
     }
 
-    @EventHandler
-    public void onMove(PlayerMoveEvent e) {
-        LivingEntity p = e.getPlayer();
-
-        for (Arrow arrow : arrows) {
-            List<UUID> uuids = arrow.getNearbyEntities(5, 5, 5).stream().map(Entity::getUniqueId).collect(Collectors.toList());
-            if (uuids.contains(p.getUniqueId())) { // Check if player is next to an arrow
-                updateArrow(arrow);
-            }
-        }
-    }
-
     private void updateArrow(Arrow arrow) {
-        LivingEntity target = null;
-        double targetDistance = 0;
-        // Search for nearest Player
-        for (Entity nearest : arrow.getNearbyEntities(5, 100, 5)) {
-            if (nearest instanceof LivingEntity && // Is a player
-                    !nearest.getUniqueId().equals(((LivingEntity) arrow.getShooter()).getUniqueId())) { // Not the shooter
-                double distance = arrow.getLocation().distance(nearest.getLocation());
-                if (target == null ||
-                        distance < targetDistance) {
-                    targetDistance = distance;
-                    target = (LivingEntity) nearest;
+        outerloop:
+        for (double i = .5; i < 100; i += .5) { // This will rapidly increase the range so you don't get so many mobs at one, and instead checks a few blocks at a time
+            for (Entity e : arrow.getNearbyEntities(i, 3, i)) { // Gets ALL nearby entities using the loop variable above it
+                if (e != arrow.getShooter()) { // Checks to make sure the entities isn't the shooter
+                    if (e.getType().isAlive()) { // Checks to make sure the entity is alive
+                        if (e.getType() == EntityType.PLAYER) return;
+                        Location from = arrow.getLocation(); // Gets the arrows location
+                        Location to = e.getLocation().add(0, 2, 0); // Gets the entities Location
+                        Vector vFrom = from.toVector(); // Converts the from location to a vector
+                        Vector vTo = to.toVector(); // Converts the to location to a vector
+                        Vector direction = vTo.subtract(vFrom).normalize(); // Subtracts the to variable to the from variable and normalizes it.
+                        arrow.setVelocity(direction); // Sets the arrows newfound direction
+                        break outerloop;
+                    }
                 }
             }
         }
-        if (target != null) {
-            try {
-                arrow.setVelocity(target.getLocation().toVector().subtract(arrow.getLocation().toVector())); // Set direction of arrow
-            } catch (Exception ignored) {
-
-            }
-        }
     }
 
+    @Override
+    public void run() {
+        for (Arrow arrow : arrows) {
+            updateArrow(arrow);
+        }
+    }
 }
