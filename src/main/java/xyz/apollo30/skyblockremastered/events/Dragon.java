@@ -403,7 +403,7 @@ public class Dragon implements Listener {
             broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &9Dragon Claw");
         } else if (weight >= 400 && Math.random() > 0.5) {
             weight -= 400;
-            broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Chestplate");
+            broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Chestplate&e!");
             switch (dragon) {
                 case "SUPERIOR":
 
@@ -425,7 +425,7 @@ public class Dragon implements Listener {
             giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
         } else if (weight >= 350 && Math.random() > 0.5) {
             weight -= 350;
-            broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Leggings");
+            broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Leggings&e!");
             switch (dragon) {
                 case "SUPERIOR":
 
@@ -447,7 +447,7 @@ public class Dragon implements Listener {
             giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
         } else if (weight >= 325 && Math.random() > 0.5) {
             weight -= 325;
-            broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Helmet");
+            broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Helmet&e!");
             switch (dragon) {
                 case "SUPERIOR":
 
@@ -469,7 +469,7 @@ public class Dragon implements Listener {
             giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
         } else if (weight >= 300 && Math.random() > 0.5) {
             weight -= 300;
-            broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Boots");
+            broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Boots&e!");
             switch (dragon) {
                 case "SUPERIOR":
 
