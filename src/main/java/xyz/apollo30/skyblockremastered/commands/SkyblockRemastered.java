@@ -62,8 +62,8 @@ public class SkyblockRemastered implements CommandExecutor {
 
             } else if (args[1].equalsIgnoreCase("health") || args[1].equalsIgnoreCase("hp")) {
 
-                if (!plr.isOp() && Integer.parseInt(args[2]) > 2000) {
-                    plr.sendMessage(Utils.chat("You cannot go over 2000"));
+                if (!plr.isOp() && Integer.parseInt(args[2]) > 10000) {
+                    plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
                 player_data.setMaxHealth(Integer.parseInt(args[2]));
@@ -72,8 +72,8 @@ public class SkyblockRemastered implements CommandExecutor {
 
             } else if (args[1].equalsIgnoreCase("defense") || args[1].equalsIgnoreCase("def")) {
 
-                if (!plr.isOp() && Integer.parseInt(args[2]) > 2000) {
-                    plr.sendMessage(Utils.chat("You cannot go over 2000"));
+                if (!plr.isOp() && Integer.parseInt(args[2]) > 10000) {
+                    plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
                 player_data.setDefense(Integer.parseInt(args[2]));
@@ -81,8 +81,8 @@ public class SkyblockRemastered implements CommandExecutor {
 
             } else if (args[1].equalsIgnoreCase("cd") || args[1].equalsIgnoreCase("critdamage")) {
 
-                if (!plr.isOp() && Integer.parseInt(args[2]) > 2000) {
-                    plr.sendMessage(Utils.chat("You cannot go over 2000"));
+                if (!plr.isOp() && Integer.parseInt(args[2]) > 10000) {
+                    plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
                 player_data.setCritDamage(Integer.parseInt(args[2]));
@@ -99,8 +99,8 @@ public class SkyblockRemastered implements CommandExecutor {
 
             } else if (args[1].equalsIgnoreCase("intel") || args[1].equalsIgnoreCase("intelligence") || args[1].equalsIgnoreCase("mana")) {
 
-                if (!plr.isOp() && Integer.parseInt(args[2]) > 2000) {
-                    plr.sendMessage(Utils.chat("You cannot go over 2000"));
+                if (!plr.isOp() && Integer.parseInt(args[2]) > 10000) {
+                    plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
                 player_data.setMaxIntelligence(Integer.parseInt(args[2]));
@@ -118,8 +118,8 @@ public class SkyblockRemastered implements CommandExecutor {
 
             } else if (args[1].equalsIgnoreCase("str") || args[1].equalsIgnoreCase("strength")) {
 
-                if (!plr.isOp() && Integer.parseInt(args[2]) > 2000) {
-                    plr.sendMessage(Utils.chat("You cannot go over 2000"));
+                if (!plr.isOp() && Integer.parseInt(args[2]) > 10000) {
+                    plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
                 player_data.setStrength(Integer.parseInt(args[2]));

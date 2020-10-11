@@ -13,6 +13,10 @@ import xyz.apollo30.skyblockremastered.abilities.Weapons;
 import xyz.apollo30.skyblockremastered.commands.*;
 import xyz.apollo30.skyblockremastered.customMobs.CustomEntityEnderDragon;
 import xyz.apollo30.skyblockremastered.events.Dragon;
+import xyz.apollo30.skyblockremastered.events.TradeEvents;
+import xyz.apollo30.skyblockremastered.items.Armor;
+import xyz.apollo30.skyblockremastered.items.Fragments;
+import xyz.apollo30.skyblockremastered.items.Pets;
 import xyz.apollo30.skyblockremastered.listeners.*;
 import xyz.apollo30.skyblockremastered.managers.BlockManager;
 import xyz.apollo30.skyblockremastered.managers.ConfigManager;
@@ -38,6 +42,13 @@ public class SkyblockRemastered extends JavaPlugin {
     public ServerObject so = new ServerObject();
     public NMSUtil nmsu = new NMSUtil();
 
+    // ItemStack Defining
+    public xyz.apollo30.skyblockremastered.items.Weapons weapons = new xyz.apollo30.skyblockremastered.items.Weapons(this);
+    public xyz.apollo30.skyblockremastered.items.Miscs miscs = new xyz.apollo30.skyblockremastered.items.Miscs(this);
+    public Pets pets = new Pets(this);
+    public Armor armor = new Armor(this);
+    public Fragments fragments = new Fragments(this);
+
     @Override
     public void onEnable() {
 
@@ -57,6 +68,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new ProtectionEvents(this);
         new SpawnEvents(this);
         new EnchantEvents(this);
+        new TradeEvents(this);
 
         // Command
         new Gamemode(this);
@@ -88,11 +100,8 @@ public class SkyblockRemastered extends JavaPlugin {
             }
         }
 
-
-
         // Inits the timer for all managers.
         blockManager.initTimer();
-        // mobManager.initBloccCheck();
         mobManager.initTimer();
         new ScoreboardTask(this).runTaskTimer(this, 30, 30);
         new ActionBarTask(this).runTaskTimer(this, 20, 20);

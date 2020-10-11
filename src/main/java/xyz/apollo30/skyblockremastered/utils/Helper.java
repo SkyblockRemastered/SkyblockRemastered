@@ -1,8 +1,10 @@
 package xyz.apollo30.skyblockremastered.utils;
 
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 
 import java.util.Map;
@@ -35,6 +37,13 @@ public class Helper {
                 break;
             }
         }
+    }
+
+    public static ItemStack setLeatherColor(ItemStack leatherArmor, int r, int b, int g) {
+        LeatherArmorMeta meta = (LeatherArmorMeta) leatherArmor.getItemMeta();
+        meta.setColor(Color.fromRGB(r, b, g));
+        leatherArmor.setItemMeta(meta);
+        return leatherArmor;
     }
 
     public static boolean consumeItem(Player player, int count, Material mat) {

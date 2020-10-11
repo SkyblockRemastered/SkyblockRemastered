@@ -9,8 +9,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.utils.NMSUtil;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+
+import java.util.UUID;
 
 public class SpawnEgg implements CommandExecutor {
 
@@ -127,6 +130,8 @@ public class SpawnEgg implements CommandExecutor {
                 meta.setDisplayName(Utils.chat("&c&lDraconis Spawn Egg"));
                 Draconis.setItemMeta(meta);
                 plr.getInventory().addItem(Draconis);
+            case "enderdragon":
+                plr.getInventory().addItem(NMSUtil.addString(plugin.pets.enderDragonLegendary, "UUID", UUID.randomUUID().toString()));
         }
 
         return false;

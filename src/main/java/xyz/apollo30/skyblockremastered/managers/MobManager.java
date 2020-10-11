@@ -282,10 +282,10 @@ public class MobManager {
             mo.setLevel(1000);
             mo.setName("Protector Dragon");
             plugin.so.setEnderDragon(mo);
-        } else if (name.equalsIgnoreCase("old")) {
+        } else if (name.equalsIgnoreCase("demonic")) {
             mo.setMaxHealth(15000000);
             mo.setLevel(1000);
-            mo.setName("Old Dragon");
+            mo.setName("Demonic Dragon");
             plugin.so.setEnderDragon(mo);
         } else if (name.equalsIgnoreCase("wise")) {
             mo.setMaxHealth(9000000);

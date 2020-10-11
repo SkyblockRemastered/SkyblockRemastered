@@ -10,6 +10,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.items.Weapons;
 
 import java.util.*;
 
@@ -39,6 +40,7 @@ public class EnchantEvents extends BukkitRunnable implements Listener {
         if (entity instanceof Arrow) {
             Arrow arrow = (Arrow) entity;
             arrows.remove(arrow); // Remove Arrow
+            arrow.remove();
         }
     }
 
@@ -47,8 +49,8 @@ public class EnchantEvents extends BukkitRunnable implements Listener {
         for (double i = .5; i < 100; i += .5) { // This will rapidly increase the range so you don't get so many mobs at one, and instead checks a few blocks at a time
             for (Entity e : arrow.getNearbyEntities(i, 3, i)) { // Gets ALL nearby entities using the loop variable above it
                 if (e != arrow.getShooter()) { // Checks to make sure the entities isn't the shooter
-                    if (e.getType().isAlive()) { // Checks to make sure the entity is alive
-                        if (e.getType() == EntityType.PLAYER) return;
+                    if (e.getType().isAlive() && e instanceof LivingEntity) { // Checks to make sure the entity is alive
+                        if (e.getType() == EntityType.PLAYER || e.getType() == EntityType.ARMOR_STAND) return;
                         Location from = arrow.getLocation(); // Gets the arrows location
                         Location to = e.getLocation().add(0, 2, 0); // Gets the entities Location
                         Vector vFrom = from.toVector(); // Converts the from location to a vector

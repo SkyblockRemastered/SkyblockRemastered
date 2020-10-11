@@ -21,9 +21,11 @@ import xyz.apollo30.skyblockremastered.objects.MobObject;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.Helper;
+import xyz.apollo30.skyblockremastered.utils.NMSUtil;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class SpawnEvents implements Listener {
 
@@ -99,14 +101,7 @@ public class SpawnEvents implements Listener {
         } else if (e.getEntityType() == EntityType.ENDERMAN && e.getEntity().getPassenger().getCustomName().contains(Utils.chat("Special Zealot"))) {
             plr.sendMessage(Utils.chat("&6&lRARE DROP!&r &5Summoning Eye&7!"));
             PacketManager.sendTitle(plr, 0, 15, 1, Utils.chat("&cSpecial Zealot!"), "");
-            e.getEntity().getWorld().dropItem(e.getEntity().getLocation(), Utils.addLore(
-                    Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGFhOGZjOGRlNjQxN2I0OGQ0OGM4MGI0NDNjZjUzMjZlM2Q5ZGE0ZGJlOWIyNWZjZDQ5NTQ5ZDk2MTY4ZmMwIn19fQ=="),
-                    "&5Summoning Eye",
-                    "&7Use this at the &5Ender Altar",
-                    "&7in the &5Dragon's Nest&7 to",
-                    "&7summon Ender Dragons!",
-                    "",
-                    "&5&lEPIC"));
+            e.getEntity().getWorld().dropItem(e.getEntity().getLocation(), NMSUtil.addString(plugin.miscs.summoningEye, "UUID", UUID.randomUUID().toString()));
             plr.playSound(plr.getLocation(), Sound.SUCCESSFUL_HIT, 1F, .5F);
         }
 
@@ -224,10 +219,13 @@ public class SpawnEvents implements Listener {
         plr.getInventory().addItem(bow);
         plr.getInventory().addItem(new ItemStack(Material.ARROW, 1));
 
+        plr.getInventory().setHelmet(plugin.armor.superiorHelmet);
+        plr.getInventory().setChestplate(plugin.armor.superiorChestplate);
+        plr.getInventory().setLeggings(plugin.armor.superiorLeggings);
+        plr.getInventory().setBoots(plugin.armor.superiorBoots);
 
-        ItemStack nether_star = Utils.createItem(null, "NETHER_STAR", 1, 9, "&aSkyBlock Menu &7(Right Click)",
-                "&7View all of your SkyBlock", "&7progress, including your Skills,",
-                "&7Collections, Recipes, and more!");
+
+        ItemStack nether_star = plugin.miscs.skyblockMenu;
         plr.getInventory().remove(nether_star);
 
         Utils.addItem(plr.getInventory(), nether_star, 9);

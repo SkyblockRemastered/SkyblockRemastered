@@ -174,7 +174,6 @@ public class DamageEvents implements Listener {
             mo.setHealth((mo.getHealth() - final_damage));
 
             if (e.getEntityType() == EntityType.ENDER_DRAGON && plugin.so.isDragonFight()) {
-                Utils.broadCast("[DEBUG] " + ((mo.getHealth() / (double) mo.getMaxHealth()) * target.getMaxHealth()));
                 target.setHealth(((mo.getHealth() / (double) mo.getMaxHealth()) * target.getMaxHealth() > 0 ? (mo.getHealth() / (double) mo.getMaxHealth()) * target.getMaxHealth() : 0));
                 plugin.dragonEvent.playerDamage.put(damager, plugin.dragonEvent.playerDamage.get(damager) + (double) final_damage);
                 plugin.so.setLastDragonHit(damager);
