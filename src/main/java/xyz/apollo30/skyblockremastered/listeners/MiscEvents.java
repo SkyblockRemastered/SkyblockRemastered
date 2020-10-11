@@ -1,37 +1,24 @@
 package xyz.apollo30.skyblockremastered.listeners;
 
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.SlimeSplitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.constants.Constants;
-import xyz.apollo30.skyblockremastered.customMobs.CustomEntityEnderDragon;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.GuiUtils;
-import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class MiscEvents implements Listener {
 
@@ -127,10 +114,7 @@ public class MiscEvents implements Listener {
             if (action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR) {
                 if (e.getItem() != null && e.getItem().hasItemMeta() && item.getItemMeta().getDisplayName() != null) {
 
-                    if (item.getItemMeta().getDisplayName().equals(Utils.chat("&c&lDraconis Spawn Egg"))) {
-                        LivingEntity enderDragon = CustomEntityEnderDragon.spawn(plr.getLocation(), "Yambol is a bitch.");
-                        plugin.mobManager.createMob(enderDragon, "celestial");
-                    } else if (item.getItemMeta().getDisplayName().equals(Utils.chat("&5Zealot Spawn Egg"))) {
+                    if (item.getItemMeta().getDisplayName().equals(Utils.chat("&5Zealot Spawn Egg"))) {
                         Enderman enderman = (Enderman) e.getClickedBlock().getLocation().getWorld().spawnEntity(e.getClickedBlock().getLocation().add(0, 1, 0), EntityType.ENDERMAN);
                         plugin.mobManager.createMob(enderman, "Zealot");
                     } else if (item.getItemMeta().getDisplayName().equals(Utils.chat("&5Special Zealot Spawn Egg"))) {
@@ -139,7 +123,7 @@ public class MiscEvents implements Listener {
                         plugin.mobManager.createMob(enderman, "Special Zealot");
                     } else if (e.getItem().getItemMeta().getDisplayName().contains("Summoning Eye")) {
                         plugin.dragonEvent.placeSummoningEye(e);
-                    } else if (e.getItem().getItemMeta().getDisplayName().contains("Sleeping Eye")) {
+                    } else if (e.getItem().getItemMeta().getDisplayName().contains("Remnant of the Eye")) {
                         plugin.dragonEvent.retrieveSummoningEye(e);
                     } else if (e.getItem() != null && e.getItem().hasItemMeta()) {
                         if (item.getItemMeta().getDisplayName().equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {

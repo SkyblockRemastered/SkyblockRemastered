@@ -1,11 +1,10 @@
 package xyz.apollo30.skyblockremastered.events;
 
-import net.minecraft.server.v1_8_R3.EntityCreature;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftCreature;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,9 +12,11 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.customMobs.CustomEntityEnderDragon;
+import xyz.apollo30.skyblockremastered.customMobs.CustomEnderDragon;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.NMSUtil;
 import xyz.apollo30.skyblockremastered.utils.Utils;
@@ -52,6 +53,7 @@ public class Dragon implements Listener {
     private final HashMap<Location, Material> dragonEggRegeneration = new HashMap<>();
     public final HashMap<Player, Double> playerDamage = new HashMap<>();
     private final List<Entity> endCrystals = new ArrayList<>();
+    BukkitTask task;
 
     public void placeSummoningEye(PlayerInteractEvent e) {
 
@@ -67,7 +69,7 @@ public class Dragon implements Listener {
                     plugin.so.setPlacedSummoningEye(plugin.so.getPlacedSummoningEye() + 1);
 
                     e.getPlayer().getInventory().remove(e.getItem());
-                    e.getPlayer().getInventory().addItem(NMSUtil.addString(plugin.miscs.sleepingEye, "UUID", UUID.randomUUID().toString()));
+                    e.getPlayer().getInventory().addItem(NMSUtil.addString(plugin.miscs.remnantOfTheEye, "UUID", UUID.randomUUID().toString()));
 
 
                     if (plugin.so.getPlacedSummoningEye() >= 8) {
@@ -81,8 +83,8 @@ public class Dragon implements Listener {
                             plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1.5F);
                             for (ItemStack item : plr.getInventory().getContents()) {
                                 if (item == null || item.getType() == Material.AIR) break;
-                                if (item.hasItemMeta() && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().contains("Sleeping Eye")) {
-                                    plr.getInventory().remove(item);
+                                if (item.hasItemMeta() && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().contains("Remnant of the Eye")) {
+                                    plr.getInventory().removeItem(item);
                                 }
                             }
                         }
@@ -203,24 +205,24 @@ public class Dragon implements Listener {
                     playerDamage.put(plr, (double) 0);
                 }
 
-                LivingEntity enderDragon = CustomEntityEnderDragon.spawn(new Location(e.getPlayer().getWorld(), 1, 63, -4), dragonName);
+                CustomEnderDragon eDragon = CustomEnderDragon.spawn(new Location(e.getPlayer().getWorld(), 1, 63, -4), dragonName);
+                LivingEntity enderDragon = (EnderDragon) eDragon.getBukkitEntity();
                 enderDragon.setNoDamageTicks(0);
                 enderDragon.setMaximumNoDamageTicks(0);
                 enderDragon.setCustomName(Utils.chat(dragonName));
 
-                // walkToPosition(enderDragon, new Location(enderDragon.getWorld(), -13, 60, 32), 10);
+                task = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        CustomEnderDragon.randomizeMovement(eDragon);
+                    }
+                }.runTaskTimer(plugin, 0L, 20L);
+
                 plugin.mobManager.createMob(enderDragon, type.toLowerCase());
                 plugin.so.setDragonName(type.toUpperCase());
                 spawnCrystals(e);
             }, 150);
         }, 60);
-    }
-
-    private void walkToPosition(LivingEntity le, Location loc, float speed) {
-        ((CraftCreature) le)
-                .getHandle()
-                .getNavigation()
-                .a(loc.getX(), loc.getY(), loc.getZ(), speed);
     }
 
     private void spawnCrystals(PlayerInteractEvent e) {
@@ -329,7 +331,7 @@ public class Dragon implements Listener {
 
     private void getLoot(Player plr, int position) {
 
-        int placedEyes = plugin.dragonEvent.placedPlayerEyes.get(plr) != null ? plugin.dragonEvent.placedPlayerEyes.get(plr) : 0;
+        int placedEyes = plugin.dragonEvent.placedPlayerEyes.getOrDefault(plr, 0);
 
         int weight = 0;
 
@@ -363,12 +365,14 @@ public class Dragon implements Listener {
         } else weight += placedEyes * 100;
 
         // Position
-        if (position == 1) weight += 300;
-        else if (position == 2) weight += 250;
-        else if (position == 3) weight += 200;
-        else if (position >= 4 && position <= 7) weight += 125;
-        else if (position >= 8 && position <= 15) weight += 100;
-        else if (position >= 16) weight += 75;
+        if (plugin.dragonEvent.playerDamage.get(plr) != 0) {
+            if (position == 1) weight += 300;
+            else if (position == 2) weight += 250;
+            else if (position == 3) weight += 200;
+            else if (position >= 4 && position <= 7) weight += 125;
+            else if (position >= 8 && position <= 15) weight += 100;
+            else if (position >= 16) weight += 75;
+        }
 
         getItem(weight, plr, plugin.so.getDragonName(), 1 - (placedEyes * .05));
     }
@@ -594,7 +598,7 @@ public class Dragon implements Listener {
 //    @EventHandler
 //    public void onDragonTarget(EntityTargetEvent e) {
 //        if (e.getEntityType() == EntityType.ENDER_DRAGON) {
-//            e.setCancelled(true);
+//            if (e.getTarget() == EntityType.PLAYER) e.setCancelled(true);
 //        }
 //    }
 
@@ -629,6 +633,8 @@ public class Dragon implements Listener {
     public void onEntityDeath(EntityDeathEvent e) {
         // Dragon
         if (e.getEntity().getType() == EntityType.ENDER_DRAGON && plugin.so.isDragonFight()) {
+
+            task.cancel();
 
             if (e.getEntity().getKiller() != null) plugin.so.setLastDragonHit(e.getEntity().getKiller());
 

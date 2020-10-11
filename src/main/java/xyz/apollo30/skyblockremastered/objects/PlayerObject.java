@@ -3,6 +3,7 @@ package xyz.apollo30.skyblockremastered.objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.constants.Constants;
 
 import java.util.ArrayList;
@@ -16,6 +17,12 @@ public class PlayerObject {
     // Useless shit that I will never use in my life.
     String ign;
     String uuid;
+
+    // Armor Detection
+    ItemStack helmet;
+    ItemStack chestplate;
+    ItemStack leggings;
+    ItemStack boots;
 
     // Settings
     Constants.Rarities selectedRarity = Constants.Rarities.COMMON;

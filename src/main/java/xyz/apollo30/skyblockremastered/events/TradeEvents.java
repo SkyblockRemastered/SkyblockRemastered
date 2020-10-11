@@ -46,13 +46,13 @@ public class TradeEvents implements Listener {
             cd.remove(c.getName());
             Inventory menu1 = Bukkit.createInventory(null, 45, "You                  " + plr.getName());
             Utils.createGlass(menu1, "STAINED_GLASS_PANE", 15, 1, 5, 14, 23, 32, 41);
-            Utils.createItemByte(menu1, 371, 0, 1, 37, "&6Coin Transaction", "", "&eClick to add coins to the trade menu", "&eYou can use prefixes like: H, K, M, B");
+            Utils.createItemByte(menu1, 371, 0, 1, 37, "&6Coin Transaction", "", "&eClick to add coins to the trade menu", "&eYou can use prefixes like: K, M, B");
             Utils.createItemByte(menu1, 351, 8, 1, 40, "&cInvalid Trade", "", "&7Place something in the trade menu in order", "&7to accept the trade");
             Utils.createItemByte(menu1, 351, 8, 1, 42, "&7Other Person's Response", "", "&7You are currently", "&7trading with " + Helper.getRank(plr));
 
             Inventory menu2 = Bukkit.createInventory(null, 45, "You                  " + c.getName());
             Utils.createGlass(menu2, "STAINED_GLASS_PANE", 15, 1, 5, 14, 23, 32, 41);
-            Utils.createItemByte(menu2, 371, 0, 1, 37, "&6Coin Transaction", "", "&eClick to add coins to the trade menu", "&eYou can use prefixes like: H, K, M, B");
+            Utils.createItemByte(menu2, 371, 0, 1, 37, "&6Coin Transaction", "", "&eClick to add coins to the trade menu", "&eYou can use prefixes like: K, M, B");
             Utils.createItemByte(menu1, 351, 8, 1, 40, "&cInvalid Trade", "", "&7Place something in the trade menu in order", "&7to accept the trade");
             Utils.createItemByte(menu2, 351, 8, 1, 42, "&7Other Person's Response", "", "&7You are currently", "&7trading with " + Helper.getRank(c));
 
@@ -74,7 +74,6 @@ public class TradeEvents implements Listener {
                 }
             }, 300);
         }
-
-
     }
+
 }

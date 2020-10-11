@@ -11,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import xyz.apollo30.skyblockremastered.abilities.Miscs;
 import xyz.apollo30.skyblockremastered.abilities.Weapons;
 import xyz.apollo30.skyblockremastered.commands.*;
-import xyz.apollo30.skyblockremastered.customMobs.CustomEntityEnderDragon;
+import xyz.apollo30.skyblockremastered.customMobs.CustomEnderDragon;
 import xyz.apollo30.skyblockremastered.events.Dragon;
 import xyz.apollo30.skyblockremastered.events.TradeEvents;
 import xyz.apollo30.skyblockremastered.items.Armor;
@@ -53,7 +53,7 @@ public class SkyblockRemastered extends JavaPlugin {
     public void onEnable() {
 
         // Registering Custom Dragons
-        nmsu.registerEntity("Dragon", 63, EntityEnderDragon.class, CustomEntityEnderDragon.class);
+        nmsu.registerEntity("Dragon", 63, EntityEnderDragon.class, CustomEnderDragon.class);
 
         db = new ConfigManager(this);
         db.saveDefaultPlayers();

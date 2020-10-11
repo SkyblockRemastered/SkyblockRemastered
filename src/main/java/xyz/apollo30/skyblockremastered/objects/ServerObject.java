@@ -2,8 +2,6 @@ package xyz.apollo30.skyblockremastered.objects;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 @Getter

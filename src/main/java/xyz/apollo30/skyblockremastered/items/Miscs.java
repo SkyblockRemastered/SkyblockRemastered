@@ -25,16 +25,18 @@ public class Miscs {
             "&7View all of your SkyBlock", "&7progress, including your Skills,",
             "&7Collections, Recipes, and more!");
 
-    public ItemStack sleepingEye = Utils.addLore(
+    public ItemStack remnantOfTheEye = Utils.addLore(
             Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTdmZjIwYTRlYjQ0YWVlYWUwOTVhZTRmMzBhNGI0ZTk3NWQ1MGEzMTY1YzVlNGE0YTMyMmUzN2Q1Y2NiNTg2YyJ9fX0="),
-            "&5Sleeping Eye",
+            "&5Remnant of the Eye",
             "&7Keep this item is in your",
             "&7inventory to recover your placed",
             "&7Summoning Eye when you leave or",
             "&7when you click the Ender Altar.",
-            "&7This item becomes imbued with",
-            "&7the magic of the Dragon when it",
-            "&7spawns, turning it into a",
+            "",
+            "&7This item can also save you from certain death,",
+            "&7granting you a second life",
+            "&cConsumed on use",
+            "&cThis item only works on the End Island",
             "",
             "&5&lEPIC");
 

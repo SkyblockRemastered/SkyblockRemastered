@@ -134,36 +134,41 @@ public class SpawnEvents implements Listener {
         Bukkit.getScheduler().runTask(plugin, () -> e.getEntity().setFireTicks(0));
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> plr.setVelocity(new Vector()), 1L);
 
-        for (ItemStack contents : plr.getInventory().getContents()) {
-            if (contents.hasItemMeta() && contents.getItemMeta().getDisplayName() != null) {
+        boolean canRevive = false;
+
+        for (ItemStack content : plr.getInventory().getContents()) {
+            if (content.hasItemMeta() && content.getItemMeta().getDisplayName() != null) {
                 if (Utils.isInZone(plr.getLocation(), new Location(plr.getWorld(), -112, 255, -107), new Location(plr.getWorld(), 213, 29, 127))) {
-                    if (contents.getItemMeta().getDisplayName().contains("Remnant of the Eye")) {
+                    if (content.getItemMeta().getDisplayName().contains("Remnant of the Eye")) {
+                        po.resetHealth();
                         plr.setHealth(plr.getMaxHealth());
                         plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1.25F);
-                        plr.getInventory().remove(contents);
-                        if (plr.getLastDamageCause().getCause().equals(EntityDamageEvent.DamageCause.VOID)) {
-                            plr.sendMessage(Utils.chat("&5Your Remnant of the Eye saved you from certain death! You were safely teleported back to spawn!"));
-                            plr.teleport(new Location(plr.getWorld(), 173.5, 101, -3));
-                            break;
-                        } else {
-                            plr.sendMessage(Utils.chat("&5Your Remnant of the Eye saved you from certain death!"));
-                            break;
-                        }
+                        plr.getInventory().removeItem(content);
+                        canRevive = true;
+                        break;
                     }
                 }
-            } else {
-                double purse = po.getPurse();
-                po.setPurse(po.getPurse() / 2);
-
-                Location loc = e.getEntity().getWorld().getSpawnLocation();
-                loc.setPitch(0);
-                loc.setYaw(-180);
-                e.getEntity().teleport(loc);
-
-                plr.sendMessage(Utils.chat("&cYou died and lost " + String.format("%,.0f", purse / 2) + " coins!"));
-                plr.playSound(plr.getLocation(), Sound.ANVIL_LAND, 1F, 10F);
-                break;
             }
+        }
+
+        if (canRevive) {
+            if (plr.getLastDamageCause().getCause().equals(EntityDamageEvent.DamageCause.VOID)) {
+                plr.sendMessage(Utils.chat("&5Your Remnant of the Eye saved you from certain death! You were safely teleported back to spawn!"));
+                plr.teleport(new Location(plr.getWorld(), 173.5, 101, -3));
+            } else {
+                plr.sendMessage(Utils.chat("&5Your Remnant of the Eye saved you from certain death!"));
+            }
+        } else {
+            double purse = po.getPurse();
+            po.setPurse(po.getPurse() / 2);
+
+            Location loc = e.getEntity().getWorld().getSpawnLocation();
+            loc.setPitch(0);
+            loc.setYaw(-180);
+            e.getEntity().teleport(loc);
+
+            plr.sendMessage(Utils.chat("&cYou died and lost " + String.format("%,.0f", purse / 2) + " coins!"));
+            plr.playSound(plr.getLocation(), Sound.ANVIL_LAND, 1F, 10F);
         }
     }
 
