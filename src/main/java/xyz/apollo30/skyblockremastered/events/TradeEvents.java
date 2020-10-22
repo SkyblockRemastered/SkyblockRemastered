@@ -68,9 +68,9 @@ public class TradeEvents implements Listener {
             cd.put(plr.getName(), c.getName());
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 if (cd.containsKey(plr.getName())) {
-                    plr.sendMessage(Utils.chat("&cYour current trade request to " + cd.get(c.getName()) + " &chas expired!"));
+                    plr.sendMessage(Utils.chat("&cYour current trade request to " + Helper.getRank(c) + " &chas expired!"));
                     plr.playSound(plr.getLocation(), Sound.VILLAGER_NO, 1000F, 1F);
-                    c.sendMessage(Utils.chat("&cYour trade request from " + cd.get(plr.getName()) + " &chas expired!"));
+                    c.sendMessage(Utils.chat("&cYour trade request from " + Helper.getRank(plr) + " &chas expired!"));
                     c.playSound(c.getLocation(), Sound.VILLAGER_NO, 1000F, 1F);
                     cd.remove(plr.getName());
                 }
