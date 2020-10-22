@@ -19,6 +19,7 @@ import xyz.apollo30.skyblockremastered.tasks.*;
 
 import java.util.HashMap;
 import xyz.apollo30.skyblockremastered.utils.GuiUtils;
+import xyz.apollo30.skyblockremastered.utils.MongoUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.Date;
@@ -35,10 +36,12 @@ public class SkyblockRemastered extends JavaPlugin {
     public HashMap<Entity, Long> indicator = new HashMap<>();
     public Miscs miscAbilities;
     public Weapons weaponAbilities;
+    public MongoUtils mongoUtils;
 
     @Override
     public void onEnable() {
 
+        mongoUtils = new MongoUtils(this, "mongoStringHere", "databaseName", "collectionName");
         db = new ConfigManager(this);
         db.saveDefaultPlayers();
         db.saveDefaultMinions();
@@ -99,7 +102,7 @@ public class SkyblockRemastered extends JavaPlugin {
 
         // When reloaded and the players still exist, it just recreates their database again.
         for (Player plr : Bukkit.getOnlinePlayers()) {
-            if (playerManager.getPlayerData(plr) == null) playerManager.createPlayerData(plr);
+            if (playerManager.getPlayerData(plr) == null) PlayerManager.createPlayerData(plr);
         }
         // Removes all entities in the server bc I am lazy to re-register them.
         for (World world : Bukkit.getWorlds()) {

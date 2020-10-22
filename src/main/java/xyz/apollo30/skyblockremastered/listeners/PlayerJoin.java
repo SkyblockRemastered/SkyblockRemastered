@@ -73,7 +73,7 @@ public class PlayerJoin implements Listener {
         plr.teleport(loc);
 
         // Create Player.yml section for them
-        PlayerManager.createPlayerData(plr, plr.getUniqueId().toString(), plugin.db.getPlayers());
+        PlayerManager.createPlayerData(plr);
         plugin.db.savePlayers();
 
         // Give the player a temporary database.
