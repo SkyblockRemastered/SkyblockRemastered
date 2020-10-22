@@ -250,7 +250,7 @@ public class PlayerManager {
             po.setTamingTotal(doc.getInteger("Skills.Taming.totalXP"));
 
             playerObjects.put(plr, po);
-            Utils.broadCast("Database created for " + plr.getName());
+            Utils.broadCast("[DEBUG] Database created for " + plr.getName());
         } catch (Exception ignored) {
 
         }

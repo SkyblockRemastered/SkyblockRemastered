@@ -23,11 +23,6 @@ public class ActionBarTask extends BukkitRunnable {
 
             PlayerObject po = plugin.playerManager.playerObjects.get(plr);
 
-            // Set Saturation
-            plr.setSaturation(20);
-            plr.setWalkSpeed(po.getSpeed() > 500 ? 1.0f : po.getSpeed() <= 0 ? 0.0f : (float) po.getSpeed() / 500);
-            plr.setFlySpeed(po.getSpeed() / 2 > 500 ? 1.0f : po.getSpeed() / 2 <= 0 ? 0.0f : (float) po.getSpeed() / 2 / 500);
-
             String hp = Integer.toString(po.getHealth());
             String maxhp = Integer.toString(po.getMaxHealth());
 

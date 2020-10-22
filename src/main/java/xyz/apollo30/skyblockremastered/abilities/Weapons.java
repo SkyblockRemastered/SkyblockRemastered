@@ -26,6 +26,7 @@ public class Weapons {
     public void aspect_of_the_end(Player plr) {
         PlayerObject po = plugin.playerManager.playerObjects.get(plr);
         if (po.getIntelligence() - 50 < 0 || po.getIntelligence() <= 0) {
+            plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, .5F);
             plr.sendMessage(Utils.chat("&cYou do not have enough mana"));
             return;
         }
@@ -62,6 +63,11 @@ public class Weapons {
         location.setYaw(plr.getLocation().getYaw());
         location.setPitch(plr.getLocation().getPitch());
         plr.teleport(location);
+        plr.sendMessage(Utils.chat(""));
+    }
+
+    public void inkWank(Player plr) {
+
     }
 
 }

@@ -28,11 +28,11 @@ public class LagPreventerTask extends BukkitRunnable {
 
         // Island Unloader, checks if there are any players inside the islands.
         for (World world : Bukkit.getWorlds()) {
-            if (world.getName().startsWith("islands/")) {
+            if (world.getName().startsWith("playerislands/")) {
                 if (world.getPlayers().size() == 0) {
                     for (Player plr : Bukkit.getOnlinePlayers()) {
                         if (plr.isOp())
-                            plr.sendMessage(Utils.chat("[DEBUG] Unloaded World: " + world.getName().replace("islands/", "")));
+                            plr.sendMessage(Utils.chat("[DEBUG] Unloaded World: " + world.getName().replace("playerislands/", "")));
                     }
                     Bukkit.getServer().unloadWorld(world, true);
                 }

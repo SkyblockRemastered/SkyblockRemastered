@@ -1,5 +1,6 @@
 package xyz.apollo30.skyblockremastered;
 
+import net.minecraft.server.v1_8_R3.EntityEnderDragon;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -9,13 +10,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.apollo30.skyblockremastered.abilities.Miscs;
 import xyz.apollo30.skyblockremastered.abilities.Weapons;
-import xyz.apollo30.skyblockremastered.commands.Build;
-import xyz.apollo30.skyblockremastered.commands.Gamemode;
-import xyz.apollo30.skyblockremastered.commands.Hub;
-import xyz.apollo30.skyblockremastered.commands.Visit;
+import xyz.apollo30.skyblockremastered.commands.*;
+import xyz.apollo30.skyblockremastered.customMobs.CustomEnderDragon;
+import xyz.apollo30.skyblockremastered.events.Dragon;
+import xyz.apollo30.skyblockremastered.events.TradeEvents;
+import xyz.apollo30.skyblockremastered.items.Armor;
+import xyz.apollo30.skyblockremastered.items.Fragments;
+import xyz.apollo30.skyblockremastered.items.Pets;
 import xyz.apollo30.skyblockremastered.listeners.*;
-import xyz.apollo30.skyblockremastered.managers.*;
+import xyz.apollo30.skyblockremastered.managers.BlockManager;
+import xyz.apollo30.skyblockremastered.managers.ConfigManager;
+import xyz.apollo30.skyblockremastered.managers.MobManager;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
+import xyz.apollo30.skyblockremastered.objects.ServerObject;
 import xyz.apollo30.skyblockremastered.tasks.*;
+import xyz.apollo30.skyblockremastered.utils.NMSUtil;
 
 import java.util.HashMap;
 import xyz.apollo30.skyblockremastered.utils.GuiUtils;
@@ -37,52 +46,38 @@ public class SkyblockRemastered extends JavaPlugin {
     public Miscs miscAbilities;
     public Weapons weaponAbilities;
     public MongoUtils mongoUtils;
+    public Dragon dragonEvent;
+    public ServerObject so = new ServerObject();
+    public NMSUtil nmsu = new NMSUtil();
+
+    // ItemStack Defining
+    public xyz.apollo30.skyblockremastered.items.Weapons weapons = new xyz.apollo30.skyblockremastered.items.Weapons(this);
+    public xyz.apollo30.skyblockremastered.items.Miscs miscs = new xyz.apollo30.skyblockremastered.items.Miscs(this);
+    public Pets pets = new Pets(this);
+    public Armor armor = new Armor(this);
+    public Fragments fragments = new Fragments(this);
 
     @Override
     public void onEnable() {
 
         mongoUtils = new MongoUtils(this, "mongoStringHere", "databaseName", "collectionName");
+        // Registering Custom Dragons
+        nmsu.registerEntity("Dragon", 63, EntityEnderDragon.class, CustomEnderDragon.class);
+
         db = new ConfigManager(this);
         db.saveDefaultPlayers();
         db.saveDefaultMinions();
         db.saveDefaultSpawns();
 
         // Listener
-        new BlockFade(this);
-        new BlockForm(this);
-        new BlockIgnite(this);
-        new BlockSpread(this);
-        new EndermanPickup(this);
-        new EntityCombust(this);
-        new EntityDamage(this);
-        new EntityDamageByEntity(this);
-        new EntityDeath(this);
-        new EntitySpawn(this);
-        new EntityTeleport(this);
-        new InventoryClick(this);
-        new InventoryItemMove(this);
-        new ItemDamage(this);
-        new ItemDrag(this);
-        new PlayerDeath(this);
-        new PlayerDrop(this);
-        new PlayerInteract(this);
-        new PlayerJoin(this);
-        new PlayerLeave(this);
-        new PlayerPortal(this);
-        new RegainHealth(this);
-        new SlimeSplit(this);
-        new UnloadChunk(this);
-        new LeavesDecay(this);
-        new BlockBreak(this);
-        new PlayerMove(this);
-        new BlockPlace(this);
-        new EntityExplode(this);
-        new WeatherChange(this);
-        new PlayerBucketEmpty(this);
-        new PlayerBucketFill(this);
-        new PlayerPickupItem(this);
-        new InventoryOpen(this);
-        new ServerListPing(this);
+        new DamageEvents(this);
+        new InventoryEvents(this);
+        new MiscEvents(this);
+        new PlayerEvents(this);
+        new ProtectionEvents(this);
+        new SpawnEvents(this);
+        new EnchantEvents(this);
+        new TradeEvents(this);
 
         // Command
         new Gamemode(this);
@@ -90,10 +85,12 @@ public class SkyblockRemastered extends JavaPlugin {
         new Visit(this);
         new Hub(this);
         new Build(this);
+        new SpawnEgg(this);
 
         // Abilities
         this.miscAbilities = new Miscs(this);
         this.weaponAbilities = new Weapons(this);
+        this.dragonEvent = new Dragon(this);
 
         // Managers
         this.blockManager = new BlockManager(this);
@@ -112,17 +109,16 @@ public class SkyblockRemastered extends JavaPlugin {
             }
         }
 
-
-
         // Inits the timer for all managers.
         blockManager.initTimer();
-        // mobManager.initBloccCheck();
         mobManager.initTimer();
         new ScoreboardTask(this).runTaskTimer(this, 30, 30);
         new ActionBarTask(this).runTaskTimer(this, 20, 20);
         new RegenerationTask(this).runTaskTimer(this, 30, 30);
         new WheatCrystalTask(this).runTaskTimer(this, 1, 1);
         new LagPreventerTask(this).runTaskTimer(this, 0, 20);
+        new EnchantEvents(this).runTaskTimer(this, 0, 1);
+
     }
 
     @Override

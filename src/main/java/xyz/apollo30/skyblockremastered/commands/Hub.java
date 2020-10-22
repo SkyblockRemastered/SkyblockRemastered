@@ -26,10 +26,15 @@ public class Hub implements CommandExecutor {
 
         Player plr = (Player) sender;
 
-        plr.sendMessage(Utils.chat("&7Sending you to the hub."));
-        World island = Bukkit.getServer().createWorld(new WorldCreator("hub"));
-        Location loc = new Location(island, island.getSpawnLocation().getX(), island.getSpawnLocation().getY(), island.getSpawnLocation().getZ());
-        plr.teleport(loc);
+        if (plr.getWorld().getName().equals("playerislands/" + plr.getUniqueId().toString())) {
+            plr.sendMessage(Utils.chat("You are already at the hub."));
+            return true;
+        } else {
+            plr.sendMessage(Utils.chat("&7Sending you to the hub."));
+            World island = Bukkit.getServer().createWorld(new WorldCreator("hub"));
+            Location loc = new Location(island, island.getSpawnLocation().getX(), island.getSpawnLocation().getY(), island.getSpawnLocation().getZ());
+            plr.teleport(loc);
+        }
 
         return false;
     }

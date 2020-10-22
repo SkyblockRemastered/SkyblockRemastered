@@ -65,12 +65,12 @@ public class WheatCrystalTask extends BukkitRunnable {
     }
 
     private void setupOrbs() {
-        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(28, 75, -141), 13);
-        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(44, 75, -123), 10);
-        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(63, 76, -134), 10);
-        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(74, 77, -161), 10);
-        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(59, 78, -183), 10);
-        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(24, 77, -178), 10);
+        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(716, 75, 149), 13);
+        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(735, 75, 138), 10);
+        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(747, 76, 112), 10);
+        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(731, 77, 88), 10);
+        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(696, 78, 93), 10);
+        blocks.put(this.plugin.getServer().getWorld("hub").getBlockAt(700, 77, 132), 10);
 
         for (Map.Entry<Block, Integer> block : blocks.entrySet()) {
             Location location = block.getKey().getLocation();
@@ -163,9 +163,9 @@ public class WheatCrystalTask extends BukkitRunnable {
         return origin.clone().add(direction.clone().multiply(dist));
     }
 
-    private ArrayList<Vector> traverse(Vector origin, Vector direction, double dist) {
+    private ArrayList<Vector> traverse(Vector origin, Vector direction) {
         ArrayList<Vector> positions = new ArrayList<>();
-        for (double d = 0; d <= dist; d += .5) {
+        for (double d = 0; d <= 30.0; d += .5) {
             positions.add(this.getPosition(origin, direction, d));
         }
 
@@ -182,7 +182,7 @@ public class WheatCrystalTask extends BukkitRunnable {
         newLocVec.setYaw((float) this.getSelectedYaw(armorStandLoc, blockLoc.add(0.5, 0, 0.5)));
         newLocVec.setPitch((float) this.getSelectedPitch(armorStandLoc, blockLoc.add(0.5, 0, 0.5)));
 
-        for (Vector clonedLoc : this.traverse(armorStandLoc.toVector(), newLocVec.getDirection(), 30.0)) {
+        for (Vector clonedLoc : this.traverse(armorStandLoc.toVector(), newLocVec.getDirection())) {
             PacketPlayOutWorldParticles particle = new PacketPlayOutWorldParticles(EnumParticle.FIREWORKS_SPARK,true, (float) clonedLoc.getX(), (float) clonedLoc.getY(), (float) clonedLoc.getZ(), 0, 0, 0, 0, 1);
 
             for (Player online : Bukkit.getOnlinePlayers()) {

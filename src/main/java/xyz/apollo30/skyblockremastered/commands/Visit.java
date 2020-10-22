@@ -36,14 +36,14 @@ public class Visit implements CommandExecutor {
         Utils.broadCast(plr.getUniqueId().toString());
         String name = Utils.getName(uuid) != null ? Utils.getName(uuid) : args[0];
 
-        if (Bukkit.getServer().getWorld("islands/" + uuid) == null) {
+        if (Bukkit.getServer().getWorld("playerislands/" + uuid) == null) {
             plr.sendMessage(Utils.chat("&cCouldn't find that player/island! Maybe a typo?"));
             return true;
         }
         //        PlayerObject pot = plugin.playerManager.playerObjects.get()
         plr.sendMessage(Utils.chat("&7Sending you to " + name + "'s Island"));
 
-        World island = Bukkit.getServer().createWorld(new WorldCreator("islands/" + uuid));
+        World island = Bukkit.getServer().createWorld(new WorldCreator("playerislands/" + uuid));
         Location loc = new Location(island, island.getSpawnLocation().getX(), island.getSpawnLocation().getY(), island.getSpawnLocation().getZ());
         plr.teleport(loc);
 

@@ -325,7 +325,26 @@ public class Utils {
 
     public static String getLocation(Player plr) {
 
+        World world = plr.getWorld();
+        Location loc = plr.getLocation();
         String location = "&7None";
+
+        if (world.getName().equals("playerislands/" + plr.getUniqueId().toString())) location = "&aYour Island";
+        else if (world.getName().startsWith("playerislands/") && !world.getName().equals("playerislands/" + plr.getUniqueId().toString())) {
+            String islandOwner = Utils.getName(world.getName().replace("playerislands/", ""));
+            location = "&a" + islandOwner + "'s Island";
+        } else if (world.getName().equals("hub")) {
+//            if (Utils.isInZone(loc, new Location(loc.getWorld(), 27, 81, -59), new Location(plr.getWorld(), 35, 69, -52))) location = "&6Bank";
+//            else if (Utils.isInZone(loc, new Location(loc.getWorld(), -44, 86, -74), new Location(plr.getWorld(), -22, 65, - 67))) location = "&eBazaar Alley";
+//            else if (Utils.isInZone(loc, new Location(loc.getWorld(), -41, 77, -66), new Location(plr.getWorld(), -24, 68, -55))) location = "&bAuction House";
+//            else if (Utils.isInZone(loc, new Location(loc.getWorld(), 33, 78, -98), new Location(loc.getWorld(), 50, 68, -78))) location = "&dCommunity Center";
+//            else if (Utils.isInZone(loc, new Location(loc.getWorld(), -38, 72, -133), new Location(plr.getWorld(), -23, 65, -121))) location = "&7Blacksmith";
+//            else if (Utils.isInZone(loc, new Location(loc.getWorld(), -40, 76, -115), new Location(plr.getWorld(), -28, 63, -105))) location = "&cRedstone House";
+//            else if (Utils.isInZone(loc, new Location(loc.getWorld(), 9, 104, -190), new Location(plr.getWorld(), 80, 55, -116))) location = "&6Farm";
+//            else if (Utils.isInZone(loc, new Location(loc.getWorld(), -80, 255, -152), new Location(plr.getWorld(), 95, 0, -26))) location = "&bVillage";
+            if (Utils.isInZone(loc, new Location(loc.getWorld(), -64, 101, -68), new Location(plr.getWorld(), 72, 1, 67))) location = "&5Dragon's Nest";
+            else if (Utils.isInZone(loc, new Location(loc.getWorld(), -112, 255, -107), new Location(plr.getWorld(), 213, 29, 127))) location = "&dThe End";
+        }
 
         return location;
     }
@@ -535,9 +554,9 @@ public class Utils {
     }
 
     public static String getDisplayHP(int level, String mobname, int current_health, int max_health) {
-        double percent = current_health / max_health;
+        double percent = current_health / (double) max_health;
         String color = percent < .30 ? "&c" : percent < .50 ? "&e" : "&a";
-        return "&8[&7Lv" + level + "&8] &c" + mobname + " " + color + (current_health < 0 ? 0 : current_health) + "&f/&a" + max_health + "&c" + GuiUtils.getUnicode("heart");
+        return "&8[&7Lv" + level + "&8] &c" + mobname + " " + color + (Math.max(current_health, 0)) + "&f/&a" + max_health + "&c" + GuiUtils.getUnicode("heart");
     }
 
     public static String intToRoman(int level) {

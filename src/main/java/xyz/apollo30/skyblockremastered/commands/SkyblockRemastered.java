@@ -1,5 +1,6 @@
 package xyz.apollo30.skyblockremastered.commands;
 
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -51,43 +52,99 @@ public class SkyblockRemastered implements CommandExecutor {
 
         if (args[0].equalsIgnoreCase("set")) {
             if (args[1].equalsIgnoreCase("speed")) {
+
+                if (!plr.isOp() && Integer.parseInt(args[2]) > 500) {
+                    plr.sendMessage(Utils.chat("You cannot go over 500"));
+                    return true;
+                }
                 player_data.setSpeed(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Speed set to " + args[2]));
-            } else if (args[1].equalsIgnoreCase("health")) {
+
+            } else if (args[1].equalsIgnoreCase("health") || args[1].equalsIgnoreCase("hp")) {
+
+                if (!plr.isOp() && Integer.parseInt(args[2]) > 10000) {
+                    plr.sendMessage(Utils.chat("You cannot go over 10000"));
+                    return true;
+                }
                 player_data.setMaxHealth(Integer.parseInt(args[2]));
                 player_data.resetHealth();
                 plr.sendMessage(Utils.chat(prefix + "Health set to " + args[2]));
-            } else if (args[1].equalsIgnoreCase("defense")) {
+
+            } else if (args[1].equalsIgnoreCase("defense") || args[1].equalsIgnoreCase("def")) {
+
+                if (!plr.isOp() && Integer.parseInt(args[2]) > 10000) {
+                    plr.sendMessage(Utils.chat("You cannot go over 10000"));
+                    return true;
+                }
                 player_data.setDefense(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Defense set to " + args[2]));
-            } else if (args[1].equalsIgnoreCase("cd")) {
-                player_data.setCrit_damage(Integer.parseInt(args[2]));
+
+            } else if (args[1].equalsIgnoreCase("cd") || args[1].equalsIgnoreCase("critdamage")) {
+
+                if (!plr.isOp() && Integer.parseInt(args[2]) > 10000) {
+                    plr.sendMessage(Utils.chat("You cannot go over 10000"));
+                    return true;
+                }
+                player_data.setCritDamage(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Crit Damage set to " + args[2]));
-            } else if (args[1].equalsIgnoreCase("cc")) {
-                player_data.setCrit_chance(Integer.parseInt(args[2]));
+
+            } else if (args[1].equalsIgnoreCase("cc") || args[1].equalsIgnoreCase("critchance")) {
+
+                if (!plr.isOp() && Integer.parseInt(args[2]) > 100) {
+                    plr.sendMessage(Utils.chat("You cannot go over 100"));
+                    return true;
+                }
+                player_data.setCritChance(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Crit Chance set to " + args[2]));
-            } else if (args[1].equalsIgnoreCase("intel")) {
+
+            } else if (args[1].equalsIgnoreCase("intel") || args[1].equalsIgnoreCase("intelligence") || args[1].equalsIgnoreCase("mana")) {
+
+                if (!plr.isOp() && Integer.parseInt(args[2]) > 10000) {
+                    plr.sendMessage(Utils.chat("You cannot go over 10000"));
+                    return true;
+                }
                 player_data.setMaxIntelligence(Integer.parseInt(args[2]));
                 player_data.resetIntelligence();
                 plr.sendMessage(Utils.chat(prefix + "Intelligence set to " + args[2]));
-            } else if (args[1].equalsIgnoreCase("mf")) {
-                player_data.setMagic_find(Integer.parseInt(args[2]));
+
+            } else if (args[1].equalsIgnoreCase("mf") || args[1].equalsIgnoreCase("magicfind")) {
+
+                if (!plr.isOp() && Integer.parseInt(args[2]) > 200) {
+                    plr.sendMessage(Utils.chat("You cannot go over 200"));
+                    return true;
+                }
+                player_data.setMagicFind(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Magic Find set to " + args[2]));
-            } else if (args[1].equalsIgnoreCase("str")) {
+
+            } else if (args[1].equalsIgnoreCase("str") || args[1].equalsIgnoreCase("strength")) {
+
+                if (!plr.isOp() && Integer.parseInt(args[2]) > 10000) {
+                    plr.sendMessage(Utils.chat("You cannot go over 10000"));
+                    return true;
+                }
                 player_data.setStrength(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Strength set to " + args[2]));
+
             } else if (args[1].equalsIgnoreCase("purse")) {
+                if (!plr.isOp()) return true;
                 player_data.setPurse(Double.parseDouble(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Purse set to " + args[2]));
             } else if (args[1].equalsIgnoreCase("bank")) {
+                if (!plr.isOp()) return true;
                 player_data.setPurse(Double.parseDouble(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Bank set to " + args[2]));
             } else if (args[1].equalsIgnoreCase("gems")) {
+                if (!plr.isOp()) return true;
                 player_data.setGems(Double.parseDouble(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Gems set to " + args[2]));
             } else if (args[1].equalsIgnoreCase("addcoins")) {
+                if (!plr.isOp()) return true;
                 player_data.setCoins_gained(Double.parseDouble(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Added " + args[2] + " coins."));
+            } else if (args[1].equalsIgnoreCase("dragon")) {
+                if (!plr.isOp()) return true;
+                plugin.so.setRiggedDragon(args[2].toUpperCase());
+                plr.sendMessage(Utils.chat("&aRigged the next dragon to spawn as a &d" + WordUtils.capitalizeFully(args[2]) + "&a dragon!"));
             }
         } else if (args[0].equalsIgnoreCase("test")) {
             if (!plr.isOp()) return false;
