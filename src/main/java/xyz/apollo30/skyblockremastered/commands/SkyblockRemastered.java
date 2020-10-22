@@ -133,10 +133,10 @@ public class SkyblockRemastered implements CommandExecutor {
                 if (!plr.isOp()) return true;
                 player_data.setPurse(Double.parseDouble(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Bank set to " + args[2]));
-            } else if (args[1].equalsIgnoreCase("gems")) {
+            } else if (args[1].equalsIgnoreCase("bits")) {
                 if (!plr.isOp()) return true;
-                player_data.setGems(Double.parseDouble(args[2]));
-                plr.sendMessage(Utils.chat(prefix + "Gems set to " + args[2]));
+                player_data.setBits(Double.parseDouble(args[2]));
+                plr.sendMessage(Utils.chat(prefix + "Bits set to " + args[2]));
             } else if (args[1].equalsIgnoreCase("addcoins")) {
                 if (!plr.isOp()) return true;
                 player_data.setCoins_gained(Double.parseDouble(args[2]));

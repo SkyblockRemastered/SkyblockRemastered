@@ -76,7 +76,8 @@ public class SpawnEvents implements Listener {
         MobObject mo = plugin.mobManager.mobObjects.get(e.getEntity());
         if (mo == null) return;
 
-        coinDrop(e.getEntity(), mo.getLevel());
+        if (e.getEntityType() != EntityType.ENDER_DRAGON)
+            coinDrop(e.getEntity(), mo.getLevel());
 
         // Special Zealot
         if (e.getEntity().getPassenger().getCustomName().contains(Utils.chat("&cZealot"))) {
@@ -137,7 +138,7 @@ public class SpawnEvents implements Listener {
         boolean canRevive = false;
 
         for (ItemStack content : plr.getInventory().getContents()) {
-            if (content.hasItemMeta() && content.getItemMeta().getDisplayName() != null) {
+            if (content != null && content.hasItemMeta() && content.getItemMeta().getDisplayName() != null) {
                 if (Utils.isInZone(plr.getLocation(), new Location(plr.getWorld(), -112, 255, -107), new Location(plr.getWorld(), 213, 29, 127))) {
                     if (content.getItemMeta().getDisplayName().contains("Remnant of the Eye")) {
                         po.resetHealth();
@@ -200,6 +201,7 @@ public class SpawnEvents implements Listener {
         plr.getInventory().clear();
 
         ItemStack midas = new ItemStack(Material.WOOD_SWORD, 1);
+        plr.getInventory().addItem(plugin.miscs.PLASMAFLUX_POWER_ORB);
         plr.getInventory().addItem(
                 Utils.addLore(
                         midas,
@@ -218,16 +220,16 @@ public class SpawnEvents implements Listener {
                         "&8This item can be reforged!",
                         "&d&kL&r &d&lMYTHIC SWORD &r&d&kL&r"));
 
-        plr.getInventory().addItem(Utils.addLore(new ItemStack(Material.DIAMOND_SWORD),"&9Aspect of The End", "&7Damage: &c+110", "&7Strength: &c+112", "&7Crit Chance: &c+9%", "&7Crit Damage: &c+15%", "&7Bonus Attack Speed: &c+5%", "", "&7Intelligence: &a+12", "", "&6Item Ability: Instant Transmission &a&lRIGHT CLICK", "&7Teleport &a8 blocks&7 ahead of", "&7you and again &a+50 &f" + GuiUtils.getUnicode("speed") + " Speed", "&7for &a3 seconds&7.", "&8Mana Cost: &b50", "", "&9&lRARE"));
-        ItemStack bow = Utils.addLore(new ItemStack(Material.BOW),"&6ITS A BOW :O", "&7Damage: &c+110", "&7Strength: &c+112", "&7Crit Chance: &c+9%", "&7Crit Damage: &c+15%", "", "&6&lLEGENDARY");
+        plr.getInventory().addItem(Utils.addLore(new ItemStack(Material.DIAMOND_SWORD), "&9Aspect of The End", "&7Damage: &c+110", "&7Strength: &c+112", "&7Crit Chance: &c+9%", "&7Crit Damage: &c+15%", "&7Bonus Attack Speed: &c+5%", "", "&7Intelligence: &a+12", "", "&6Item Ability: Instant Transmission &a&lRIGHT CLICK", "&7Teleport &a8 blocks&7 ahead of", "&7you and again &a+50 &f" + GuiUtils.getUnicode("speed") + " Speed", "&7for &a3 seconds&7.", "&8Mana Cost: &b50", "", "&9&lRARE"));
+        ItemStack bow = Utils.addLore(new ItemStack(Material.BOW), "&6ITS A BOW :O", "&7Damage: &c+110", "&7Strength: &c+112", "&7Crit Chance: &c+9%", "&7Crit Damage: &c+15%", "", "&6&lLEGENDARY");
         bow.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 69);
         plr.getInventory().addItem(bow);
         plr.getInventory().addItem(new ItemStack(Material.ARROW, 1));
 
-        plr.getInventory().setHelmet(plugin.armor.superiorHelmet);
-        plr.getInventory().setChestplate(plugin.armor.superiorChestplate);
-        plr.getInventory().setLeggings(plugin.armor.superiorLeggings);
-        plr.getInventory().setBoots(plugin.armor.superiorBoots);
+        plr.getInventory().setHelmet(plugin.armor.SUPERIOR_DRAGON_HELMET);
+        plr.getInventory().setChestplate(plugin.armor.SUPERIOR_DRAGON_CHESTPLATE);
+        plr.getInventory().setLeggings(plugin.armor.SUPERIOR_DRAGON_LEGGINGS);
+        plr.getInventory().setBoots(plugin.armor.SUPERIOR_DRAGON_BOOTS);
 
 
         ItemStack nether_star = plugin.miscs.skyblockMenu;

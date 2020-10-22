@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEnderDragon;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,7 +40,7 @@ public class Dragon implements Listener {
         UNSTABLE,
         WISE,
         PROTECTOR,
-        DEMONIC
+        OLD
     }
 
     private final HashMap<Location, UUID> placedEyes = new HashMap<>();
@@ -53,7 +54,6 @@ public class Dragon implements Listener {
     private final HashMap<Location, Material> dragonEggRegeneration = new HashMap<>();
     public final HashMap<Player, Double> playerDamage = new HashMap<>();
     private final List<Entity> endCrystals = new ArrayList<>();
-    BukkitTask task;
 
     public void placeSummoningEye(PlayerInteractEvent e) {
 
@@ -81,12 +81,6 @@ public class Dragon implements Listener {
                         for (Player plr : e.getPlayer().getWorld().getPlayers()) {
                             plr.sendMessage(Utils.chat(Helper.getRank(e.getPlayer()) + " &dplaced a Summoning Eye! Brace Yourselves! &7(&e" + plugin.so.getPlacedSummoningEye() + "&7/&a8&7)"));
                             plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1.5F);
-                            for (ItemStack item : plr.getInventory().getContents()) {
-                                if (item == null || item.getType() == Material.AIR) break;
-                                if (item.hasItemMeta() && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().contains("Remnant of the Eye")) {
-                                    plr.getInventory().removeItem(item);
-                                }
-                            }
                         }
                     } else {
                         placedEyes.put(blocc.getLocation(), e.getPlayer().getUniqueId());
@@ -211,12 +205,7 @@ public class Dragon implements Listener {
                 enderDragon.setMaximumNoDamageTicks(0);
                 enderDragon.setCustomName(Utils.chat(dragonName));
 
-                task = new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        CustomEnderDragon.randomizeMovement(eDragon);
-                    }
-                }.runTaskTimer(plugin, 0L, 20L);
+                ((CraftEnderDragon) enderDragon).getHandle().getNavigation().a(49, 33, 2);
 
                 plugin.mobManager.createMob(enderDragon, type.toLowerCase());
                 plugin.so.setDragonName(type.toUpperCase());
@@ -384,7 +373,7 @@ public class Dragon implements Listener {
             weight -= 450;
             giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
 
-            inv.addItem(NMSUtil.addString(plugin.weapons.aspectOfTheDragons, "UUID", UUID.randomUUID().toString()));
+            inv.addItem(NMSUtil.addString(plugin.weapons.ASPECT_OF_THE_DRAGONS, "UUID", UUID.randomUUID().toString()));
             broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6Aspect of the Dragons");
         } else if (weight >= 450 && Math.random() > 0.996) {
             weight -= 450;
@@ -410,20 +399,28 @@ public class Dragon implements Listener {
             broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Chestplate&e!");
             switch (dragon) {
                 case "SUPERIOR":
-
+                    inv.addItem(plugin.armor.SUPERIOR_DRAGON_CHESTPLATE);
+                    break;
                 case "UNSTABLE":
-
+                    inv.addItem(plugin.armor.UNSTABLE_DRAGON_CHESTPLATE);
+                    break;
                 case "YOUNG":
-
-                case "DEMONIC":
-
+                    inv.addItem(plugin.armor.YOUNG_DRAGON_CHESTPLATE);
+                    break;
+                case "OLD":
+                    inv.addItem(plugin.armor.OLD_DRAGON_CHESTPLATE);
+                    break;
                 case "PROTECTOR":
-
+                    inv.addItem(plugin.armor.PROTECTOR_DRAGON_CHESTPLATE);
+                    break;
                 case "STRONG":
-
+                    inv.addItem(plugin.armor.STRONG_DRAGON_CHESTPLATE);
+                    break;
                 case "WISE":
-
+                    inv.addItem(plugin.armor.WISE_DRAGON_CHESTPLATE);
+                    break;
                 case "CELESTIAL":
+                    break;
 
             }
             giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
@@ -432,21 +429,28 @@ public class Dragon implements Listener {
             broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Leggings&e!");
             switch (dragon) {
                 case "SUPERIOR":
-
+                    inv.addItem(plugin.armor.SUPERIOR_DRAGON_LEGGINGS);
+                    break;
                 case "UNSTABLE":
-
+                    inv.addItem(plugin.armor.UNSTABLE_DRAGON_LEGGINGS);
+                    break;
                 case "YOUNG":
-
-                case "DEMONIC":
-
+                    inv.addItem(plugin.armor.YOUNG_DRAGON_LEGGINGS);
+                    break;
+                case "OLD":
+                    inv.addItem(plugin.armor.OLD_DRAGON_LEGGINGS);
+                    break;
                 case "PROTECTOR":
-
+                    inv.addItem(plugin.armor.PROTECTOR_DRAGON_LEGGINGS);
+                    break;
                 case "STRONG":
-
+                    inv.addItem(plugin.armor.STRONG_DRAGON_LEGGINGS);
+                    break;
                 case "WISE":
-
+                    inv.addItem(plugin.armor.WISE_DRAGON_LEGGINGS);
+                    break;
                 case "CELESTIAL":
-
+                    break;
             }
             giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
         } else if (weight >= 325 && Math.random() > 0.5) {
@@ -454,21 +458,28 @@ public class Dragon implements Listener {
             broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Helmet&e!");
             switch (dragon) {
                 case "SUPERIOR":
-
+                    inv.addItem(plugin.armor.SUPERIOR_DRAGON_HELMET);
+                    break;
                 case "UNSTABLE":
-
+                    inv.addItem(plugin.armor.UNSTABLE_DRAGON_HELMET);
+                    break;
                 case "YOUNG":
-
-                case "DEMONIC":
-
+                    inv.addItem(plugin.armor.YOUNG_DRAGON_HELMET);
+                    break;
+                case "OLD":
+                    inv.addItem(plugin.armor.OLD_DRAGON_HELMET);
+                    break;
                 case "PROTECTOR":
-
+                    inv.addItem(plugin.armor.PROTECTOR_DRAGON_HELMET);
+                    break;
                 case "STRONG":
-
+                    inv.addItem(plugin.armor.STRONG_DRAGON_HELMET);
+                    break;
                 case "WISE":
-
+                    inv.addItem(plugin.armor.WISE_DRAGON_HELMET);
+                    break;
                 case "CELESTIAL":
-
+                    break;
             }
             giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
         } else if (weight >= 300 && Math.random() > 0.5) {
@@ -476,21 +487,28 @@ public class Dragon implements Listener {
             broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + WordUtils.capitalizeFully(dragon) + " Dragon Boots&e!");
             switch (dragon) {
                 case "SUPERIOR":
-
+                    inv.addItem(plugin.armor.SUPERIOR_DRAGON_BOOTS);
+                    break;
                 case "UNSTABLE":
-
+                    inv.addItem(plugin.armor.UNSTABLE_DRAGON_BOOTS);
+                    break;
                 case "YOUNG":
-
-                case "DEMONIC":
-
+                    inv.addItem(plugin.armor.YOUNG_DRAGON_BOOTS);
+                    break;
+                case "OLD":
+                    inv.addItem(plugin.armor.OLD_DRAGON_BOOTS);
+                    break;
                 case "PROTECTOR":
-
+                    inv.addItem(plugin.armor.PROTECTOR_DRAGON_BOOTS);
+                    break;
                 case "STRONG":
-
+                    inv.addItem(plugin.armor.STRONG_DRAGON_BOOTS);
+                    break;
                 case "WISE":
-
+                    inv.addItem(plugin.armor.WISE_DRAGON_BOOTS);
+                    break;
                 case "CELESTIAL":
-
+                    break;
             }
             giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
         } else if (weight >= 22) {
@@ -517,7 +535,7 @@ public class Dragon implements Listener {
                 fragment2.setAmount(totalFrags);
                 inv.addItem(fragment2);
                 break;
-            case "DEMONIC":
+            case "OLD":
                 ItemStack fragment3 = plugin.fragments.oldFragment;
                 fragment3.setAmount(totalFrags);
                 inv.addItem(fragment3);
@@ -634,8 +652,6 @@ public class Dragon implements Listener {
         // Dragon
         if (e.getEntity().getType() == EntityType.ENDER_DRAGON && plugin.so.isDragonFight()) {
 
-            task.cancel();
-
             if (e.getEntity().getKiller() != null) plugin.so.setLastDragonHit(e.getEntity().getKiller());
 
             plugin.so.setPlacedSummoningEye(0);
@@ -672,9 +688,9 @@ public class Dragon implements Listener {
                         numberThree = entry.getKey() + " &7- &c" + Utils.coinFormat(entry.getValue());
                 }
 
-                if (numberOne == null) numberOne = "&7&kWE LIKE FORTNITE&r - &e0";
-                if (numberTwo == null) numberTwo = "&7&kWE LIKE FORTNITE&r - &60";
-                if (numberThree == null) numberThree = "&7&kWE LIKE FORTNITE&r - &c0";
+                if (numberOne == null) numberOne = "&7&kApollon was here&r - &e0";
+                if (numberTwo == null) numberTwo = "&7&kApollon was here&r - &60";
+                if (numberThree == null) numberThree = "&7&kApollon was here&r - &c0";
 
                 for (int i = 0; i < sortByValues(playerDamage2).size(); i++) {
                     if (sortByValues(playerDamage2).get(i).getValue().equals(playerDamage.get(plr))) position = i + 1;

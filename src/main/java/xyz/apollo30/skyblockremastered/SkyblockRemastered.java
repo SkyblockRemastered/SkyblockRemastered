@@ -18,7 +18,6 @@ import xyz.apollo30.skyblockremastered.items.Armor;
 import xyz.apollo30.skyblockremastered.items.Fragments;
 import xyz.apollo30.skyblockremastered.items.Pets;
 import xyz.apollo30.skyblockremastered.listeners.*;
-import xyz.apollo30.skyblockremastered.managers.BlockManager;
 import xyz.apollo30.skyblockremastered.managers.ConfigManager;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
@@ -32,7 +31,6 @@ public class SkyblockRemastered extends JavaPlugin {
 
     public ConfigManager db;
     public HashMap<Entity, Entity> health_indicator = new HashMap<>();
-    public BlockManager blockManager;
     public PlayerManager playerManager;
     public MobManager mobManager;
     public HashMap<Entity, Long> indicator = new HashMap<>();
@@ -77,6 +75,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new Hub(this);
         new Build(this);
         new SpawnEgg(this);
+        new Item(this);
 
         // Abilities
         this.miscAbilities = new Miscs(this);
@@ -84,7 +83,6 @@ public class SkyblockRemastered extends JavaPlugin {
         this.dragonEvent = new Dragon(this);
 
         // Managers
-        this.blockManager = new BlockManager(this);
         this.playerManager = new PlayerManager(this);
         this.mobManager = new MobManager(this);
 
@@ -101,11 +99,10 @@ public class SkyblockRemastered extends JavaPlugin {
         }
 
         // Inits the timer for all managers.
-        blockManager.initTimer();
         mobManager.initTimer();
         new ScoreboardTask(this).runTaskTimer(this, 30, 30);
         new ActionBarTask(this).runTaskTimer(this, 20, 20);
-        new RegenerationTask(this).runTaskTimer(this, 30, 30);
+        new ConstantTask(this).runTaskTimer(this, 30, 30);
         new WheatCrystalTask(this).runTaskTimer(this, 1, 1);
         new LagPreventerTask(this).runTaskTimer(this, 0, 20);
         new EnchantEvents(this).runTaskTimer(this, 0, 1);

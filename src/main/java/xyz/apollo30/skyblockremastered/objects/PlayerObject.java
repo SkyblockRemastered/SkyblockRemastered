@@ -30,7 +30,7 @@ public class PlayerObject {
 
     double purse = 100;
     double bank = 0;
-    double gems = 0;
+    double bits = 0;
 
     // Stats
     int health = 1000;
@@ -63,6 +63,7 @@ public class PlayerObject {
     boolean vanished = false;
     double damageToDragon = 0;
     long lastDeath = 0;
+    long lastInvFullNotification = 0;
 
     // Skills
     int farmingLevel = 0;
