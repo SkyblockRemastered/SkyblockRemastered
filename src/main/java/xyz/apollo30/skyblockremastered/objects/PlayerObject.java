@@ -3,6 +3,7 @@ package xyz.apollo30.skyblockremastered.objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.constants.Constants;
 
 import java.util.ArrayList;
@@ -17,13 +18,19 @@ public class PlayerObject {
     String ign;
     String uuid;
 
+    // Armor Detection
+    ItemStack helmet;
+    ItemStack chestplate;
+    ItemStack leggings;
+    ItemStack boots;
+
     // Settings
     Constants.Rarities selectedRarity = Constants.Rarities.COMMON;
     boolean fullInventoryAlert = true;
 
     double purse = 100;
     double bank = 0;
-    double gems = 0;
+    double bits = 0;
 
     // Stats
     int health = 1000;
@@ -56,6 +63,7 @@ public class PlayerObject {
     boolean vanished = false;
     double damageToDragon = 0;
     long lastDeath = 0;
+    long lastInvFullNotification = 0;
 
     // Skills
     int farmingLevel = 0;

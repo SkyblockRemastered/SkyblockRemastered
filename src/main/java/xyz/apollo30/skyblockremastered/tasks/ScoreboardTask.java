@@ -58,7 +58,7 @@ public class ScoreboardTask extends BukkitRunnable {
             }
 
             String purse = "&fPurse: &6" + Utils.coinFormat(po.getPurse()) + coins_gained;
-            String gems = "&fGems: &a" + Utils.coinFormat(po.getGems());
+            String bits = "&fBits: &b" + Utils.coinFormat(po.getBits());
 
             String number = d.format(now).startsWith("0") ? d.format(now) : d.format(now);
             List<String> contents = new ArrayList<>();
@@ -68,7 +68,7 @@ public class ScoreboardTask extends BukkitRunnable {
             contents.add(" &7⋄ " + Utils.getLocation(plr));
             contents.add("&2&8 ");
             contents.add(purse.length() > 40 ? purse.substring(0, 40) : purse);
-            contents.add(gems);
+            contents.add(bits);
 
             if (plugin.so.isDragonFight()) {
                 MobObject mo = plugin.so.getEnderDragon();
@@ -82,7 +82,8 @@ public class ScoreboardTask extends BukkitRunnable {
             }
 
             contents.add("&2&5");
-            contents.add("&eplay.apollo30.xyz");
+            contents.add("&ewww.hypixel.net");
+            // contents.add("&eplay.apollo30.xyz");
 
             int cycle = contents.size();
             for (String list : contents) {

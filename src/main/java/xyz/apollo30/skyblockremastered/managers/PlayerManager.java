@@ -39,7 +39,7 @@ public class PlayerManager {
 
             po.setBank(player.getConfigurationSection(".Information").getDouble("bank"));
             po.setPurse(player.getConfigurationSection(".Information").getDouble("purse"));
-            po.setGems(player.getConfigurationSection(".Information").getDouble("gems"));
+            po.setBits(player.getConfigurationSection(".Information").getDouble("bits"));
 
             po.setStatOverride(player.getConfigurationSection(".Database").getBoolean("statOverride"));
             po.setBlockBreak(player.getConfigurationSection(".Database").getBoolean("blockBreak"));
@@ -157,7 +157,7 @@ public class PlayerManager {
 
         player.getConfigurationSection(".Information").set("purse", po.getPurse());
         player.getConfigurationSection(".Information").set("bank", po.getBank());
-        player.getConfigurationSection(".Information").set("gems", po.getGems());
+        player.getConfigurationSection(".Information").set("bits", po.getBits());
 
         player.getConfigurationSection(".Database").set("statOverride", po.isStatOverride());
         player.getConfigurationSection(".Database").set("blockBreak", po.isBlockBreak());

@@ -9,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.Inventory;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -45,7 +44,22 @@ public class TradeEvents implements Listener {
         // send msgs
         if (cd.containsKey(c.getName()) && cd.containsValue(plr.getName())) {
             cd.remove(c.getName());
-            GuiUtils.playerTradeMenu(plr, c);
+            Inventory menu1 = Bukkit.createInventory(null, 45, "You                  " + plr.getName());
+            Utils.createGlass(menu1, "STAINED_GLASS_PANE", 15, 1, 5, 14, 23, 32, 41);
+            Utils.createItemByte(menu1, 371, 0, 1, 1, "&6100M Coins");
+            Utils.createItemByte(menu1, 371, 0, 1, 37, "&6Coin Transaction", "", "&eClick to add coins to the trade menu", "&eYou can use prefixes like: K, M, B");
+            Utils.createItemByte(menu1, 351, 8, 1, 40, "&cInvalid Trade", "", "&7Place something in the trade menu in order", "&7to accept the trade");
+            Utils.createItemByte(menu1, 351, 8, 1, 42, "&7Other Person's Response", "", "&7You are currently", "&7trading with " + Helper.getRank(plr));
+
+            Inventory menu2 = Bukkit.createInventory(null, 45, "You                  " + c.getName());
+            Utils.createGlass(menu2, "STAINED_GLASS_PANE", 15, 1, 5, 14, 23, 32, 41);
+            Utils.createItemByte(menu1, 371, 0, 1, 6, "&6100M Coins");
+            Utils.createItemByte(menu2, 371, 0, 1, 37, "&6Coin Transaction", "", "&eClick to add coins to the trade menu", "&eYou can use prefixes like: K, M, B");
+            Utils.createItemByte(menu1, 351, 8, 1, 40, "&cInvalid Trade", "", "&7Place something in the trade menu in order", "&7to accept the trade");
+            Utils.createItemByte(menu2, 351, 8, 1, 42, "&7Other Person's Response", "", "&7You are currently", "&7trading with " + Helper.getRank(c));
+
+            c.openInventory(menu1);
+            plr.openInventory(menu2);
         } else {
             plr.playSound(plr.getLocation(), Sound.VILLAGER_HAGGLE, 1000F, 1F);
             plr.sendMessage(Utils.chat("&aYou have sent a trade request to " + Helper.getRank(c)));
@@ -62,7 +76,6 @@ public class TradeEvents implements Listener {
                 }
             }, 300);
         }
-
-
     }
+
 }
