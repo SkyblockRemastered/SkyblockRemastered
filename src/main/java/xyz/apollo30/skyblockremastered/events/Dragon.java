@@ -28,6 +28,7 @@ public class Dragon implements Listener {
 
     private final SkyblockRemastered plugin;
 
+
     public Dragon(SkyblockRemastered plugin) {
         this.plugin = plugin;
 
