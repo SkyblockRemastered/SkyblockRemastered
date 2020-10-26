@@ -24,19 +24,9 @@ public class Masterclass {
                 put("UNSTABLE", new UnstableDragon());
                 put("OLD", new OldDragon());
                 put("PROTECTOR", new ProtectorDragon());
-                put("HOLY", new HolyDragon());
             }
         };
     }
-    public int armorRewards(int weight) {
-        // 4-6% drop chance per eye placed.
-        if (Math.random() < 0.5) return 1;
-        if (Math.random() < 0.5) return 2;
-        if (Math.random() < 0.5) return 3;
-        if (Math.random() < 0.5) return 4;
-        else return 0;
-    }
-
     public static void broadcastWorld(Player plr, String msg) {
         for (Player player : plr.getWorld().getPlayers()) {
             player.sendMessage(Utils.chat(msg));

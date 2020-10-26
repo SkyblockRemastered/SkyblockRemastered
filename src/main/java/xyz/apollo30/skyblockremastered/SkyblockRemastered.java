@@ -37,6 +37,7 @@ public class SkyblockRemastered extends JavaPlugin {
     public Miscs miscAbilities;
     public Weapons weaponAbilities;
     public Dragon dragonEvent;
+    public xyz.apollo30.skyblockremastered.dragons.Dragon dragon;
     public ServerObject so = new ServerObject();
     public NMSUtil nmsu = new NMSUtil();
 

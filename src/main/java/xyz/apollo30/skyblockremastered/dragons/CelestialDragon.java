@@ -1,13 +1,17 @@
 package xyz.apollo30.skyblockremastered.dragons;
 
+import org.bukkit.entity.Player;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.items.Armor;
 import xyz.apollo30.skyblockremastered.items.Pets;
 import xyz.apollo30.skyblockremastered.items.Stones;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 
+import java.util.HashMap;
+
 public class CelestialDragon extends Dragon {
     private final SkyblockRemastered plugin;
+
     CelestialDragon(SkyblockRemastered plugin){
         this.plugin = plugin;
         f = "Celestial";
@@ -20,7 +24,7 @@ public class CelestialDragon extends Dragon {
         Stones s = new Stones(plugin);
         int weight = (int) Math.random();
         int damage = (int) Math.random();
-        int eyesPlaced = (int) Math.random();
+        int placedEyes = (int) Math.random();
         double chance = Math.random() * 100;
 
         if (weight <=0 || damage <= 0) { Masterclass.broadcastWorld(plr, Helper.getRank(plr) + " has 0 weight L");

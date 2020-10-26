@@ -59,5 +59,7 @@ public class Miscs {
     public ItemStack MANA_FLUX_POWER_ORB = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODJhZGExYzdmY2M4Y2YzNWRlZmViOTQ0YTRmOGZmYTlhOWQyNjA1NjBmYzdmNWY1ODI2ZGU4MDg1NDM1OTY3YyJ9fX0="), "&9Mana Flux Power Orb", "&6Item Ability: Deploy", "&7Place an orb for &a30s &7buffing", "&7up to &b5 &7players within &a18", "&7blocks", "&8Costs 50% of max mana.", "&8Only one orb applies per player.", "&aOrb Buff: Mana Flux", "&7Grants &b+50% &7base mana regen.", "&7Heals &c2% &7of max &c❤&7 per second.", "&7Grants &c+10❁ Strength&7.", " ", "&4☠ &cRequires &5Wolf Slayer 6", "&9&lRARE");
 
     public ItemStack RADIANT_POWER_ORB = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2FiNGM0ZDZlZTY5YmMyNGJiYTJiOGZhZjY3YjlmNzA0YTA2YjAxYWE5M2YzZWZhNmFlZjdhOTY5NmM0ZmVlZiJ9fX0="), "&aRadiant Power Orb", "&6Item Ability: Deploy", "&7Place an orb for &a30s &7buffing", "&7up to &b5 &7players within &a18", "&7blocks", "&8Costs 50% of max mana.", "&8Only one orb applies per player.", " ", "&aOrb Buff: Radiant", "&7Heals &c1% &7of max &c❤&7 per second.", " ", "&4☠ &cRequires &5Wolf Slayer 2", "&a&lUNCOMMON");
+
+    public ItemStack RESISTANT_SCALE = Utils.addLore(new ItemStack(Material.PRISMARINE_SHARD), "&9Resitant Scale", "blah blah blah", "Gives player 100 defense");
 }
 
