@@ -17,6 +17,7 @@ import xyz.apollo30.skyblockremastered.events.TradeEvents;
 import xyz.apollo30.skyblockremastered.items.Armor;
 import xyz.apollo30.skyblockremastered.items.Fragments;
 import xyz.apollo30.skyblockremastered.items.Pets;
+import xyz.apollo30.skyblockremastered.items.Stones;
 import xyz.apollo30.skyblockremastered.listeners.*;
 import xyz.apollo30.skyblockremastered.managers.ConfigManager;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
@@ -44,6 +45,7 @@ public class SkyblockRemastered extends JavaPlugin {
     // ItemStack Defining
     public xyz.apollo30.skyblockremastered.items.Weapons weapons = new xyz.apollo30.skyblockremastered.items.Weapons(this);
     public xyz.apollo30.skyblockremastered.items.Miscs miscs = new xyz.apollo30.skyblockremastered.items.Miscs(this);
+    public Stones stones = new Stones(this);
     public Pets pets = new Pets(this);
     public Armor armor = new Armor(this);
     public Fragments fragments = new Fragments(this);

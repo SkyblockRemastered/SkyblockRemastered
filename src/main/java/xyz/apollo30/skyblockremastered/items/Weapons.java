@@ -3,6 +3,7 @@ package xyz.apollo30.skyblockremastered.items;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.commands.Item;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 public class Weapons {
@@ -23,4 +24,7 @@ public class Weapons {
 
     public ItemStack ROGUE_SWORD = Utils.addLore(new ItemStack(Material.GOLD_SWORD), "&fRogue Sword", "&7Damage: &c+20", " ", "&6Item Ability: Speed Boost &e&lRIGHT CLICK", "&7Increases your movement &f✦", "&fSpeed&7 by &a+20&7 for &a30", "&7seconds.", "&8Mana Cost: &350", "&8Half speed if already active.", " ", "&8This item can be reforged!", "&f&lCOMMON SWORD");
 
+    public ItemStack LIGHTING_STAFF = Utils.addLore(new ItemStack(Material.BLAZE_ROD), "&6Lightning Staff", "shoots lightning at people", "uses no mana, just a 10 sec cooldown", "deals double your strength", "this is gonna get nerfed it's way too op");
+
+    public ItemStack MAGE_BEAM = Utils.addLore(new ItemStack(Material.IRON_SWORD), "&6Mage Beam", "you already know who it is");
 }
