@@ -18,11 +18,28 @@ public class PlayerObject {
     String ign;
     String uuid;
 
-    // Armor Detection
+    // Armor & Held Item Detection
     ItemStack helmet;
     ItemStack chestplate;
     ItemStack leggings;
     ItemStack boots;
+    ItemStack heldItem;
+
+    int itemHealth = 0;
+    int itemMaxHealth = 0;
+    int itemDefense = 0;
+    int itemStrength = 0;
+    int itemSpeed = 0;
+    int itemCritChance = 0;
+    int itemCritDamage = 0;
+    int itemAtkSpeed = 0;
+    int itemIntelligence = 0;
+    int itemMaxIntelligence = 0;
+    int itemSeaCreatureChance = 0;
+    int itemMagicFind = 0;
+    int itemPetLuck = 0;
+    int itemTrueDamage = 0;
+    int itemTrueDefense = 0;
 
     // Settings
     Constants.Rarities selectedRarity = Constants.Rarities.COMMON;
@@ -33,21 +50,41 @@ public class PlayerObject {
     double bits = 0;
 
     // Stats
-    int health = 1000;
-    int maxHealth = 1000;
-    int defense = 0;
-    int strength = 1000;
-    int speed = 300;
-    int critChance = 100;
-    int critDamage = 1000;
-    int atkSpeed = 10;
-    int intelligence = 2000;
-    int maxIntelligence = 200;
-    int seaCreatureChance = 0;
-    int magicFind = 0;
-    int petLuck = 0;
-    int trueDamage = 0;
 
+    // Health
+    int baseHealth = 100;
+    int health = 0;
+    int absorptionHealth = 0;
+    int extraHealth = 0;
+    int maxHealth = baseHealth;
+
+    // Defense
+    int baseDefense = 0;
+    int defense = 0;
+    int baseStrength = 0;
+    int strength = 0;
+    int baseSpeed = 100;
+    int speed = baseSpeed + itemSpeed;
+    int baseCritChance = 100;
+    int critChance = baseCritChance + itemCritChance;
+    int baseCritDamage = 1000;
+    int critDamage = baseCritDamage + itemCritDamage;
+    int baseAtkSpeed = 0;
+    int atkSpeed = 0;
+    int baseIntelligence = 100;
+    int intelligence = baseIntelligence;
+    int extraIntelligence = 0;
+    int maxIntelligence = baseIntelligence;
+    int baseSeaCreatureChance = 0;
+    int seaCreatureChance = 0;
+    int baseMagicFind = 0;
+    int magicFind = 0;
+    int basePetLuck = 0;
+    int petLuck = 0;
+    int baseTrueDamage = 0;
+    int trueDamage = 0;
+    int baseTrueDefense = 0;
+    int trueDefense = 0;
 
     // Island
     List<UUID> coop = new ArrayList<>();
@@ -143,15 +180,17 @@ public class PlayerObject {
     double totalSpent = revSpent + taraSpent + svenSpent + skeleSpent;
 
     public void resetHealth() {
+        maxHealth = baseHealth + itemHealth;
         health = maxHealth;
     }
 
     public void resetIntelligence() {
+        maxIntelligence = baseHealth + itemHealth;
         intelligence = maxIntelligence;
     }
 
     public void subtractHealth(int i) {
-        health -= i;
+        baseHealth -= i;
     }
 
     public void addZealotKill() {

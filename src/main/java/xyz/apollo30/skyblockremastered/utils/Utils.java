@@ -15,12 +15,11 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.util.Vector;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.tasks.LagPreventerTask;
+import xyz.apollo30.skyblockremastered.constants.GUIs;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -94,7 +93,7 @@ public class Utils {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(Utils.chat(displayName));
         for (String s : loreString) {
-            lore.add(Utils.chat(s));
+            if (s.length() != 0) lore.add(Utils.chat(s));
         }
         meta.setLore(lore);
 
@@ -117,7 +116,7 @@ public class Utils {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(Utils.chat(displayName));
         for (String s : loreString) {
-            lore.add(Utils.chat(s));
+            if (s.length() != 0) lore.add(Utils.chat(s));
         }
         meta.setLore(lore);
 
@@ -140,7 +139,7 @@ public class Utils {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(Utils.chat(displayName));
         for (String s : loreString) {
-            lore.add(Utils.chat(s));
+            if (s.length() != 0) lore.add(Utils.chat(s));
         }
         meta.setLore(lore);
 
@@ -211,7 +210,7 @@ public class Utils {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(Utils.chat(displayName));
         for (String s : loreString) {
-            lore.add(Utils.chat(s));
+            if (s.length() != 0) lore.add(Utils.chat(s));
         }
         meta.setLore(lore);
 
@@ -237,7 +236,7 @@ public class Utils {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(Utils.chat(displayName));
         for (String s : loreString) {
-            lore.add(Utils.chat(s));
+            if (s.length() != 0) lore.add(Utils.chat(s));
         }
         meta.setLore(lore);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -263,7 +262,7 @@ public class Utils {
         meta.setOwner(IGN);
         meta.setDisplayName(Utils.chat(displayName));
         for (String s : loreString) {
-            lore.add(Utils.chat(s));
+            if (s.length() != 0) if (s.length() != 0) lore.add(Utils.chat(s));
         }
 
         meta.setLore(lore);
@@ -432,33 +431,6 @@ public class Utils {
         return skull;
     }
 
-    public static ItemStack getLeather(String type, Color color, int amount) {
-        ItemStack piece = null;
-
-        if (type.equalsIgnoreCase("helmet")) {
-            piece = new ItemStack(Material.LEATHER_HELMET, amount);
-            LeatherArmorMeta meta = (LeatherArmorMeta) piece.getItemMeta();
-            meta.setColor(color);
-            piece.setItemMeta(meta);
-        } else if (type.equalsIgnoreCase("chestplate")) {
-            piece = new ItemStack(Material.LEATHER_CHESTPLATE, amount);
-            LeatherArmorMeta meta = (LeatherArmorMeta) piece.getItemMeta();
-            meta.setColor(color);
-            piece.setItemMeta(meta);
-        } else if (type.equalsIgnoreCase("leggings")) {
-            piece = new ItemStack(Material.LEATHER_LEGGINGS, amount);
-            LeatherArmorMeta meta = (LeatherArmorMeta) piece.getItemMeta();
-            meta.setColor(color);
-            piece.setItemMeta(meta);
-        } else if (type.equalsIgnoreCase("boots")) {
-            piece = new ItemStack(Material.LEATHER_BOOTS, amount);
-            LeatherArmorMeta meta = (LeatherArmorMeta) piece.getItemMeta();
-            meta.setColor(color);
-            piece.setItemMeta(meta);
-        }
-        return piece;
-    }
-
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static ItemStack generateMinion(String type, String block, String name, FileConfiguration db) {
         ItemStack head = null;
@@ -504,21 +476,21 @@ public class Utils {
         int y = (int) (new Random().nextInt((int) (4 - -.5)) + -.5);
         int z = new Random().nextInt(2 - -1) + -1;
 
-        String color = type.equals("fire") ? "&6" + damage : type.equals("water") ? "&9" + damage : type.equals("normal") ? "&7" + damage : type.equals("wither") ? "&0" + damage : type.equals("poison") ? "&2" + damage : "&7" + damage;
+        StringBuilder color = new StringBuilder(type.equals("fire") ? "&6" + damage : type.equals("water") ? "&9" + damage : type.equals("normal") ? "&7" + damage : type.equals("wither") ? "&0" + damage : type.equals("poison") ? "&2" + damage : "&7" + damage);
 
         if (type.equals("crithit")) {
-            color = "";
+            color = new StringBuilder();
             String previous = "red";
             for (String letter : Integer.toString(damage).split("")) {
-                color += previous.equals("red") ? "&f" + letter : previous.equals("white") ? "&e" + letter : previous.equals("yellow") ? "&6" + letter : previous.equals("orange") ? "&c" + letter : "&f" + letter;
-                previous = previous.equals("red") ? "white" : previous.equals("white") ? "yellow" : previous.equals("yellow") ? "orange" : previous.equals("orange") ? "red" : "red";
+                color.append(previous.equals("red") ? "&f" + letter : previous.equals("white") ? "&e" + letter : previous.equals("yellow") ? "&6" + letter : "&c" + letter);
+                previous = previous.equals("red") ? "white" : previous.equals("white") ? "yellow" : previous.equals("yellow") ? "orange" : "red";
             }
-            color = "&f" + GuiUtils.getUnicode("crithit") + color + "&c" + GuiUtils.getUnicode("crithit");
+            color = new StringBuilder("&f" + GUIs.getUnicode("crithit") + color + "&c" + GUIs.getUnicode("crithit"));
         }
 
         ArmorStand armorStand = entity.getWorld().spawn(entity.getLocation().add(x, y, z), ArmorStand.class);
         armorStand.setGravity(false);
-        armorStand.setCustomName(Utils.chat(color));
+        armorStand.setCustomName(Utils.chat(color.toString()));
         armorStand.setCustomNameVisible(true);
         armorStand.setRemoveWhenFarAway(true);
         armorStand.setVisible(false);
@@ -535,7 +507,7 @@ public class Utils {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(Utils.chat(displayName));
         for (String s : loreString) {
-            lore.add(Utils.chat(s));
+            if (s.length() != 0) lore.add(Utils.chat(s));
         }
         meta.setLore(lore);
         item.setItemMeta(meta);
@@ -556,7 +528,7 @@ public class Utils {
     public static String getDisplayHP(int level, String mobname, int current_health, int max_health) {
         double percent = current_health / (double) max_health;
         String color = percent < .30 ? "&c" : percent < .50 ? "&e" : "&a";
-        return "&8[&7Lv" + level + "&8] &c" + mobname + " " + color + (Math.max(current_health, 0)) + "&f/&a" + max_health + "&c" + GuiUtils.getUnicode("heart");
+        return "&8[&7Lv" + level + "&8] &c" + mobname + " " + color + (Math.max(current_health, 0)) + "&f/&a" + max_health + "&c" + GUIs.getUnicode("heart");
     }
 
     public static String intToRoman(int level) {

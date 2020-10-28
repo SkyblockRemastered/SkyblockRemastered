@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
+import xyz.apollo30.skyblockremastered.constants.GUIs;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.ResponsesUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
@@ -57,7 +57,7 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 500"));
                     return true;
                 }
-                player_data.setSpeed(Integer.parseInt(args[2]));
+                player_data.setBaseSpeed(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Speed set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("health") || args[1].equalsIgnoreCase("hp")) {
@@ -66,7 +66,7 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
-                player_data.setMaxHealth(Integer.parseInt(args[2]));
+                player_data.setBaseHealth(Integer.parseInt(args[2]));
                 player_data.resetHealth();
                 plr.sendMessage(Utils.chat(prefix + "Health set to " + args[2]));
 
@@ -76,7 +76,7 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
-                player_data.setDefense(Integer.parseInt(args[2]));
+                player_data.setBaseDefense(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Defense set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("cd") || args[1].equalsIgnoreCase("critdamage")) {
@@ -85,7 +85,7 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
-                player_data.setCritDamage(Integer.parseInt(args[2]));
+                player_data.setBaseCritDamage(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Crit Damage set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("cc") || args[1].equalsIgnoreCase("critchance")) {
@@ -94,7 +94,7 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 100"));
                     return true;
                 }
-                player_data.setCritChance(Integer.parseInt(args[2]));
+                player_data.setBaseCritChance(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Crit Chance set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("intel") || args[1].equalsIgnoreCase("intelligence") || args[1].equalsIgnoreCase("mana")) {
@@ -103,7 +103,7 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
-                player_data.setMaxIntelligence(Integer.parseInt(args[2]));
+                player_data.setBaseIntelligence(Integer.parseInt(args[2]));
                 player_data.resetIntelligence();
                 plr.sendMessage(Utils.chat(prefix + "Intelligence set to " + args[2]));
 
@@ -113,7 +113,7 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 200"));
                     return true;
                 }
-                player_data.setMagicFind(Integer.parseInt(args[2]));
+                player_data.setBaseMagicFind(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Magic Find set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("str") || args[1].equalsIgnoreCase("strength")) {
@@ -122,8 +122,17 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
-                player_data.setStrength(Integer.parseInt(args[2]));
+                player_data.setBaseStrength(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Strength set to " + args[2]));
+
+            } else if (args[1].equalsIgnoreCase("absorption") || args[1].equalsIgnoreCase("abs")) {
+
+                if (!plr.isOp() && Integer.parseInt(args[2]) > 10000) {
+                    plr.sendMessage(Utils.chat("You cannot go over 10000"));
+                    return true;
+                }
+                player_data.setAbsorptionHealth(Integer.parseInt(args[2]));
+                plr.sendMessage(Utils.chat(prefix + "Absorption set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("purse")) {
                 if (!plr.isOp()) return true;
@@ -146,12 +155,15 @@ public class SkyblockRemastered implements CommandExecutor {
                 plugin.so.setRiggedDragon(args[2].toUpperCase());
                 plr.sendMessage(Utils.chat("&aRigged the next dragon to spawn as a &d" + WordUtils.capitalizeFully(args[2]) + "&a dragon!"));
             }
-        } else if (args[0].equalsIgnoreCase("test")) {
+        } else if (args[0].equalsIgnoreCase("pvp")) {
             if (!plr.isOp()) return false;
-            ItemStack item = new ItemStack(Material.MONSTER_EGG, 1, (short) 0);
-            plr.getInventory().addItem(item);
+            plugin.so.setPvp(!plugin.so.isPvp());
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.playSound(player.getLocation(), Sound.NOTE_PLING, 100F, 1F);
+                player.sendMessage(Utils.chat("&7PVP has been " + (plugin.so.isPvp() ? "&aEnabled&7!" : "&cDisabled&7!")));
+            }
         } else if (args[0].equalsIgnoreCase("bank")) {
-            GuiUtils.bankMenu(plr, plr.getUniqueId().toString(), plugin);
+            GUIs.bankMenu(plr, plr.getUniqueId().toString(), plugin);
         } else if (args[0].equalsIgnoreCase("dialogs")) {
             if (args[1].equalsIgnoreCase("clerk")) {
                 ResponsesUtils.villagerDialog(plr, plugin, "&e[NPC] Clerk Seraphine:", "&fOh hello! You're here for the mayor elections?", "&fWell, this server ain't pay to win, &c&lGET OUTTA HERE!");
@@ -169,7 +181,6 @@ public class SkyblockRemastered implements CommandExecutor {
             Location loc = new Location(island, island.getSpawnLocation().getX(), island.getSpawnLocation().getY(), island.getSpawnLocation().getZ());
             plr.teleport(loc);
         }
-
 
         return false;
     }

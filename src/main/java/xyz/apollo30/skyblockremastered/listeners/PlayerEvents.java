@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 public class PlayerEvents implements Listener {
@@ -39,21 +40,7 @@ public class PlayerEvents implements Listener {
         if (plr.getLocation().getY() <= -5) {
             Location loc = plr.getWorld().getSpawnLocation();
             plr.teleport(loc);
-            plr.setHealth(plr.getMaxHealth());
-            po.setHealth(po.getMaxHealth());
-            po.resetHealth();
-
-            plugin.getServer().getScheduler()
-                    .scheduleSyncDelayedTask(plugin, () -> {
-                        plr.setVelocity(new Vector());
-                    }, 1L);
-
-            if (!plr.getWorld().getName().startsWith("playerislands/")) {
-                plr.playSound(plr.getLocation(), Sound.ANVIL_LAND, 1F, 10F);
-                double purse = po.getPurse();
-                po.setPurse(po.getPurse() / 2);
-                plr.sendMessage(Utils.chat("&cYou died and lost " + String.format("%,.0f", purse / 2) + " coins!"));
-            } else plr.sendMessage(Utils.chat("&cYou fell into the void"));
+            Helper.deathHandler(plugin, plr, "void");
         }
 
         // Portal Mechanism.
