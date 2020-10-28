@@ -61,7 +61,6 @@ public class InventoryEvents implements Listener {
         } else if (item.equals(Utils.chat("&aCrafting Table"))) {
             GUIs.craftingMenu(plr, plr.getUniqueId().toString(), "empty");
             e.setCancelled(true);
-            // Trade Menu
         } else if (item.equals(Utils.chat("&aTrades"))) {
             GUIs.tradeMenu(plr, plr.getUniqueId().toString());
             e.setCancelled(true);
@@ -248,6 +247,11 @@ public class InventoryEvents implements Listener {
                     GUIs.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
                 }
                 break;
+        }
+        // trade menu
+        if (title.startsWith("You   ")) {
+            e.setCancelled(true);
+
         }
     }
 
