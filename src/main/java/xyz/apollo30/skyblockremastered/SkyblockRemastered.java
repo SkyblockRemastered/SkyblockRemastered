@@ -15,19 +15,16 @@ import xyz.apollo30.skyblockremastered.customMobs.CustomEnderDragon;
 import xyz.apollo30.skyblockremastered.events.Dragon;
 import xyz.apollo30.skyblockremastered.events.TradeEvents;
 import xyz.apollo30.skyblockremastered.items.Armor;
+import xyz.apollo30.skyblockremastered.items.Bows;
 import xyz.apollo30.skyblockremastered.items.Fragments;
 import xyz.apollo30.skyblockremastered.items.Pets;
 import xyz.apollo30.skyblockremastered.listeners.*;
-import xyz.apollo30.skyblockremastered.managers.BlockManager;
 import xyz.apollo30.skyblockremastered.managers.ConfigManager;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.objects.ServerObject;
 import xyz.apollo30.skyblockremastered.tasks.*;
 import xyz.apollo30.skyblockremastered.utils.NMSUtil;
-
-import java.util.HashMap;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.MongoUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -39,7 +36,6 @@ public class SkyblockRemastered extends JavaPlugin {
 
     public ConfigManager db;
     public HashMap<Entity, Entity> health_indicator = new HashMap<>();
-    public BlockManager blockManager;
     public PlayerManager playerManager;
     public MobManager mobManager;
     public HashMap<Entity, Long> indicator = new HashMap<>();
@@ -47,6 +43,7 @@ public class SkyblockRemastered extends JavaPlugin {
     public Weapons weaponAbilities;
     public MongoUtils mongoUtils;
     public Dragon dragonEvent;
+    public xyz.apollo30.skyblockremastered.dragons.Dragon dragon;
     public ServerObject so = new ServerObject();
     public NMSUtil nmsu = new NMSUtil();
 
@@ -56,6 +53,7 @@ public class SkyblockRemastered extends JavaPlugin {
     public Pets pets = new Pets(this);
     public Armor armor = new Armor(this);
     public Fragments fragments = new Fragments(this);
+    public Bows bows = new Bows(this);
 
     @Override
     public void onEnable() {
@@ -78,6 +76,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new SpawnEvents(this);
         new EnchantEvents(this);
         new TradeEvents(this);
+        new ItemAbilityEvents(this);
 
         // Command
         new Gamemode(this);
@@ -86,6 +85,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new Hub(this);
         new Build(this);
         new SpawnEgg(this);
+        new Item(this);
 
         // Abilities
         this.miscAbilities = new Miscs(this);
@@ -93,7 +93,6 @@ public class SkyblockRemastered extends JavaPlugin {
         this.dragonEvent = new Dragon(this);
 
         // Managers
-        this.blockManager = new BlockManager(this);
         this.playerManager = new PlayerManager(this);
         this.mobManager = new MobManager(this);
 
@@ -103,14 +102,12 @@ public class SkyblockRemastered extends JavaPlugin {
         }
         // Removes all entities in the server bc I am lazy to re-register them.
         for (World world : Bukkit.getWorlds()) {
-            world.setPVP(false);
             for (LivingEntity entity : world.getLivingEntities()) {
                 if (entity.getType() != EntityType.PLAYER) entity.remove();
             }
         }
 
         // Inits the timer for all managers.
-        blockManager.initTimer();
         mobManager.initTimer();
         new ScoreboardTask(this).runTaskTimer(this, 30, 30);
         new ActionBarTask(this).runTaskTimer(this, 20, 20);
@@ -118,6 +115,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new WheatCrystalTask(this).runTaskTimer(this, 1, 1);
         new LagPreventerTask(this).runTaskTimer(this, 0, 20);
         new EnchantEvents(this).runTaskTimer(this, 0, 1);
+        new ConstantTask(this).runTaskTimer(this, 0, 1);
 
     }
 

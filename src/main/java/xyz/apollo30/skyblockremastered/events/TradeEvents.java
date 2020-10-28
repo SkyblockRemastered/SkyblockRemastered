@@ -46,29 +46,31 @@ public class TradeEvents implements Listener {
             cd.remove(c.getName());
             Inventory menu1 = Bukkit.createInventory(null, 45, "You                  " + plr.getName());
             Utils.createGlass(menu1, "STAINED_GLASS_PANE", 15, 1, 5, 14, 23, 32, 41);
+            Utils.createItemByte(menu1, 371, 0, 1, 1, "&6100M Coins");
             Utils.createItemByte(menu1, 371, 0, 1, 37, "&6Coin Transaction", "", "&eClick to add coins to the trade menu", "&eYou can use prefixes like: K, M, B");
             Utils.createItemByte(menu1, 351, 8, 1, 40, "&cInvalid Trade", "", "&7Place something in the trade menu in order", "&7to accept the trade");
-            Utils.createItemByte(menu1, 351, 8, 1, 42, "&7Other Person's Response", "", "&7You are currently", "&7trading with " + Helper.getRank(plr));
+            Utils.createItemByte(menu1, 351, 8, 1, 42, "&7Other Person's Response", "", "&7You are currently", "&7trading with " + Helper.getRank(plr, true));
 
             Inventory menu2 = Bukkit.createInventory(null, 45, "You                  " + c.getName());
             Utils.createGlass(menu2, "STAINED_GLASS_PANE", 15, 1, 5, 14, 23, 32, 41);
+            Utils.createItemByte(menu1, 371, 0, 1, 6, "&6100M Coins");
             Utils.createItemByte(menu2, 371, 0, 1, 37, "&6Coin Transaction", "", "&eClick to add coins to the trade menu", "&eYou can use prefixes like: K, M, B");
             Utils.createItemByte(menu1, 351, 8, 1, 40, "&cInvalid Trade", "", "&7Place something in the trade menu in order", "&7to accept the trade");
-            Utils.createItemByte(menu2, 351, 8, 1, 42, "&7Other Person's Response", "", "&7You are currently", "&7trading with " + Helper.getRank(c));
+            Utils.createItemByte(menu2, 351, 8, 1, 42, "&7Other Person's Response", "", "&7You are currently", "&7trading with " + Helper.getRank(c, true));
 
             c.openInventory(menu1);
             plr.openInventory(menu2);
         } else {
             plr.playSound(plr.getLocation(), Sound.VILLAGER_HAGGLE, 1000F, 1F);
-            plr.sendMessage(Utils.chat("&aYou have sent a trade request to " + Helper.getRank(c)));
+            plr.sendMessage(Utils.chat("&aYou have sent a trade request to " + Helper.getRank(c, false)));
             c.playSound(plr.getLocation(), Sound.VILLAGER_HAGGLE, 1000F, 1F);
-            c.sendMessage(Utils.chat(Helper.getRank(plr) + " &ahas sent you a trade request.\n&a&lSHIFT-CLICK &r&athem to accept"));
+            c.sendMessage(Utils.chat(Helper.getRank(plr, false) + " &ahas sent you a trade request.\n&a&lSHIFT-CLICK &r&athem to accept"));
             cd.put(plr.getName(), c.getName());
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 if (cd.containsKey(plr.getName())) {
-                    plr.sendMessage(Utils.chat("&cYour current trade request to " + cd.get(c.getName()) + " &chas expired!"));
+                    plr.sendMessage(Utils.chat("&cYour current trade request to " + Helper.getRank(c, false) + " &chas expired!"));
                     plr.playSound(plr.getLocation(), Sound.VILLAGER_NO, 1000F, 1F);
-                    c.sendMessage(Utils.chat("&cYour trade request from " + cd.get(plr.getName()) + " &chas expired!"));
+                    c.sendMessage(Utils.chat("&cYour trade request from " + Helper.getRank(plr, false) + " &chas expired!"));
                     c.playSound(c.getLocation(), Sound.VILLAGER_NO, 1000F, 1F);
                     cd.remove(plr.getName());
                 }

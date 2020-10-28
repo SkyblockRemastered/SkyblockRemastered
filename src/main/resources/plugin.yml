@@ -36,3 +36,5 @@ commands:
       sbr.give:
         description: Allows the player to give them custom spawn eggs
         default: false
+  item:
+    description: free items daddi

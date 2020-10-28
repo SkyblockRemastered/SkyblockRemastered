@@ -49,7 +49,24 @@ public class ProtectionEvents implements Listener {
                 } else e.setCancelled(true);
             }
             // If the player is in their island
-        } else if (!plr.getWorld().getName().replace("islands/", "").equals(plr.getUniqueId().toString())) {
+        } else if (!plr.getWorld().getName().replace("playerislands/", "").equals(plr.getUniqueId().toString())) {
+            if (!po.isBlockBreak()) {
+                e.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onArmorStandManipulate(PlayerArmorStandManipulateEvent e) {
+        Player plr = e.getPlayer();
+        PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+        // Check if the player is in the hub or not.
+        if (plr.getWorld().getName().equals("hub")) {
+            // Checking if their settings is allowed.
+            if (!po.isBlockBreak()) {
+                e.setCancelled(true);
+            }
+        } else if (!plr.getWorld().getName().replace("playerislands/", "").equals(plr.getUniqueId().toString())) {
             if (!po.isBlockBreak()) {
                 e.setCancelled(true);
             }
@@ -65,7 +82,7 @@ public class ProtectionEvents implements Listener {
         ItemStack item = plr.getItemInHand();
 
         // Island Border
-        if (plr.getWorld().getName().startsWith("islands/")) {
+        if (plr.getWorld().getName().startsWith("playerislands/")) {
 
             if (!Utils.isInZone(e.getBlock().getLocation(), new Location(plr.getWorld(), -80, 255, -80), new Location(plr.getWorld(), 80, 0, 80))) {
                 plr.sendMessage(Utils.chat("&cYou've reached the world border.\n&aTo expand it, you can use your &2gems&a by heading to the Community Center!"));
@@ -90,7 +107,7 @@ public class ProtectionEvents implements Listener {
             if (!po.isBlockBreak()) {
                 e.setCancelled(true);
             }
-        } else if (!plr.getWorld().getName().replace("islands/", "").equals(plr.getUniqueId().toString())) {
+        } else if (!plr.getWorld().getName().replace("playerislands/", "").equals(plr.getUniqueId().toString())) {
             if (!po.isBlockBreak()) {
                 e.setCancelled(true);
             }
@@ -130,18 +147,14 @@ public class ProtectionEvents implements Listener {
 
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent e) {
-        if (e.getEntity().getWorld().getName().equals("hub")) {
-            e.setCancelled(true);
-        } else if (e.getEntity().getWorld().getName().startsWith("playerislands/")) {
-            if (e.getEntityType() != EntityType.PRIMED_TNT) e.setCancelled(true);
-        } else e.setCancelled(true);
+        e.setCancelled(!e.getEntity().getWorld().getName().startsWith("playerislands/"));
     }
 
     @EventHandler
     public void onEntityTarget(EntityTargetEvent e) {
         if (e.getTarget() instanceof Player) {
             Player plr = (Player) e.getTarget();
-            if (plr.getWorld().getName().startsWith("islands/") && !plr.getWorld().getName().equals("islands/" + plr.getUniqueId().toString())) {
+            if (plr.getWorld().getName().startsWith("playerislands/") && !plr.getWorld().getName().equals("playerislands/" + plr.getUniqueId().toString())) {
                 e.setCancelled(true);
             }
         }
@@ -157,6 +170,7 @@ public class ProtectionEvents implements Listener {
     @EventHandler
     public void onItemDamage(PlayerItemDamageEvent e) {
         // Cancels out all item damage.
+        e.setDamage(0);
         e.setCancelled(true);
     }
 
@@ -181,7 +195,7 @@ public class ProtectionEvents implements Listener {
         }
 
         // If the player is in their island
-        if (!plr.getWorld().getName().replace("islands/", "").equals(plr.getUniqueId().toString())) {
+        if (!plr.getWorld().getName().replace("playerislands/", "").equals(plr.getUniqueId().toString())) {
             if (!po.isBlockBreak()) {
                 e.setCancelled(true);
             }
@@ -204,7 +218,7 @@ public class ProtectionEvents implements Listener {
         }
 
         // If the player is in their island
-        if (!plr.getWorld().getName().replace("islands/", "").equals(plr.getUniqueId().toString())) {
+        if (!plr.getWorld().getName().replace("playerislands/", "").equals(plr.getUniqueId().toString())) {
             if (!po.isBlockBreak()) {
                 e.setCancelled(true);
             }
