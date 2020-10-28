@@ -41,7 +41,7 @@ public class SkyblockRemastered extends JavaPlugin {
     public HashMap<Entity, Long> indicator = new HashMap<>();
     public Miscs miscAbilities;
     public Weapons weaponAbilities;
-    public MongoUtils mongoUtils;
+    public MongoUtils playerData;
     public Dragon dragonEvent;
     public xyz.apollo30.skyblockremastered.dragons.Dragon dragon;
     public ServerObject so = new ServerObject();
@@ -58,7 +58,7 @@ public class SkyblockRemastered extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        mongoUtils = new MongoUtils(this, "mongoStringHere", "databaseName", "collectionName");
+        playerData = new MongoUtils(this, "mongoStringHere", "PlayerData", "playerData");
 
         // Registering Custom Dragons
         nmsu.registerEntity("Dragon", 63, EntityEnderDragon.class, CustomEnderDragon.class);
@@ -125,7 +125,7 @@ public class SkyblockRemastered extends JavaPlugin {
 
         // Saves all playerdata once the plugin deactivates.
         for (Player plr : Bukkit.getOnlinePlayers()) {
-            playerManager.savePlayerData(plr);
+            if (playerManager != null) playerManager.savePlayerData(plr);
         }
 
     }

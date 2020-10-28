@@ -475,7 +475,10 @@ public class DamageEvents implements Listener {
     }
 
     private void attackSpeed(int atkSpeed, LivingEntity e) {
-        if (atkSpeed > 0) {
+        if (e.getType() == EntityType.ENDER_DRAGON) {
+            e.setNoDamageTicks(0);
+            e.setMaximumNoDamageTicks(0);
+        } else if (atkSpeed > 0) {
             if (atkSpeed >= 100) atkSpeed = 100;
             atkSpeed = atkSpeed / 20;
             e.setMaximumNoDamageTicks(20 - atkSpeed);

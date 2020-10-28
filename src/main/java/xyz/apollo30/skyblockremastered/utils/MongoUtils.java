@@ -22,7 +22,7 @@ public class MongoUtils {
     }
 
     public static MongoUtils getInstance() {
-        return plugin.mongoUtils;
+        return plugin.playerData;
     }
 
     public void setPlayerData(Player plr, String path, String value) {

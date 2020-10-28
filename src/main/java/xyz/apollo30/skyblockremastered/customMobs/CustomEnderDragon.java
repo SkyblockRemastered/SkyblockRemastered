@@ -163,7 +163,7 @@ public class CustomEnderDragon extends EntityEnderDragon {
                         destinationLoc = null;
                         currentLoc = getBukkitEntity().getLocation();
                         onPath = false;
-                        locCooldown = new Date().getTime() + 5000;
+                        locCooldown = new Date().getTime() + 2000;
                         return;
                     }
 
