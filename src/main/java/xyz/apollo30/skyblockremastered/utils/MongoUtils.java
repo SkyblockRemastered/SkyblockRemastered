@@ -3,7 +3,6 @@ package xyz.apollo30.skyblockremastered.utils;
 import com.mongodb.client.*;
 import org.bson.Document;
 import org.bukkit.entity.Player;
-import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
 public class MongoUtils {
 

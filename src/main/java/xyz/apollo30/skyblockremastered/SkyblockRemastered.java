@@ -97,7 +97,7 @@ public class SkyblockRemastered extends JavaPlugin {
 
         // When reloaded and the players still exist, it just recreates their database again.
         for (Player plr : Bukkit.getOnlinePlayers()) {
-            if (playerManager.getPlayerData(plr) == null) PlayerManager.createPlayerData(plr);
+            if (playerManager.getPlayerData(plr) == null) playerManager.createPlayerData(plr);
         }
         // Removes all entities in the server bc I am lazy to re-register them.
         for (World world : Bukkit.getWorlds()) {
