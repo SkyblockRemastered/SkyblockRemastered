@@ -31,6 +31,7 @@ repositories {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+    compile 'org.mongodb:mongo-java-driver:2.12.3'
     compile "com.mojang:authlib:1.5.21"
     compile "org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT"
     compile files("libs/craftbukkit-1.8.8.jar")

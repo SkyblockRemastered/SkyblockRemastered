@@ -15,6 +15,7 @@ import xyz.apollo30.skyblockremastered.customMobs.CustomEnderDragon;
 import xyz.apollo30.skyblockremastered.events.Dragon;
 import xyz.apollo30.skyblockremastered.events.TradeEvents;
 import xyz.apollo30.skyblockremastered.items.Armor;
+import xyz.apollo30.skyblockremastered.items.Bows;
 import xyz.apollo30.skyblockremastered.items.Fragments;
 import xyz.apollo30.skyblockremastered.items.Pets;
 import xyz.apollo30.skyblockremastered.listeners.*;
@@ -24,8 +25,14 @@ import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.objects.ServerObject;
 import xyz.apollo30.skyblockremastered.tasks.*;
 import xyz.apollo30.skyblockremastered.utils.NMSUtil;
-
+//import xyz.apollo30.skyblockremastered.utils.MongoUtils;
+//import xyz.apollo30.skyblockremastered.utils.Utils;
+//
+//import java.util.Date;
 import java.util.HashMap;
+//import java.util.Map;
+//
+//import java.util.HashMap;
 
 public class SkyblockRemastered extends JavaPlugin {
 
@@ -46,6 +53,7 @@ public class SkyblockRemastered extends JavaPlugin {
     public Pets pets = new Pets(this);
     public Armor armor = new Armor(this);
     public Fragments fragments = new Fragments(this);
+    public Bows bows = new Bows(this);
 
     @Override
     public void onEnable() {
@@ -67,6 +75,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new SpawnEvents(this);
         new EnchantEvents(this);
         new TradeEvents(this);
+        new ItemAbilityEvents(this);
 
         // Command
         new Gamemode(this);
@@ -92,7 +101,6 @@ public class SkyblockRemastered extends JavaPlugin {
         }
         // Removes all entities in the server bc I am lazy to re-register them.
         for (World world : Bukkit.getWorlds()) {
-            world.setPVP(false);
             for (LivingEntity entity : world.getLivingEntities()) {
                 if (entity.getType() != EntityType.PLAYER) entity.remove();
             }
@@ -102,10 +110,11 @@ public class SkyblockRemastered extends JavaPlugin {
         mobManager.initTimer();
         new ScoreboardTask(this).runTaskTimer(this, 30, 30);
         new ActionBarTask(this).runTaskTimer(this, 20, 20);
-        new ConstantTask(this).runTaskTimer(this, 30, 30);
+        new RegenerationTask(this).runTaskTimer(this, 30, 30);
         new WheatCrystalTask(this).runTaskTimer(this, 1, 1);
         new LagPreventerTask(this).runTaskTimer(this, 0, 20);
         new EnchantEvents(this).runTaskTimer(this, 0, 1);
+        new ConstantTask(this).runTaskTimer(this, 0, 1);
 
     }
 

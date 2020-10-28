@@ -1,12 +1,14 @@
 package xyz.apollo30.skyblockremastered.tasks;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.PacketManager;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.Date;
@@ -21,25 +23,57 @@ public class ConstantTask extends BukkitRunnable {
 
     @Override
     public void run() {
+
         for (Player plr : Bukkit.getOnlinePlayers()) {
 
-            PlayerObject po = plugin.playerManager.playerObjects.get(plr);
-
-            // Health Regeneration
-            if (po.getHealth() < po.getMaxHealth()) {
-                if (plr.getFireTicks() <= 0) {
-                    int health_regen = po.getHealth() + (int) ((po.getMaxHealth() * 0.01) + 1.5);
-                    po.setHealth(Math.min(health_regen, po.getMaxHealth()));
+            /**
+             * Just to update all concurrent items in a player's inventory to check for missing rarities,
+             * Or maybe to remove some attributes/flags.
+             */
+            for (ItemStack item : plr.getInventory().getContents()) {
+                if (item == null) break;
+                if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
+                    if (Helper.getRarity(item.getItemMeta().getLore()).equals("none")) {
+                        // Utils.broadCast("");
+                    }
                 }
             }
 
-            // Mana Regeneration
-            if (po.getIntelligence() < po.getMaxIntelligence()) {
-                int mana_regen = po.getIntelligence() + (int) ((po.getMaxIntelligence() * 0.01) + 1.5);
-                po.setIntelligence(Math.min(mana_regen, po.getMaxIntelligence()));
+            /**
+             * Checking if the player is wearing Taran Boots or Spider Boots
+             * If true, we enable fly and ItemAbilityEvents can handle the rest.
+             */
+            if (plr.getEquipment().getBoots() != null && plr.getEquipment().getBoots().hasItemMeta() && !plr.getEquipment().getBoots().getItemMeta().getDisplayName().isEmpty()) {
+                if (plr.getEquipment().getBoots().getItemMeta().getDisplayName().equalsIgnoreCase(Utils.chat("&5Tarantula Boots"))) {
+                    if (!plr.getGameMode().equals(GameMode.CREATIVE) && !plr.getGameMode().equals(GameMode.SPECTATOR)) {
+                        if (plr.isFlying()) {
+                            plr.setFlying(false);
+                        }
+                        plr.setAllowFlight(true);
+                    }
+                }
+            } else if (!plr.getGameMode().equals(GameMode.CREATIVE) && !plr.getGameMode().equals(GameMode.SPECTATOR)) {
+                plr.setFlying(false);
+                plr.setAllowFlight(false);
             }
 
-            // Checking if the player's inventory is full.
+            /**
+             * Infinite Quiver (Replaces Skyblock Menu)
+             * This is temporary.
+             */
+            if (plr.getItemInHand() != null && plr.getItemInHand().getType() == Material.BOW) {
+                Utils.createInvisibleEnchantedItemByte(plr.getInventory(), 262, 0, 64, 9, "&8Quiver Arrow", "&7This item is in your", "&7inventory because you are", "&7holding your bow currently.", " ", "&7Switch your held item to", "&7see the item that was here", "&7before.");
+            } else {
+                ItemStack nether_star = plugin.miscs.SKYBLOCK_MENU;
+                plr.getInventory().setItem(8, nether_star);
+            }
+
+            PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+
+            /**
+             * Checking if the player's inventory is full
+             * If so, it notifies them with a 30 second cooldown.
+             */
             if ((plr.getInventory().firstEmpty() == -1)) {
                 if (po.getLastInvFullNotification() > new Date().getTime()) return;
                 plr.sendMessage(Utils.chat("&cYour inventory is full!"));
@@ -47,8 +81,219 @@ public class ConstantTask extends BukkitRunnable {
                 plr.playSound(plr.getLocation(), Sound.CHEST_OPEN, 1000L, 5L);
                 po.setLastInvFullNotification(new Date().getTime() + 30000);
             }
+
+            int health = 0;
+            int defense = 0;
+            int strength = 0;
+            int speed = 0;
+            int critChance = 0;
+            int critDamage = 0;
+            int atkSpeed = 0;
+            int intelligence = 0;
+            int seaCreatureChance = 0;
+            int magicFind = 0;
+            int petLuck = 0;
+            int trueDamage = 0;
+            int trueDefense = 0;
+
+            EntityEquipment equipment = plr.getEquipment();
+
+            if (equipment.getHelmet() != null && po.getHelmet() != equipment.getHelmet()) {
+                po.setHelmet(equipment.getHelmet());
+                if (equipment.getHelmet().hasItemMeta()) {
+                    for (String lore : equipment.getHelmet().getItemMeta().getLore()) {
+                        if (lore.startsWith(Utils.chat("&7Health"))) health += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Defense"))) defense += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Strength"))) strength += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Speed"))) speed += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Crit Chance"))) critChance += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Crit Damage"))) critDamage += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Bonus Attack Speed")) || lore.startsWith(Utils.chat("&7Attack Speed")))
+                            atkSpeed += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Intelligence"))) intelligence += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Sea Creature Chance"))) seaCreatureChance += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Magic Find"))) magicFind += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Pet Luck"))) petLuck += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7True Defense"))) trueDefense += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7True Damage"))) trueDamage += parseLore(lore);
+                    }
+                }
+            }
+
+            if (equipment.getChestplate() != null && po.getChestplate() != equipment.getChestplate()) {
+                po.setChestplate(equipment.getChestplate());
+                if (equipment.getChestplate().hasItemMeta()) {
+                    for (String lore : equipment.getChestplate().getItemMeta().getLore()) {
+                        if (lore.startsWith(Utils.chat("&7Health"))) health += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Defense"))) defense += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Strength"))) strength += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Speed"))) speed += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Crit Chance"))) critChance += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Crit Damage"))) critDamage += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Bonus Attack Speed")) || lore.startsWith(Utils.chat("&7Attack Speed")))
+                            atkSpeed += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Intelligence"))) intelligence += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Sea Creature Chance"))) seaCreatureChance += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Magic Find"))) magicFind += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Pet Luck"))) petLuck += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7True Defense"))) trueDefense += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7True Damage"))) trueDamage += parseLore(lore);
+                    }
+                }
+            }
+
+            if (equipment.getLeggings() != null && po.getLeggings() != equipment.getLeggings()) {
+                po.setLeggings(equipment.getLeggings());
+                if (equipment.getLeggings().hasItemMeta()) {
+                    for (String lore : equipment.getLeggings().getItemMeta().getLore()) {
+                        if (lore.startsWith(Utils.chat("&7Health"))) health += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Defense"))) defense += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Strength"))) strength += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Speed"))) speed += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Crit Chance"))) critChance += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Crit Damage"))) critDamage += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Bonus Attack Speed")) || lore.startsWith(Utils.chat("&7Attack Speed")))
+                            atkSpeed += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Intelligence"))) intelligence += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Sea Creature Chance"))) seaCreatureChance += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Magic Find"))) magicFind += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Pet Luck"))) petLuck += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7True Defense"))) trueDefense += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7True Damage"))) trueDamage += parseLore(lore);
+                    }
+                }
+            }
+
+            if (equipment.getBoots() != null && po.getBoots() != equipment.getBoots()) {
+                po.setBoots(equipment.getBoots());
+                if (equipment.getBoots().hasItemMeta()) {
+                    for (String lore : equipment.getBoots().getItemMeta().getLore()) {
+                        if (lore.startsWith(Utils.chat("&7Health"))) health += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Defense"))) defense += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Strength"))) strength += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Speed"))) speed += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Crit Chance"))) critChance += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Crit Damage"))) critDamage += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Bonus Attack Speed")) || lore.startsWith(Utils.chat("&7Attack Speed")))
+                            atkSpeed += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Intelligence"))) intelligence += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Sea Creature Chance"))) seaCreatureChance += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Magic Find"))) magicFind += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Pet Luck"))) petLuck += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7True Defense"))) trueDefense += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7True Damage"))) trueDamage += parseLore(lore);
+                    }
+                }
+            }
+
+            if (po.getHeldItem() != plr.getItemInHand()) {
+                po.setHeldItem(plr.getItemInHand());
+                if (plr.getItemInHand().hasItemMeta() && plr.getItemInHand().getItemMeta().getLore().size() > 0) {
+                    for (String lore : plr.getItemInHand().getItemMeta().getLore()) {
+                        if (lore.startsWith(Utils.chat("&7Health"))) health += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Defense"))) defense += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Strength"))) strength += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Speed"))) speed += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Crit Chance"))) critChance += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Crit Damage"))) critDamage += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Bonus Attack Speed")) || lore.startsWith(Utils.chat("&7Attack Speed")))
+                            atkSpeed += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Intelligence"))) intelligence += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Sea Creature Chance"))) seaCreatureChance += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Magic Find"))) magicFind += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7Pet Luck"))) petLuck += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7True Defense"))) trueDefense += parseLore(lore);
+                        if (lore.startsWith(Utils.chat("&7True Damage"))) trueDamage += parseLore(lore);
+                    }
+                }
+            }
+
+            /**
+             * Young Armor Full Set Ability
+             * When a full set is worn, the player gains +70 speed while above 50% health.
+             */
+            if (plr.getEquipment().getBoots() != null && plr.getEquipment().getBoots().hasItemMeta() && !plr.getEquipment().getBoots().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getBoots().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Young Dragon Boots"))) {
+                if (plr.getEquipment().getChestplate() != null && plr.getEquipment().getChestplate().hasItemMeta() && !plr.getEquipment().getChestplate().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getChestplate().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Young Dragon Chestplate"))) {
+                    if (plr.getEquipment().getLeggings() != null && plr.getEquipment().getLeggings().hasItemMeta() && !plr.getEquipment().getLeggings().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getLeggings().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Young Dragon Leggings"))) {
+                        if (plr.getEquipment().getHelmet() != null && plr.getEquipment().getHelmet().hasItemMeta() && !plr.getEquipment().getHelmet().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getHelmet().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Young Dragon Helmet"))) {
+                            if ((po.getHealth() / 2) > po.getMaxHealth()) {
+                                speed += 70;
+                            }
+                        }
+                    }
+                }
+            }
+
+            /**
+             * Protector Dragon Helmet
+             * Increases the defense of each armor piece by 1% defense for each missing percent of hp.
+             */
+
+
+            /**
+             * Superior Armor Full Set Ability
+             * When a full set is worn, the player's stats are increased by 5%
+             */
+            if (plr.getEquipment().getBoots() != null && plr.getEquipment().getBoots().hasItemMeta() && !plr.getEquipment().getBoots().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getBoots().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Superior Dragon Boots"))) {
+                if (plr.getEquipment().getChestplate() != null && plr.getEquipment().getChestplate().hasItemMeta() && !plr.getEquipment().getChestplate().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getChestplate().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Superior Dragon Chestplate"))) {
+                    if (plr.getEquipment().getLeggings() != null && plr.getEquipment().getLeggings().hasItemMeta() && !plr.getEquipment().getLeggings().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getLeggings().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Superior Dragon Leggings"))) {
+                        if (plr.getEquipment().getHelmet() != null && plr.getEquipment().getHelmet().hasItemMeta() && !plr.getEquipment().getHelmet().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getHelmet().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Superior Dragon Helmet"))) {
+                            health += (health * 0.05);
+                            defense += (defense * 0.05);
+                            strength += (strength * 0.05);
+                            speed += (speed * 0.05);
+                            critChance += (critChance * 0.05);
+                            critDamage += (critDamage * 0.05);
+                            atkSpeed += (atkSpeed * 0.05);
+                            intelligence += (intelligence * 0.05);
+                            seaCreatureChance += (seaCreatureChance * 0.05);
+                            magicFind += (magicFind * 0.05);
+                            petLuck += (petLuck * 0.05);
+                            trueDefense += (trueDefense * 0.05);
+                            trueDamage += (trueDamage * 0.05);
+                        }
+                    }
+                }
+            }
+
+            // Setting Item Stats
+            po.setItemHealth(health);
+            po.setItemDefense(defense);
+            po.setItemStrength(strength);
+            po.setItemSpeed(speed);
+            po.setItemCritChance(critChance);
+            po.setItemCritDamage(critDamage);
+            po.setItemAtkSpeed(atkSpeed);
+            po.setItemIntelligence(intelligence);
+            po.setItemSeaCreatureChance(seaCreatureChance);
+            po.setItemMagicFind(magicFind);
+            po.setItemPetLuck(petLuck);
+            po.setItemTrueDamage(trueDamage);
+            po.setItemTrueDefense(trueDefense);
+
+            // Stats
+            po.setDefense(po.getBaseDefense() + po.getItemDefense());
+            po.setStrength(po.getBaseStrength() + po.getItemStrength());
+            po.setSpeed(po.getBaseSpeed() + po.getItemSpeed());
+            po.setCritChance(po.getBaseCritChance() + po.getItemCritChance());
+            po.setCritDamage(po.getBaseCritDamage() + po.getItemCritDamage());
+            po.setAtkSpeed(po.getBaseAtkSpeed() + po.getItemAtkSpeed());
+            po.setSeaCreatureChance(po.getBaseSeaCreatureChance() + po.getItemSeaCreatureChance());
+            po.setMagicFind(po.getBaseMagicFind() + po.getItemMagicFind());
+            po.setPetLuck(po.getBasePetLuck() + po.getItemPetLuck());
+            po.setTrueDamage(po.getBaseTrueDamage() + po.getItemTrueDamage());
+            po.setTrueDefense(po.getBaseTrueDefense() + po.getItemTrueDefense());
+            po.setMaxHealth(po.getBaseHealth() + po.getItemHealth());
+            po.setMaxIntelligence(po.getBaseIntelligence() + po.getItemIntelligence());
         }
+
+    }
+
+    private int parseLore(String lore) {
+        try {
+            return Integer.parseInt(lore.split(" ")[lore.split(" ").length - 1].replaceAll(",", "").replace(Utils.chat("&c+"), "").replace(Utils.chat("&a+"), "").replace("%", ""));
+        } catch (Exception ignored) {
+        }
+        return 0;
     }
 }
-
-

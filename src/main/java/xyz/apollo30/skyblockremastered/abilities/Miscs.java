@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
+import xyz.apollo30.skyblockremastered.constants.GUIs;
 import xyz.apollo30.skyblockremastered.utils.ResponsesUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -46,7 +46,7 @@ public class Miscs {
             else {
                 plr.sendMessage(ResponsesUtils.callSuccess());
                 plr.playSound(plr.getLocation(), Sound.CLICK, 1F, 1F);
-                GuiUtils.batphoneMenu(plr, plr.getUniqueId().toString(), plugin);
+                GUIs.batphoneMenu(plr, plr.getUniqueId().toString(), plugin);
                 bcd.put(plr.getUniqueId(), 0);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> bcd.remove(plr.getUniqueId()), 600L);
             }

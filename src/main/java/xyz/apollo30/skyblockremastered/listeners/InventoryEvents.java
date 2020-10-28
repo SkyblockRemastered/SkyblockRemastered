@@ -15,7 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.constants.Constants;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
+import xyz.apollo30.skyblockremastered.constants.GUIs;
+import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.ArrayList;
@@ -46,20 +47,23 @@ public class InventoryEvents implements Listener {
 
         // Skyblock Menu
         if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
-            GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
             e.setCancelled(true);
             // Personal Vault
+        } else if (item.equals(Utils.chat("&8Quiver Arrow"))) {
+            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            e.setCancelled(true);
         } else if (item.equals(Utils.chat("&aPersonal Vault"))) {
             plr.openInventory(plr.getEnderChest());
             plr.playSound(plr.getLocation(), Sound.CHEST_OPEN, 1F, 0.3F);
             e.setCancelled(true);
             // Crafting Table
         } else if (item.equals(Utils.chat("&aCrafting Table"))) {
-            GuiUtils.craftingMenu(plr, plr.getUniqueId().toString(), "empty");
+            GUIs.craftingMenu(plr, plr.getUniqueId().toString(), "empty");
             e.setCancelled(true);
             // Trade Menu
         } else if (item.equals(Utils.chat("&aTrades"))) {
-            GuiUtils.tradeMenu(plr, plr.getUniqueId().toString());
+            GUIs.tradeMenu(plr, plr.getUniqueId().toString());
             e.setCancelled(true);
             // Close Button
         } else if (item.equals(Utils.chat("&cClose"))) {
@@ -67,7 +71,7 @@ public class InventoryEvents implements Listener {
             e.setCancelled(true);
             // Personal Bank
         } else if (item.equals(Utils.chat("&aPersonal Bank"))) {
-            GuiUtils.bankMenu(plr, plr.getUniqueId().toString(), plugin);
+            GUIs.bankMenu(plr, plr.getUniqueId().toString(), plugin);
             e.setCancelled(true);
         } else if (item.equals(Utils.chat("&bFast Travel"))) {
             if (clickType.equals("RIGHT")) {
@@ -94,13 +98,13 @@ public class InventoryEvents implements Listener {
                 }
             }
         } else if (item.equals(Utils.chat("&aYour Skills"))) {
-            GuiUtils.skillMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers());
+            GUIs.skillMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers());
             e.setCancelled(true);
         } else if (item.equals(Utils.chat("&aGo Back"))) {
-            GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
             e.setCancelled(true);
         } else if (item.equals(Utils.chat("&aPlugin Developer Menu"))) {
-            GuiUtils.adminPanel(plr, plr.getUniqueId().toString());
+            GUIs.adminPanel(plr, plr.getUniqueId().toString());
             e.setCancelled(true);
         }
 
@@ -132,9 +136,9 @@ public class InventoryEvents implements Listener {
             case "Bank":
                 e.setCancelled(true);
                 if (item.equalsIgnoreCase(Utils.chat("&aDeposit Coins"))) {
-                    GuiUtils.bankDeposit(plr, plr.getUniqueId().toString(), plugin);
+                    GUIs.bankDeposit(plr, plr.getUniqueId().toString(), plugin);
                 } else if (item.equalsIgnoreCase(Utils.chat("&aWithdraw Coins"))) {
-                    GuiUtils.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
+                    GUIs.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
                 }
                 // Bank Dep
                 break;
@@ -159,7 +163,7 @@ public class InventoryEvents implements Listener {
                     po.setPurse(0);
 
                     // Refreshing the Page
-                    GuiUtils.bankDeposit(plr, plr.getUniqueId().toString(), plugin);
+                    GUIs.bankDeposit(plr, plr.getUniqueId().toString(), plugin);
                 } else if (item.equalsIgnoreCase(Utils.chat("&aHalf your purse"))) {
                     PlayerObject po = plugin.playerManager.playerObjects.get(plr);
 
@@ -178,7 +182,7 @@ public class InventoryEvents implements Listener {
                     po.setPurse(po.getPurse() / 2);
 
                     // Refreshing the Page
-                    GuiUtils.bankDeposit(plr, plr.getUniqueId().toString(), plugin);
+                    GUIs.bankDeposit(plr, plr.getUniqueId().toString(), plugin);
                 }
                 // Bank Withdrawal
                 break;
@@ -203,7 +207,7 @@ public class InventoryEvents implements Listener {
                     po.setBank(0);
 
                     // Refreshing the Page
-                    GuiUtils.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
+                    GUIs.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
                 } else if (item.equalsIgnoreCase(Utils.chat("&aHalf your account"))) {
                     PlayerObject po = plugin.playerManager.playerObjects.get(plr);
 
@@ -222,7 +226,7 @@ public class InventoryEvents implements Listener {
                     po.setBank(po.getBank() - po.getBank() / 2);
 
                     // Refreshing the Page
-                    GuiUtils.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
+                    GUIs.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
                 } else if (item.equalsIgnoreCase(Utils.chat("&a20% of your account"))) {
                     PlayerObject po = plugin.playerManager.playerObjects.get(plr);
 
@@ -241,7 +245,7 @@ public class InventoryEvents implements Listener {
                     po.setBank((int) (po.getBank() - (po.getBank() * .2)));
 
                     // Refreshing the Page
-                    GuiUtils.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
+                    GUIs.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
                 }
                 break;
         }
@@ -254,7 +258,7 @@ public class InventoryEvents implements Listener {
         PlayerObject po = plugin.playerManager.playerObjects.get(plr);
 
         // If the player is in their island or not.
-        if (!plr.getWorld().getName().equals("islands/" + plr.getUniqueId().toString())) {
+        if (!plr.getWorld().getName().equals("playerislands/" + plr.getUniqueId().toString())) {
             // Do a little checcing
             List<String> containers = new ArrayList<>();
             containers.add("container.dropper");
@@ -278,7 +282,10 @@ public class InventoryEvents implements Listener {
             return;
 
         if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
-            GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            e.setCancelled(true);
+        } else if (item.equals(Utils.chat("&8Quiver Arrow"))) {
+            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
             e.setCancelled(true);
         }
     }
@@ -290,18 +297,12 @@ public class InventoryEvents implements Listener {
         if (item == null)
             return;
         if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
-            GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            e.setCancelled(true);
+        } else if (item.equals(Utils.chat("&8Quiver Arrow"))) {
+            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
             e.setCancelled(true);
         }
-    }
-
-    @EventHandler
-    public void playerLeave(PlayerQuitEvent e) {
-        Player plr = e.getPlayer();
-        e.setQuitMessage(Utils.chat("&e" + plr.getName() + " has left the game."));
-
-        plugin.playerManager.savePlayerData(plr);
-        plugin.playerManager.playerObjects.remove(plr);
     }
 
     @EventHandler
@@ -326,19 +327,9 @@ public class InventoryEvents implements Listener {
 
         if (lores == null || lores.size() <= 0) return;
 
-        Constants.Rarities item_rarity = Constants.Rarities.NONE;
+        String item_rarity;
 
-        for (String lore : lores) {
-            item_rarity = lore.contains("COMMON") ? Constants.Rarities.COMMON :
-                    lore.contains("UNCOMMON") ? Constants.Rarities.UNCOMMON :
-                            lore.contains("RARE") ? Constants.Rarities.RARE :
-                                    lore.contains("EPIC") ? Constants.Rarities.EPIC : lore.equals("LEGENDARY") ? Constants.Rarities.LEGENDARY :
-                                            lore.contains("SPECIAL") ? Constants.Rarities.SPECIAL :
-                                                    lore.contains("VERY SPECIAL") ? Constants.Rarities.VERY_SPECIAL :
-                                                            Constants.Rarities.CELESTIAL;
-        }
-
-        Utils.broadCast(item_rarity.toString());
+        item_rarity = Helper.getRarity(lores);
 
         switch (selected_rarity) {
 
@@ -346,30 +337,30 @@ public class InventoryEvents implements Listener {
             // selected_rarity is the players rarity selection
 
             case CELESTIAL:
-                if (item_rarity == Constants.Rarities.COMMON ||
-                        item_rarity == Constants.Rarities.UNCOMMON ||
-                        item_rarity == Constants.Rarities.RARE ||
-                        item_rarity == Constants.Rarities.EPIC ||
-                        item_rarity == Constants.Rarities.LEGENDARY) e.setCancelled(true);
+                if (item_rarity.equals("common") ||
+                        item_rarity.equals("uncommon") ||
+                        item_rarity.equals("rare") ||
+                        item_rarity.equals("epic") ||
+                        item_rarity.equals("legendary")) e.setCancelled(true);
                 break;
             case LEGENDARY:
-                if (item_rarity == Constants.Rarities.COMMON ||
-                        item_rarity == Constants.Rarities.UNCOMMON ||
-                        item_rarity == Constants.Rarities.RARE ||
-                        item_rarity == Constants.Rarities.EPIC) e.setCancelled(true);
+                if (item_rarity.equals("common") ||
+                        item_rarity.equals("uncommon") ||
+                        item_rarity.equals("rare") ||
+                        item_rarity.equals("epic")) e.setCancelled(true);
                 break;
             case EPIC:
-                if (item_rarity == Constants.Rarities.COMMON ||
-                        item_rarity == Constants.Rarities.UNCOMMON ||
-                        item_rarity == Constants.Rarities.RARE) e.setCancelled(true);
+                if (item_rarity.equals("common") ||
+                        item_rarity.equals("uncommon") ||
+                        item_rarity.equals("rare")) e.setCancelled(true);
 
                 break;
             case RARE:
-                if (item_rarity == Constants.Rarities.COMMON || item_rarity == Constants.Rarities.UNCOMMON)
+                if (item_rarity.equals("common") || item_rarity.equals("uncommon"))
                     e.setCancelled(true);
                 break;
             case UNCOMMON:
-                if (item_rarity == Constants.Rarities.COMMON) e.setCancelled(true);
+                if (item_rarity.equals("common")) e.setCancelled(true);
                 break;
             case COMMON:
                 e.setCancelled(false);

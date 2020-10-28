@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
+import xyz.apollo30.skyblockremastered.constants.GUIs;
 import xyz.apollo30.skyblockremastered.managers.PacketManager;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
@@ -23,7 +23,7 @@ public class ActionBarTask extends BukkitRunnable {
 
             PlayerObject po = plugin.playerManager.playerObjects.get(plr);
 
-            String hp = Integer.toString(po.getHealth());
+            String hp = Integer.toString(po.getHealth() + po.getExtraHealth() + po.getAbsorptionHealth());
             String maxhp = Integer.toString(po.getMaxHealth());
 
             String defense = Integer.toString(po.getDefense());
@@ -31,7 +31,7 @@ public class ActionBarTask extends BukkitRunnable {
             String intell = Integer.toString(po.getIntelligence());
             String maxIntell = Integer.toString(po.getMaxIntelligence());
 
-            String actionbar = "&c" + hp + "/" + maxhp + GuiUtils.getUnicode("heart") + " HP" + "     &a" + defense + GuiUtils.getUnicode("defense") + " Defense" + "     &b" + intell + "/" + maxIntell + GuiUtils.getUnicode("intel") + " Intelligence";
+            String actionbar = (po.getAbsorptionHealth() > 0 ? "&e" : "&c") + hp + "/" + maxhp + GUIs.getUnicode("heart") + " HP" + "     &a" + defense + GUIs.getUnicode("defense") + " Defense" + "     &b" + intell + "/" + maxIntell + GUIs.getUnicode("intel") + " Intelligence";
             PacketManager.sendMessage(plr, Utils.chat(actionbar));
         }
     }

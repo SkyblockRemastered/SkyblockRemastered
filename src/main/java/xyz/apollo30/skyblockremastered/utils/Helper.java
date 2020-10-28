@@ -1,41 +1,134 @@
 package xyz.apollo30.skyblockremastered.utils;
 
-import org.bukkit.Color;
-import org.bukkit.Material;
+import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.util.Vector;
+import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class Helper {
 
-    public static String getRank(Player plr) {
-        if (plr.hasPermission("groups.admin")) return "&c[ADMIN] " + plr.getName();
-        else if (plr.hasPermission("groups.mod")) return "&2[MOD] " + plr.getName();
-        else if (plr.hasPermission("groups.helper")) return "&9[HELPER] " + plr.getName();
-        else if (plr.hasPermission("groups.builder")) return "&d[BUILDER] " + plr.getName();
-        else if (plr.hasPermission("groups.tester")) return "&9[BETA] " + plr.getName();
-        else if (plr.hasPermission("groups.youtuber")) return "&c[&fYOUTUBE&c] " + plr.getName();
-        else if (plr.hasPermission("groups.mvp++")) return "&e»» &6[MVP&0++&6] " + plr.getName();
-        else if (plr.hasPermission("groups.mvp+")) return "&b[MVP&0+&b] " + plr.getName();
-        else if (plr.hasPermission("groups.mvp")) return "&b[MVP] " + plr.getName();
-        else if (plr.hasPermission("groups.vip+")) return "&a[VIP&6+&a] " + plr.getName();
-        else if (plr.hasPermission("groups.vip")) return "&a[VIP] " + plr.getName();
-        else return "&7" + plr.getName();
+    public SkyblockRemastered plugin;
+
+    public Helper(final SkyblockRemastered plugin) {
+        this.plugin = plugin;
     }
 
-    public static void removeItem(Player plr, Material material) {
-        for(int i = 0; i < plr.getInventory().getSize(); i++){
-            ItemStack item = plr.getInventory().getItem(i);
-            if(item != null && item.getType().equals(material)) {
-                int amt = item.getAmount() - 1;
-                item.setAmount(amt);
-                plr.getInventory().setItem(i, amt > 0 ? item : null);
-                plr.updateInventory();
-                break;
+    public static String getRank(Player plr, boolean a) {
+        String prefix = "";
+        if (plr.hasPermission("groups.admin")) prefix = a ? "&c[ADMIN] " : "&c";
+        else if (plr.hasPermission("groups.mod")) prefix = a ? "&2[MOD] " : "&2";
+        else if (plr.hasPermission("groups.helper")) prefix = a ? "&9[HELPER] " : "&9";
+        else if (plr.hasPermission("groups.builder")) prefix = a ? "&d[BUILDER] " : "&d";
+        else if (plr.hasPermission("groups.tester")) prefix = a ? "&9[BETA] " : "&9";
+        else if (plr.hasPermission("groups.youtuber")) prefix = a ? "&c[&fYOUTUBE&c] " : "&c";
+        else if (plr.hasPermission("groups.mvp++")) prefix = a ? "&e»» &6[MVP&0++&6] " : "&6";
+        else if (plr.hasPermission("groups.mvp+")) prefix = a ? "&b[MVP&0+&b] " : "&b";
+        else if (plr.hasPermission("groups.mvp")) prefix = a ? "&b[MVP] " : "&b";
+        else if (plr.hasPermission("groups.vip+")) prefix = a ? "&a[VIP&6+&a] " : "&a";
+        else if (plr.hasPermission("groups.vip")) prefix = a ? "&a[VIP] " : "&a";
+        else prefix = "&7";
+
+        return prefix + plr.getName();
+    }
+
+    public static ItemStack addEnchantGlow(ItemStack item) {
+
+        ItemMeta meta = item.getItemMeta();
+        meta.addEnchant(Enchantment.DURABILITY, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_UNBREAKABLE);
+        item.setItemMeta(meta);
+
+        return NMSUtil.addString(item, "Unbreakable", "1");
+    }
+
+    public static void addItem(Inventory inv, ItemStack item, String uuid) {
+        inv.addItem(NMSUtil.addString(item, "UUID", uuid.length() > 0 ? uuid : UUID.randomUUID().toString()));
+    }
+
+    public static double triangularDistribution(double a, double b, double c) {
+        double F = (c - a) / (b - a);
+        double rand = Math.random();
+        if (rand < F) return a + Math.sqrt(rand * (b - a) * (c - a));
+        return b - Math.sqrt((1 - rand) * (b - a) * (b - c));
+    }
+
+    public static String getRarity(List<String> lores) {
+        String rarity = "none";
+        for (String lore : lores) {
+            if (lore.length() == 0) break;
+            if (lore.contains(Utils.chat("&f&lCOMMON"))) rarity = "common";
+            else if (lore.contains(Utils.chat("&a&lUNCOMMON"))) rarity = "uncommon";
+            else if (lore.contains(Utils.chat("&9&lRARE"))) rarity = "rare";
+            else if (lore.contains(Utils.chat("&5&lEPIC"))) rarity = "epic";
+            else if (lore.contains(Utils.chat("&6&lLEGENDARY"))) rarity = "legendary";
+            else if (lore.contains(Utils.chat("&d&lMYTHIC"))) rarity = "mythic";
+            else if (lore.contains(Utils.chat("&c&lSPECIAL"))) rarity = "special";
+            else if (lore.contains(Utils.chat("&c&lVERY SPECIAL"))) rarity = "very special";
+            else if (lore.contains(Utils.chat("&b&lCELESTIAL"))) rarity = "celestial";
+        }
+        return rarity;
+    }
+
+    public static void deathHandler(SkyblockRemastered plugin, Player plr, String type) {
+
+        plr.setHealth(plr.getMaxHealth());
+        PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+        po.resetHealth();
+
+        Bukkit.getScheduler().runTask(plugin, () -> plr.setFireTicks(0));
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> plr.setVelocity(new Vector()), 1L);
+
+        for (ItemStack content : plr.getInventory().getContents()) {
+            if (content != null && content.hasItemMeta() && content.getItemMeta().getDisplayName() != null) {
+                if (!plr.getWorld().getName().startsWith("playerislands/") && Utils.isInZone(plr.getLocation(), new Location(plr.getWorld(), -112, 255, -107), new Location(plr.getWorld(), 213, 29, 127))) {
+                    if (content.getItemMeta().getDisplayName().contains("Remnant of the Eye")) {
+                        if (plr.getLastDamageCause().getCause().equals(EntityDamageEvent.DamageCause.VOID)) {
+                            plr.sendMessage(Utils.chat("&5Your Remnant of the Eye saved you from certain death! You were safely teleported back to spawn!"));
+                            plr.teleport(new Location(plr.getWorld(), 173.5, 101, -3));
+                        } else {
+                            plr.sendMessage(Utils.chat("&5Your Remnant of the Eye saved you from certain death!"));
+                        }
+                        po.resetHealth();
+                        plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1.25F);
+                        plr.getInventory().removeItem(content);
+                        return;
+                    }
+                }
             }
+        }
+
+        if (type.equals("void")) {
+            if (!plr.getWorld().getName().startsWith("playerislands/")) {
+                plr.playSound(plr.getLocation(), Sound.ANVIL_LAND, 1F, 10F);
+                double purse = po.getPurse();
+                po.setPurse(po.getPurse() / 2);
+                plr.sendMessage(Utils.chat("&cYou died and lost " + String.format("%,.0f", purse / 2) + " coins!"));
+            } else plr.sendMessage(Utils.chat("&cYou fell into the void"));
+        } else {
+            double purse = po.getPurse();
+            po.setPurse(po.getPurse() / 2);
+
+            Location loc = plr.getWorld().getSpawnLocation();
+            loc.setPitch(0);
+            loc.setYaw(90);
+            plr.teleport(loc);
+
+            plr.sendMessage(Utils.chat("&cYou died and lost " + String.format("%,.0f", purse / 2) + " coins!"));
+            plr.playSound(plr.getLocation(), Sound.ANVIL_LAND, 1F, 10F);
         }
     }
 
@@ -46,8 +139,8 @@ public class Helper {
         return leatherArmor;
     }
 
-    public static boolean consumeItem(Player player, int count, Material mat) {
-        Map<Integer, ? extends ItemStack> ammo = player.getInventory().all(mat);
+    public static boolean consumeItem(Player player, int count, ItemStack item) {
+        Map<Integer, ? extends ItemStack> ammo = player.getInventory().all(item);
 
         int found = 0;
         for (ItemStack stack : ammo.values())

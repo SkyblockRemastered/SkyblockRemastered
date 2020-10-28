@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.objects.MobObject;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
+import xyz.apollo30.skyblockremastered.constants.GUIs;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.*;
@@ -38,8 +38,6 @@ public class MobManager {
 
         MobObject mo = new MobObject();
 
-        Utils.broadCast(name);
-
         // Custom Mobs
         if (name.equalsIgnoreCase("zombie villager")) {
             mo.setMaxHealth(120);
@@ -57,7 +55,6 @@ public class MobManager {
             zombie.getEquipment().setBoots(new ItemStack(Material.LEATHER_BOOTS));
 
             zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999999, 1, true));
-
 
         } else if (name.equalsIgnoreCase("zombie")) {
             mo.setMaxHealth(100);
@@ -273,19 +270,19 @@ public class MobManager {
 
         // Dragon
         else if (name.equalsIgnoreCase("celestial")) {
-            mo.setMaxHealth(1000000000);
+            mo.setMaxHealth(50000000);
             mo.setLevel(69420);
-            mo.setName("Celestial Draconis");
+            mo.setName("Celestial Dragon");
             plugin.so.setEnderDragon(mo);
         } else if (name.equalsIgnoreCase("protector")) {
             mo.setMaxHealth(9000000);
             mo.setLevel(1000);
             mo.setName("Protector Dragon");
             plugin.so.setEnderDragon(mo);
-        } else if (name.equalsIgnoreCase("demonic")) {
+        } else if (name.equalsIgnoreCase("old")) {
             mo.setMaxHealth(15000000);
             mo.setLevel(1000);
-            mo.setName("Demonic Dragon");
+            mo.setName("old Dragon");
             plugin.so.setEnderDragon(mo);
         } else if (name.equalsIgnoreCase("wise")) {
             mo.setMaxHealth(9000000);
@@ -328,7 +325,7 @@ public class MobManager {
 
         ArmorStand armorStand = entity.getWorld().spawn(entity.getLocation(), ArmorStand.class);
         armorStand.setGravity(false);
-        armorStand.setCustomName(Utils.chat("&8[&7Lv" + mo.getLevel() + "&8] &c" + mo.getName() + " &a" + mo.getHealth() + "&f/&a" + mo.getMaxHealth() + "&c" + GuiUtils.getUnicode("heart")));
+        armorStand.setCustomName(Utils.chat("&8[&7Lv" + mo.getLevel() + "&8] &c" + mo.getName() + " &a" + mo.getHealth() + "&f/&a" + mo.getMaxHealth() + "&c" + GUIs.getUnicode("heart")));
         armorStand.setCustomNameVisible(true);
         armorStand.setRemoveWhenFarAway(true);
         armorStand.setVisible(false);
