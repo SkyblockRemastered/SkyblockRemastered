@@ -1,6 +1,7 @@
 package xyz.apollo30.skyblockremastered.managers;
 
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClients;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
@@ -131,10 +132,7 @@ public class PlayerManager {
 
         doc.append("Skills", tempDoc);
 
-        FileConfiguration db = plugin.db.getPlayers();
-        if (db.isConfigurationSection(plr.getUniqueId().toString())) {
-            createPlayerData(plr);
-        }
+        MongoUtils.insertOrUpdate(new Document("uuid", plr.getUniqueId().toString()), doc);
 
         Utils.broadCast("Database saved for " + plr.getName());
     }
@@ -144,7 +142,7 @@ public class PlayerManager {
         try {
             PlayerObject po = new PlayerObject();
             FindIterable<Document> findResult = MongoUtils.getInstance().getPlayerCollection().find(new Document("uuid", plr.getUniqueId().toString()));
-            if (findResult == null) {
+            if (findResult.first() == null) {
                 Utils.broadCast("Database created for " + plr.getName());
                 buildPlayerData(plr);
                 createPlayerData(plr);
@@ -254,7 +252,7 @@ public class PlayerManager {
     }
 
     public static void buildPlayerData(Player plr) {
-        if (MongoUtils.getInstance().getPlayerCollection().find(new Document("uuid", plr.getUniqueId().toString())) == null)
+        if (MongoUtils.getInstance().getPlayerCollection().find(new Document("uuid", plr.getUniqueId().toString())).first() == null)
             return;
 
         String[] profile_fruits = {"Grapes", "Watermelon", "Mango", "Peach", "Apple", "Pear", "Kiwi"};

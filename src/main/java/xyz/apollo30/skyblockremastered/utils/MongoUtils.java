@@ -7,11 +7,11 @@ import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
 public class MongoUtils {
 
-    public static SkyblockRemastered plugin;
     private final MongoCollection<Document> playerCollection;
+    private static MongoUtils instance;
 
-    public MongoUtils(SkyblockRemastered plugin, String conn, String databaseName, String collectionName) {
-        MongoUtils.plugin = plugin;
+    public MongoUtils(String conn, String databaseName, String collectionName) {
+        instance = this;
         MongoClient client = MongoClients.create(conn);
         MongoDatabase database = client.getDatabase(databaseName);
         playerCollection = database.getCollection(collectionName);
@@ -22,14 +22,19 @@ public class MongoUtils {
     }
 
     public static MongoUtils getInstance() {
-        return plugin.mongoUtils;
+        return instance;
     }
 
-    public void setPlayerData(Player plr, String path, String value) {
-        FindIterable<Document> playerDoc = playerCollection.find(new Document("uuid", plr.getUniqueId().toString()));
-        if (playerDoc == null) {
 
+    public static void insertOrUpdate(Document identifier, Document doc) {
+        if (getInstance().getPlayerCollection().find(identifier).first() == null) {
+            getInstance().getPlayerCollection().insertOne(doc);
+        } else {
+            getInstance().getPlayerCollection().replaceOne(identifier, doc);
         }
     }
+
+
+
 
 }

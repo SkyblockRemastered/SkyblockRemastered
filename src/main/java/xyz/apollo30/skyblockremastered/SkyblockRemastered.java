@@ -41,7 +41,6 @@ public class SkyblockRemastered extends JavaPlugin {
     public HashMap<Entity, Long> indicator = new HashMap<>();
     public Miscs miscAbilities;
     public Weapons weaponAbilities;
-    public MongoUtils mongoUtils;
     public Dragon dragonEvent;
     public xyz.apollo30.skyblockremastered.dragons.Dragon dragon;
     public ServerObject so = new ServerObject();
@@ -58,7 +57,7 @@ public class SkyblockRemastered extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        mongoUtils = new MongoUtils(this, "mongoStringHere", "databaseName", "collectionName");
+        new MongoUtils("mongoStringHere", "databaseName", "collectionName");
         // Registering Custom Dragons
         nmsu.registerEntity("Dragon", 63, EntityEnderDragon.class, CustomEnderDragon.class);
 
