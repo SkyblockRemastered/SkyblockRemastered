@@ -231,6 +231,14 @@ public class ConstantTask extends BukkitRunnable {
 
 
             /**
+             * Tarantula Helmet Ability
+             * 1% Crit Damage per 10 strength
+             */
+            if (plr.getEquipment().getHelmet() != null && plr.getEquipment().getHelmet().hasItemMeta() && !plr.getEquipment().getHelmet().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getHelmet().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Tarantula Helmet"))) {
+                critDamage += (strength / 10);
+            }
+
+            /**
              * Superior Armor Full Set Ability
              * When a full set is worn, the player's stats are increased by 5%
              */

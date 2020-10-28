@@ -69,7 +69,7 @@ public class Weapons {
             location.setYaw(plr.getLocation().getYaw());
             location.setPitch(plr.getLocation().getPitch());
         } else {
-            location.setX(location.getX() > 0 ? location.getX() - .5 : location.getX() + .5);
+            location.setX(location.getX() > 0 ? location.getX() - .5 + 1 : location.getX() + .5 + 1);
             location.setZ(location.getX() > 0 ? location.getZ() + .5 : location.getZ() - .5);
 
             location.setYaw(plr.getLocation().getYaw());

@@ -190,7 +190,7 @@ public class PlayerObject {
     }
 
     public void subtractHealth(int i) {
-        baseHealth -= i;
+        health -= i;
     }
 
     public void addZealotKill() {

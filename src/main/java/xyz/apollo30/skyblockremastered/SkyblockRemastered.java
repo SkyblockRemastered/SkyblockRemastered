@@ -25,14 +25,12 @@ import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.objects.ServerObject;
 import xyz.apollo30.skyblockremastered.tasks.*;
 import xyz.apollo30.skyblockremastered.utils.NMSUtil;
-//import xyz.apollo30.skyblockremastered.utils.MongoUtils;
-//import xyz.apollo30.skyblockremastered.utils.Utils;
-//
-//import java.util.Date;
+import xyz.apollo30.skyblockremastered.utils.MongoUtils;
+import xyz.apollo30.skyblockremastered.utils.Utils;
+
+import java.util.Date;
 import java.util.HashMap;
-//import java.util.Map;
-//
-//import java.util.HashMap;
+import java.util.Map;
 
 public class SkyblockRemastered extends JavaPlugin {
 
@@ -43,6 +41,7 @@ public class SkyblockRemastered extends JavaPlugin {
     public HashMap<Entity, Long> indicator = new HashMap<>();
     public Miscs miscAbilities;
     public Weapons weaponAbilities;
+    public MongoUtils mongoUtils;
     public Dragon dragonEvent;
     public xyz.apollo30.skyblockremastered.dragons.Dragon dragon;
     public ServerObject so = new ServerObject();
@@ -58,6 +57,8 @@ public class SkyblockRemastered extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        mongoUtils = new MongoUtils(this, "mongoStringHere", "databaseName", "collectionName");
 
         // Registering Custom Dragons
         nmsu.registerEntity("Dragon", 63, EntityEnderDragon.class, CustomEnderDragon.class);

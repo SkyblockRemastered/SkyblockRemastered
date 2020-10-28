@@ -11,13 +11,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.Vector;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.*;
 
 public class Helper {
 
@@ -43,6 +44,39 @@ public class Helper {
         else prefix = "&7";
 
         return prefix + plr.getName();
+    }
+
+    public static String inventoryToString(Inventory inventory) {
+        try {
+            ByteArrayOutputStream str = new ByteArrayOutputStream();
+            BukkitObjectOutputStream data = new BukkitObjectOutputStream(str);
+            data.writeInt(inventory.getSize());
+            data.writeObject(inventory.getName());
+            for (int i = 0; i < inventory.getSize(); i++) {
+                data.writeObject(inventory.getItem(i));
+            }
+            data.close();
+            return Base64.getEncoder().encodeToString(str.toByteArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static Inventory stringToInventory(String inventoryData) {
+        try {
+            ByteArrayInputStream stream = new ByteArrayInputStream(Base64.getDecoder().decode(inventoryData));
+            BukkitObjectInputStream data = new BukkitObjectInputStream(stream);
+            Inventory inventory = Bukkit.createInventory(null, data.readInt(), data.readObject().toString());
+            for (int i = 0; i < inventory.getSize(); i++) {
+                inventory.setItem(i, (ItemStack) data.readObject());
+            }
+            data.close();
+            return inventory;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static ItemStack addEnchantGlow(ItemStack item) {

@@ -425,7 +425,7 @@ public class Dragon implements Listener {
             if (Math.random() > .8) rarity = "Legendary";
             else rarity = "Epic";
 
-            inv.addItem(rarity.equalsIgnoreCase("legendary") ? NMSUtil.addString(plugin.pets.ENDER_DRAGON_LEGENDARY, "UUID", UUID.randomUUID().toString()) : NMSUtil.addString(plugin.pets.enderDragonEpic, "UUID", UUID.randomUUID().toString()));
+            inv.addItem(rarity.equalsIgnoreCase("legendary") ? NMSUtil.addString(plugin.pets.ENDER_DRAGON_LEGENDARY, "UUID", UUID.randomUUID().toString()) : NMSUtil.addString(plugin.pets.ENDER_DRAGON_EPIC, "UUID", UUID.randomUUID().toString()));
             String color = rarity.equalsIgnoreCase("legendary") ? "&6" : "&5";
             giveFrags(inv, dragon, (int) Math.floor((double) weight / 22));
             broadcastWorld(plr, Helper.getRank(plr, true) + " &ehas obtained a &7[Lvl 1] " + color + "Ender Dragon");
@@ -752,10 +752,5 @@ public class Dragon implements Listener {
 
             plugin.so.setDragonName(null);
         }
-    }
-
-    @EventHandler
-    public void onEntityExplode(EntityExplodeEvent e) {
-        e.setCancelled(true);
     }
 }

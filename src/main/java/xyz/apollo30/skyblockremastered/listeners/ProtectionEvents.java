@@ -147,11 +147,7 @@ public class ProtectionEvents implements Listener {
 
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent e) {
-        if (e.getEntity().getWorld().getName().equals("hub")) {
-            e.setCancelled(true);
-        } else if (e.getEntity().getWorld().getName().startsWith("playerislands/")) {
-            if (e.getEntityType() != EntityType.PRIMED_TNT) e.setCancelled(true);
-        } else e.setCancelled(true);
+        e.setCancelled(!e.getEntity().getWorld().getName().startsWith("playerislands/"));
     }
 
     @EventHandler

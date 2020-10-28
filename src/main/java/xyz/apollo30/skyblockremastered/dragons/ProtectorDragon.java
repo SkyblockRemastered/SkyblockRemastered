@@ -24,14 +24,14 @@ public class ProtectorDragon extends Dragon {
         Pets p = new Pets(plugin);
         Stones s = new Stones(plugin);
         Miscs m = new Miscs(plugin);
-        int weight = (int) Math.random();
-        int damage = (int) Math.random();
-        int placedEyes = (int) Math.random();
+        double weight = Math.random();
+        double damage = Math.random();
+        double placedEyes = Math.random();
         double chance = Math.random() * 100;
 
-        if (weight <=0 || damage <= 0) { Masterclass.broadcastWorld(plr, Helper.getRank(plr) + " has 0 weight L");
+        if (weight <=0 || damage <= 0) { Masterclass.broadcastWorld(plr, Helper.getRank(plr, true) + " has 0 weight L");
         } else if (weight >= 550 && chance < 10) {
-            Masterclass.broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &9Resistant Scale&e!");
+            Masterclass.broadcastWorld(plr, Helper.getRank(plr, true) + " &ehas obtained &9Resistant Scale&e!");
             plr.getInventory().addItem(m.RESISTANT_SCALE);
         } else if (weight >= 450) {
             // edrag chance
@@ -39,21 +39,21 @@ public class ProtectorDragon extends Dragon {
                 // got leg
                 if (chance < 20) {
                     plr.getInventory().addItem(p.ENDER_DRAGON_LEGENDARY);
-                    Masterclass.broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &7[Lvl 1] &6Ender Dragon&e!");
+                    Masterclass.broadcastWorld(plr, Helper.getRank(plr, true) + " &ehas obtained &7[Lvl 1] &6Ender Dragon&e!");
                 }
                 // got epic
                 else {
                     plr.getInventory().addItem(p.ENDER_DRAGON_EPIC);
-                    Masterclass.broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &7[Lvl 1] &5Ender Dragon&e!");
+                    Masterclass.broadcastWorld(plr, Helper.getRank(plr, true) + " &ehas obtained &7[Lvl 1] &5Ender Dragon&e!");
                 }
             }
             else if (chance < 25) {
                 plr.getInventory().addItem(s.DRAGON_CLAW);
-                Masterclass.broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &9Dragon Claw&e!");
+                Masterclass.broadcastWorld(plr, Helper.getRank(plr, true) + " &ehas obtained &9Dragon Claw&e!");
             }
             else if (chance < 50) {
                 plr.getInventory().addItem(s.DRAGON_SCALE);
-                Masterclass.broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &9Dragon Scale&e!");
+                Masterclass.broadcastWorld(plr, Helper.getRank(plr, true) + " &ehas obtained &9Dragon Scale&e!");
             }
         }
         else if (weight >= 400 && chance < 50) {

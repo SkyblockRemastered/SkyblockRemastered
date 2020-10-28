@@ -23,7 +23,7 @@ public class Masterclass {
                 put("WISE", new WiseDragon());
                 put("UNSTABLE", new UnstableDragon());
                 put("OLD", new OldDragon());
-                put("PROTECTOR", new ProtectorDragon());
+                put("PROTECTOR", new ProtectorDragon(plugin));
             }
         };
     }
@@ -33,7 +33,7 @@ public class Masterclass {
         }
     }
     public static void broadcastPiece(Player plr, String piece, String f) {
-        broadcastWorld(plr, Helper.getRank(plr) + " &ehas obtained &6" + f.toUpperCase() + " Dragon " + piece + "&e!");
+        broadcastWorld(plr, Helper.getRank(plr, true) + " &ehas obtained &6" + f.toUpperCase() + " Dragon " + piece + "&e!");
     }
 }
 

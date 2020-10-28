@@ -56,6 +56,44 @@ public class ConfigManager {
         this.plugin.saveResource("Players.yml", false);
     }
 
+    // Config
+    private FileConfiguration config;
+    private File configFile;
+
+    public FileConfiguration getConfig() {
+        if (this.config == null) {
+            this.reloadConfig();
+        }
+        return this.config;
+    }
+    public void reloadConfig() {
+        if (!plugin.getDataFolder().exists()) {
+            plugin.getDataFolder().mkdir();
+        }
+
+        minionFile = new File(plugin.getDataFolder() + File.separator + "config.yml");
+        if (!configFile.exists()) {
+            try {
+                configFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        config = YamlConfiguration.loadConfiguration(configFile);
+    }
+
+    public void saveConfig() {
+        if (this.config == null || this.configFile == null)
+            return;
+
+        try {
+            this.getConfig().save(this.configFile);
+        } catch (IOException e) {
+            System.out.print("Could not save config to " + this.configFile);
+        }
+    }
+
     // Minions
 
     private FileConfiguration minionConfig;

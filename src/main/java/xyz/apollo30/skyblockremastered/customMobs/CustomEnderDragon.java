@@ -36,7 +36,6 @@ public class CustomEnderDragon extends EntityEnderDragon {
 
     public static int endCrystals = 0;
     public static boolean targetingPlayer = false;
-    public static boolean isStopped = false;
 
     public Location getRandomLocation(Location entity, Location loc1, Location loc2) {
 
@@ -67,7 +66,19 @@ public class CustomEnderDragon extends EntityEnderDragon {
         return new Location(loc1.getWorld(), targetX, targetY, targetZ);
     }
 
+    /**
+     * - Those found guilty of charges on which are currently tried by the Areopagites, the Epheate, and the officers pf the city hall are to remain
+     * disfranchised, while all the others are to regain their rights and franchises,
+     * - Immediately joining whichever side is acting with a higher degree of integrity and justice.
+     * - If someone had been the victim of an assault, for instance, and had been beaten up or injured,
+     * it was possible for anyone who had the resources and the will to bring a lawsuit against the offender and prosecute them.
+     * - If the husband of an heiress is impotent (helpless/powerless), she has the right to have sex with close relatives with his.
+     * - It is illegal to slander a dead person.
+     * - You cannot slander a living person
+     */
+
     private void respawnCrystal() {
+        if (getBukkitEntity().isDead()) return;
         List<Location> crystalSpawns = new ArrayList<>();
         crystalSpawns.add(new Location(getBukkitEntity().getWorld(), -10.5, 44.5, 48.5));
         crystalSpawns.add(new Location(getBukkitEntity().getWorld(), -39.5, 69.5, 35.5));
@@ -104,7 +115,7 @@ public class CustomEnderDragon extends EntityEnderDragon {
                     curX = currentLoc.getX();
                     curY = currentLoc.getY();
                     curZ = currentLoc.getZ();
-                    destinationLoc = getRandomLocation(getBukkitEntity().getLocation(), new Location(getBukkitEntity().getWorld(), -24, 9, -33), new Location(getBukkitEntity().getWorld(), 32, 70, 29));
+                    destinationLoc = getRandomLocation(getBukkitEntity().getLocation(), new Location(getBukkitEntity().getWorld(), -24, 9, -33), new Location(getBukkitEntity().getWorld(), 32, 20, 29));
                     onPath = true;
                     // Utils.broadCast("Path Started at " + destinationLoc.getX() + ", " + destinationLoc.getY() + ", " + destinationLoc.getZ());
                 }
@@ -116,10 +127,10 @@ public class CustomEnderDragon extends EntityEnderDragon {
             public void run() {
                 if (getBukkitEntity().isDead()) this.cancel();
 
-                Utils.broadCast(Utils.isInZone(getBukkitEntity().getLocation(), new Location(getBukkitEntity().getWorld(), -46, 9, -48), new Location(getBukkitEntity().getWorld(), 54, 70, 38)) + " ");
+                // Utils.broadCast(Utils.isInZone(getBukkitEntity().getLocation(), new Location(getBukkitEntity().getWorld(), -46, 9, -48), new Location(getBukkitEntity().getWorld(), 54, 50, 38)) + " ");
 
-                if (destinationLoc == null && !Utils.isInZone(getBukkitEntity().getLocation(), new Location(getBukkitEntity().getWorld(), -46, 9, -48), new Location(getBukkitEntity().getWorld(), 54, 70, 38))) {
-                    destinationLoc = getRandomLocation(getBukkitEntity().getLocation(), new Location(getBukkitEntity().getWorld(), -24, 9, -33), new Location(getBukkitEntity().getWorld(), 32, 70, 29));
+                if (destinationLoc == null && !Utils.isInZone(getBukkitEntity().getLocation(), new Location(getBukkitEntity().getWorld(), -46, 9, -48), new Location(getBukkitEntity().getWorld(), 54, 20, 38))) {
+                    destinationLoc = getRandomLocation(getBukkitEntity().getLocation(), new Location(getBukkitEntity().getWorld(), -24, 9, -33), new Location(getBukkitEntity().getWorld(), 32, 20, 29));
                     currentLoc = getBukkitEntity().getLocation();
                     curX = currentLoc.getX();
                     curY = currentLoc.getY();
@@ -169,9 +180,9 @@ public class CustomEnderDragon extends EntityEnderDragon {
             public void run() {
 
                 if (getBukkitEntity().isDead()) this.cancel();
-                if (Math.random() > .3 && endCrystals < 5) respawnCrystal();
+                if (Math.random() > 1 - (endCrystals * .2) && endCrystals < 5) respawnCrystal();
 
-                // 1, 64, -3
+                //if (Math.random() > )
 
             }
         }.runTaskTimer(JavaPlugin.getProvidingPlugin(SkyblockRemastered.class), 1200L, 1200L);

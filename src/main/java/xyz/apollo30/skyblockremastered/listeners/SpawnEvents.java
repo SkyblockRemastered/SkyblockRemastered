@@ -164,11 +164,11 @@ public class SpawnEvents implements Listener {
         Utils.addItem(plr.getInventory(), nether_star, 9);
 
         // Create Player.yml section for them
-        PlayerManager.createPlayerData(plr, plr.getUniqueId().toString(), plugin.db.getPlayers());
+        PlayerManager.createPlayerData(plr);
         plugin.db.savePlayers();
 
         // Give the player a temporary database.
-        if (plugin.playerManager.getPlayerData(plr) == null) plugin.playerManager.createPlayerData(plr);
+        if (plugin.playerManager.getPlayerData(plr) == null) PlayerManager.createPlayerData(plr);
 
         // If a player joins during a dragon fight
         plugin.dragonEvent.playerDamage.computeIfAbsent(plr, k -> (double) 0);

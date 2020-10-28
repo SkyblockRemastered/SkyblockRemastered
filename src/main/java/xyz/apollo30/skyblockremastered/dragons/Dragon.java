@@ -7,5 +7,3 @@ public abstract class Dragon {
     Player plr;
     public abstract void getItem();
 }
-
-

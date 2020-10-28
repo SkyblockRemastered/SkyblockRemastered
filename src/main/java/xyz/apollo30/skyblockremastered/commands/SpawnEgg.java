@@ -131,7 +131,7 @@ public class SpawnEgg implements CommandExecutor {
                 Draconis.setItemMeta(meta);
                 plr.getInventory().addItem(Draconis);
             case "enderdragon":
-                plr.getInventory().addItem(NMSUtil.addString(plugin.pets.enderDragonLegendary, "UUID", UUID.randomUUID().toString()));
+                plr.getInventory().addItem(NMSUtil.addString(plugin.pets.ENDER_DRAGON_LEGENDARY, "UUID", UUID.randomUUID().toString()));
         }
 
         return false;

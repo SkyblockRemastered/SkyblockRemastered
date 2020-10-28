@@ -384,6 +384,17 @@ public class DamageEvents implements Listener {
             // Checking if the entity is a creature and not an arrow or a dropped item
             if (e.getEntity() instanceof LivingEntity) {
 
+                EntityDamageEvent.DamageCause[] uniqueCauses = {
+                        EntityDamageEvent.DamageCause.POISON,
+                        EntityDamageEvent.DamageCause.FIRE_TICK,
+                        EntityDamageEvent.DamageCause.FIRE,
+                        EntityDamageEvent.DamageCause.LAVA,
+                        EntityDamageEvent.DamageCause.WITHER,
+                        EntityDamageEvent.DamageCause.DROWNING,
+                        EntityDamageEvent.DamageCause.BLOCK_EXPLOSION,
+                        EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
+                };
+
                 if (e.getEntity().getType() == EntityType.PLAYER) {
 
                     Player target = (Player) e.getEntity();
@@ -397,20 +408,11 @@ public class DamageEvents implements Listener {
                         if (e.getEntityType() == EntityType.PLAYER) Helper.deathHandler(plugin, target, "other");
                     }
 
-                    EntityDamageEvent.DamageCause[] uniqueCauses = {
-                            EntityDamageEvent.DamageCause.POISON,
-                            EntityDamageEvent.DamageCause.FIRE_TICK,
-                            EntityDamageEvent.DamageCause.FIRE,
-                            EntityDamageEvent.DamageCause.LAVA,
-                            EntityDamageEvent.DamageCause.WITHER,
-                            EntityDamageEvent.DamageCause.DROWNING
-                    };
-
                     // Checks if the damage cause was unique to have its own custom color.
                     for (EntityDamageEvent.DamageCause cause : uniqueCauses) {
                         if (e.getCause() == cause) {
                             type = cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.LAVA ? "fire" : cause == EntityDamageEvent.DamageCause.DROWNING ? "water" : cause == EntityDamageEvent.DamageCause.WITHER ? "wither" : cause == EntityDamageEvent.DamageCause.POISON ? "poison" : "normal";
-                            damage = cause == EntityDamageEvent.DamageCause.LAVA ? 20 : 5;
+                            damage = cause == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION || cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION ? 200 : cause == EntityDamageEvent.DamageCause.LAVA ? 20 : 5;
                             break;
                         }
                     }
@@ -421,7 +423,7 @@ public class DamageEvents implements Listener {
 
                     po.subtractHealth(damage);
                     int health = po.getHealth();
-                    if (health <= 0) ((LivingEntity) e.getEntity()).setHealth(0);
+                    if (health <= 0 && !target.isDead()) Helper.deathHandler(plugin, target, "other");
                 } else {
 
                     LivingEntity target = (LivingEntity) e.getEntity();
@@ -430,15 +432,6 @@ public class DamageEvents implements Listener {
                     int damage = 5;
 
                     if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) return;
-
-                    EntityDamageEvent.DamageCause[] uniqueCauses = {
-                            EntityDamageEvent.DamageCause.POISON,
-                            EntityDamageEvent.DamageCause.FIRE_TICK,
-                            EntityDamageEvent.DamageCause.FIRE,
-                            EntityDamageEvent.DamageCause.LAVA,
-                            EntityDamageEvent.DamageCause.WITHER,
-                            EntityDamageEvent.DamageCause.DROWNING
-                    };
 
                     // Checks if the damage cause was unique to have its own custom color.
                     for (EntityDamageEvent.DamageCause cause : uniqueCauses) {
