@@ -65,6 +65,10 @@ public class Miscs {
 
     public ItemStack RADIANT_POWER_ORB = Utils.addLore(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2FiNGM0ZDZlZTY5YmMyNGJiYTJiOGZhZjY3YjlmNzA0YTA2YjAxYWE5M2YzZWZhNmFlZjdhOTY5NmM0ZmVlZiJ9fX0="), "&aRadiant Power Orb", "&6Item Ability: Deploy", "&7Place an orb for &a30s &7buffing", "&7up to &b5 &7players within &a18", "&7blocks", "&8Costs 50% of max mana.", "&8Only one orb applies per player.", " ", "&aOrb Buff: Radiant", "&7Heals &c1% &7of max &c❤&7 per second.", " ", "&4☠ &cRequires &5Wolf Slayer 2", "&a&lUNCOMMON");
 
-    public ItemStack RESISTANT_SCALE = Utils.addLore(new ItemStack(Material.PRISMARINE_SHARD), "&9Resitant Scale", "blah blah blah", "Gives player 100 defense");
+    public ItemStack RESISTANT_SCALE = Utils.addLore(new ItemStack(Material.PRISMARINE_SHARD), "&9Resitant Scale", "blah blah blah", "Gives player 100 defense", "is a pet item");
+
+    public ItemStack WALKING_CANE = Utils.addLore(new ItemStack(Material.STICK), "&5Walking Cane", "takes 1/4 of your speed for 30 seconds and gives you 1/4 of your max health back");
+
+    public ItemStack YOUNG_BONE = Utils.addLore(new ItemStack(Material.BONE), "gives 5 percent more speed while in your inventory", "exceeds speed cap");
 }
 

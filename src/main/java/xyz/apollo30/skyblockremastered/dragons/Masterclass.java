@@ -8,21 +8,19 @@ import xyz.apollo30.skyblockremastered.utils.Utils;
 import java.util.HashMap;
 
 public class Masterclass {
-    private final SkyblockRemastered plugin;
     public static HashMap<String, Dragon> dragonMap;
     private final HashMap<Player, Integer> placedPlayerEyes = new HashMap<>();
 
     public Masterclass(SkyblockRemastered plugin) {
-        this.plugin = plugin;
         dragonMap = new HashMap<String, Dragon>() {
             {
                 put("CELESTIAL", new CelestialDragon(plugin));
-                put("SUPERIOR", new SuperiorDragon());
-                put("STRONG", new StrongDragon());
-                put("YOUNG", new YoungDragon());
-                put("WISE", new WiseDragon());
-                put("UNSTABLE", new UnstableDragon());
-                put("OLD", new OldDragon());
+                put("SUPERIOR", new SuperiorDragon(plugin));
+                put("STRONG", new StrongDragon(plugin));
+                put("YOUNG", new YoungDragon(plugin));
+                put("WISE", new WiseDragon(plugin));
+                put("UNSTABLE", new UnstableDragon(plugin));
+                put("OLD", new OldDragon(plugin));
                 put("PROTECTOR", new ProtectorDragon(plugin));
             }
         };

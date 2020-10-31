@@ -23,5 +23,6 @@ public class Weapons {
     public ItemStack POOCH_SWORD = Utils.addLore(new ItemStack(Material.GOLD_SWORD), "&6Pooch Sword", "&7Damage: &c+120", "&7Strength: &c+20", "&7Crit Damage: &c+50%", " ", "&7Speed: &a+5", " ", "&7Deal &c+1 Damage &7per &c50 max ❤&7.", "&7Receive &a-20% &7damage from wolves.", "&7Gain &c+150❁ Strength &7against wolves.", " ", "&8This item can be reforged!", "&4☠ &cRequires &5Wolf Slayer 6", "&6&lLEGENDARY SWORD");
     public ItemStack SHAMAN_SWORD = Utils.addLore(new ItemStack(Material.IRON_SWORD), "&5Shaman Sword", "&7Damage: &c+100", "&7Strength: &c+20", " ", "&7Speed: &a+5", " ", "&7Deal &c+1 Damage &7per &c50 max ❤&7.", "&7Receive &a-20% &7damage from wolves.", " ", "&8This item can be reforged!", "&4☠ &cRequires &5Wolf Slayer 3", "&5&lEPIC SWORD");
     public ItemStack ROGUE_SWORD = Utils.addLore(new ItemStack(Material.GOLD_SWORD), "&fRogue Sword", "&7Damage: &c+20", "&6Item Ability: Speed Boost &e&lRIGHT CLICK", "&7Increases your movement &f✦", "&fSpeed&7 by &a+20&7 for &a30", "&7seconds.", "&8Mana Cost: &350", "&8Half speed if already active.", " ", "&8This item can be reforged!", "&f&lCOMMON SWORD");
-
+    public ItemStack LIGHTNING_STAFF = Utils.addLore(new ItemStack(Material.BLAZE_ROD), "casts lighting on all nearby enemies, dealing double your strength.", "30 second cooldown");
+    public ItemStack MAGE_BEAM = Utils.addLore(new ItemStack(Material.CARROT), "why...", "just &owhy");
 }

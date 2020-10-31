@@ -14,10 +14,7 @@ import xyz.apollo30.skyblockremastered.commands.*;
 import xyz.apollo30.skyblockremastered.customMobs.CustomEnderDragon;
 import xyz.apollo30.skyblockremastered.events.Dragon;
 import xyz.apollo30.skyblockremastered.events.TradeEvents;
-import xyz.apollo30.skyblockremastered.items.Armor;
-import xyz.apollo30.skyblockremastered.items.Bows;
-import xyz.apollo30.skyblockremastered.items.Fragments;
-import xyz.apollo30.skyblockremastered.items.Pets;
+import xyz.apollo30.skyblockremastered.items.*;
 import xyz.apollo30.skyblockremastered.listeners.*;
 import xyz.apollo30.skyblockremastered.managers.ConfigManager;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
@@ -53,6 +50,7 @@ public class SkyblockRemastered extends JavaPlugin {
     public Armor armor = new Armor(this);
     public Fragments fragments = new Fragments(this);
     public Bows bows = new Bows(this);
+    public Stones stones = new Stones(this);
 
     @Override
     public void onEnable() {
