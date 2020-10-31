@@ -35,8 +35,8 @@ public class InventoryEvents implements Listener {
     @EventHandler
     public void onPlayerClick(InventoryClickEvent e) {
 
-        if (e.getCurrentItem() == null)
-            return;
+        if (e.getCurrentItem() == null) return;
+
         Player plr = (Player) e.getView().getPlayer();
         String title = e.getInventory().getTitle();
         String item = e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() ? e.getCurrentItem().getItemMeta().getDisplayName() : null;
@@ -252,6 +252,12 @@ public class InventoryEvents implements Listener {
         if (title.startsWith("You   ")) {
             e.setCancelled(true);
 
+        }
+        if (e.getClick().isShiftClick() && !(e.getCurrentItem().getType() == Material.SKULL || e.getCurrentItem().getType() == Material.SKULL_ITEM)) {
+            if (e.getWhoClicked().getInventory().getHelmet() == null) {
+                e.setCurrentItem(null);
+                e.getWhoClicked().getInventory().setHelmet(new ItemStack(e.getCurrentItem()));
+            }
         }
     }
 

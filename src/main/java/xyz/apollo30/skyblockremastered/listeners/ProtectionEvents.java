@@ -96,7 +96,7 @@ public class ProtectionEvents implements Listener {
             e.setCancelled(true);
         } else {
             assert item != null;
-            if (item.getType().equals(Material.SKULL) || item.getType().equals(Material.SKULL_ITEM)) {
+            if (item.getType() == Material.SKULL || item.getType() == Material.SKULL_ITEM) {
                 e.setCancelled(true);
             }
         }
