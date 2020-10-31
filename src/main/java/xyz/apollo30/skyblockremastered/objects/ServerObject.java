@@ -17,4 +17,5 @@ public class ServerObject {
     String dragonName = null;
     String riggedDragon = null;
     BukkitTask movementManager = null;
+    boolean pvp = false;
 }

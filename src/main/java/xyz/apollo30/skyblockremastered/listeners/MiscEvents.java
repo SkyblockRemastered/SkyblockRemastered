@@ -17,7 +17,7 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
+import xyz.apollo30.skyblockremastered.constants.GUIs;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 public class MiscEvents implements Listener {
@@ -32,8 +32,8 @@ public class MiscEvents implements Listener {
 
     @EventHandler
     public void onServerListPing(ServerListPingEvent e) {
-        e.setMotd(Utils.chat("&6SkyblockRemastered &7- &8[&71.8&8]\n&b&k|&r &9Beta Release Coming Soon &b&k|&r"));
-        e.setMaxPlayers(100);
+        e.setMotd(Utils.chat("                         &eSkyblock Remastered &f[1.8]\n       &fDragon Simulator &e| play.apollo30.xyz | &aOnline"));
+        if (e.getMaxPlayers() != 100) e.setMaxPlayers(100);
     }
 
     @EventHandler
@@ -53,44 +53,6 @@ public class MiscEvents implements Listener {
         e.setCancelled(e.toWeatherState());
     }
 
-//    @EventHandler
-//    public void onPlayerItemHeld(PlayerItemHeldEvent e) {
-//
-//        Player plr = e.getPlayer();
-//        PlayerObject po = plugin.playerManager.playerObjects.get(plr);
-//
-//        for (ItemStack item : plr.getInventory().getContents()) {
-//            if (item == null) return;
-////            addStats(item);
-//            addRarity(item);
-//        }
-//    }
-//
-//    private void addRarity(ItemStack item) {
-//
-//        List<Integer> itemIds = new ArrayList<>(Arrays.asList(256, 257, 258, 259, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 283, 284, 285, 286, 290, 291, 292, 293, 294, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317));
-//        if (itemIds.contains(item.getTypeId())) {
-//            if (!item.hasItemMeta()) {
-//                List<Integer> common = new ArrayList<>(Arrays.asList())
-//            }
-//            switch ()
-//        }
-//
-//
-//        if (!item.hasItemMeta()) {
-//            Utils.addLore(item, "", "&7Damage: &c+20", "&7Strength: &c+30", "", "&b&lCELESTIAL");
-//            ItemMeta meta = item.getItemMeta();
-//            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_POTION_EFFECTS);
-//        }
-//
-//
-//    }
-
-//
-//    private void addStats(ItemStack item) {
-//        Utils.addLore(item, "", "");
-//    }
-
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         Player plr = e.getPlayer();
@@ -104,7 +66,7 @@ public class MiscEvents implements Listener {
 
             if (e.getItem() != null && e.getItem().hasItemMeta() && item.getItemMeta().getDisplayName() != null) {
                 if (item.getItemMeta().getDisplayName().equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
-                    GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+                    GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
                     e.setCancelled(true);
                 }
             }
@@ -127,7 +89,7 @@ public class MiscEvents implements Listener {
                         plugin.dragonEvent.retrieveSummoningEye(e);
                     } else if (e.getItem() != null && e.getItem().hasItemMeta()) {
                         if (item.getItemMeta().getDisplayName().equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
-                            GuiUtils.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+                            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
                             e.setCancelled(true);
                         } else if (item.getItemMeta().getDisplayName().contains(Utils.chat("Aspect of The End"))) {
                             plugin.weaponAbilities.aspect_of_the_end(plr);

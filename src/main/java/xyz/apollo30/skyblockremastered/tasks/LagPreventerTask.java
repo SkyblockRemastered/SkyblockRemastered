@@ -1,18 +1,15 @@
 package xyz.apollo30.skyblockremastered.tasks;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.managers.PacketManager;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
+import xyz.apollo30.skyblockremastered.constants.GUIs;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 public class LagPreventerTask extends BukkitRunnable {
@@ -42,7 +39,7 @@ public class LagPreventerTask extends BukkitRunnable {
         // Checking for loose armor_stands
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
-                if (entity.getCustomName() != null && entity.getCustomName().startsWith(Utils.chat("&8[&7Lv")) && entity.getCustomName().endsWith(Utils.chat("&c" + GuiUtils.getUnicode("heart")))) {
+                if (entity.getCustomName() != null && entity.getCustomName().startsWith(Utils.chat("&8[&7Lv")) && entity.getCustomName().endsWith(Utils.chat("&c" + GUIs.getUnicode("heart")))) {
                     if (entity.getVehicle() == null) entity.remove();
                 }
             }

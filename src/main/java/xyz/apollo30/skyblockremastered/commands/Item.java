@@ -37,7 +37,9 @@ public class Item implements CommandExecutor {
         inv.addItem(plugin.armor.YOUNG_DRAGON_HELMET, plugin.armor.YOUNG_DRAGON_BOOTS, plugin.armor.YOUNG_DRAGON_LEGGINGS, plugin.armor.YOUNG_DRAGON_CHESTPLATE);
         inv.addItem(plugin.armor.UNSTABLE_DRAGON_HELMET, plugin.armor.UNSTABLE_DRAGON_BOOTS, plugin.armor.UNSTABLE_DRAGON_LEGGINGS, plugin.armor.UNSTABLE_DRAGON_CHESTPLATE);
         inv.addItem(plugin.armor.CELESTIAL_DRAGON_HELMET);
-        inv.addItem(plugin.weapons.ASPECT_OF_THE_DRAGONS, plugin.weapons.EDIBLE_MACE, plugin.weapons.POOCH_SWORD, plugin.weapons.ROGUE_SWORD, plugin.weapons.SHAMAN_SWORD);
+        inv.addItem(plugin.weapons.ASPECT_OF_THE_DRAGONS, plugin.weapons.EDIBLE_MACE, plugin.weapons.POOCH_SWORD, plugin.weapons.ROGUE_SWORD, plugin.weapons.SHAMAN_SWORD, plugin.weapons.ASPECT_OF_THE_END);
+        inv.addItem(plugin.armor.HELMET_OF_THE_STARS, plugin.armor.CHESTPLATE_OF_THE_STARS, plugin.armor.LEGGINGS_OF_THE_STARS, plugin.armor.BOOTS_OF_THE_STARS);
+        inv.addItem(plugin.miscs.GRAPPLING_HOOK, plugin.armor.TARANTULA_HELMET, plugin.armor.TARANTULA_CHESTPLATE, plugin.armor.TARANTULA_LEGGINGS, plugin.armor.TARANTULA_BOOTS, plugin.bows.RUNAANS_BOW);
         plr.openInventory(inv);
 
         return false;

@@ -31,7 +31,8 @@ public class Weapons {
             return;
         }
 
-        po.setIntelligence(po.getIntelligence() - 50);
+        int usedMana = 50;
+        po.setIntelligence(po.getIntelligence() - usedMana);
 
         plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1F);
 
@@ -60,13 +61,26 @@ public class Weapons {
         }
 
         Location location = block.getLocation();
-        location.setYaw(plr.getLocation().getYaw());
-        location.setPitch(plr.getLocation().getPitch());
+
+        if (plr.getLocation().getYaw() >= 0 && plr.getLocation().getYaw() <= -180) {
+            location.setX(location.getX() > 0 ? location.getX() + .5 : location.getX() - .5);
+            location.setZ(location.getX() > 0 ? location.getZ() - .5 : location.getZ() + .5);
+
+            location.setYaw(plr.getLocation().getYaw());
+            location.setPitch(plr.getLocation().getPitch());
+        } else {
+            location.setX(location.getX() > 0 ? location.getX() - .5 : location.getX() + .5);
+            location.setZ(location.getX() > 0 ? location.getZ() + .5 : location.getZ() - .5);
+
+            location.setYaw(plr.getLocation().getYaw());
+            location.setPitch(plr.getLocation().getPitch());
+        }
+
         plr.teleport(location);
-        plr.sendMessage(Utils.chat(""));
+        plr.sendMessage(Utils.chat("&aUsed &6Instant Transmission &b(" + usedMana + " Mana)"));
     }
 
-    public void inkWank(Player plr) {
+    public void inkWand(Player plr) {
 
     }
 

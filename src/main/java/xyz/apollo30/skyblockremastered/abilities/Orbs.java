@@ -4,15 +4,19 @@ import org.bukkit.entity.Player;
 
 public class Orbs {
 
-    public void radiant_power_orb(Player plr) {
+    public void radiantPowerOrb(Player plr) {
 
     }
 
-    public void mana_flux(Player plr) {
+    public void manaFluxPowerOrb(Player plr) {
 
     }
 
-    public void overflux_power_orb(Player plr) {
+    public void overfluxPowerOrb(Player plr) {
+
+    }
+
+    public void plasmafluxPowerOrb(Player plr) {
 
     }
 

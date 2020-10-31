@@ -1,7 +1,6 @@
 package xyz.apollo30.skyblockremastered.listeners;
 
 import org.bukkit.*;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,16 +9,15 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.constants.Enchantments;
 import xyz.apollo30.skyblockremastered.managers.PacketManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.objects.MobObject;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
-import xyz.apollo30.skyblockremastered.utils.GuiUtils;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.NMSUtil;
 import xyz.apollo30.skyblockremastered.utils.Utils;
@@ -67,9 +65,7 @@ public class SpawnEvents implements Listener {
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent e) {
-
         if (EntityType.PLAYER == e.getEntityType()) return;
-
         Player plr = e.getEntity().getKiller();
         if (plr == null) return;
         PlayerObject po = plugin.playerManager.getPlayerData(plr);
@@ -102,7 +98,7 @@ public class SpawnEvents implements Listener {
         } else if (e.getEntityType() == EntityType.ENDERMAN && e.getEntity().getPassenger().getCustomName().contains(Utils.chat("Special Zealot"))) {
             plr.sendMessage(Utils.chat("&6&lRARE DROP!&r &5Summoning Eye&7!"));
             PacketManager.sendTitle(plr, 0, 15, 1, Utils.chat("&cSpecial Zealot!"), "");
-            e.getEntity().getWorld().dropItem(e.getEntity().getLocation(), NMSUtil.addString(plugin.miscs.summoningEye, "UUID", UUID.randomUUID().toString()));
+            e.getEntity().getWorld().dropItem(e.getEntity().getLocation(), NMSUtil.addString(plugin.miscs.SUMMONING_EYE, "UUID", UUID.randomUUID().toString()));
             plr.playSound(plr.getLocation(), Sound.SUCCESSFUL_HIT, 1F, .5F);
         }
 
@@ -119,58 +115,20 @@ public class SpawnEvents implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
-
-        Player plr = e.getEntity();
-
-        e.getEntity().setHealth(e.getEntity().getMaxHealth());
         e.setKeepInventory(true);
         e.setKeepLevel(true);
         e.setDroppedExp(0);
         e.setDeathMessage("");
-        PlayerObject po = plugin.playerManager.getPlayerData(e.getEntity());
-        if (po.getLastDeath() != 0 && new Date().getTime() - po.getLastDeath() <= 1000) return;
-        po.setLastDeath(new Date().getTime());
-        po.resetHealth();
+    }
 
-        Bukkit.getScheduler().runTask(plugin, () -> e.getEntity().setFireTicks(0));
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> plr.setVelocity(new Vector()), 1L);
+    @EventHandler
+    public void playerLeave(PlayerQuitEvent e) {
+        Player plr = e.getPlayer();
+        e.setQuitMessage(Utils.chat("&e" + plr.getName() + " has left the game."));
 
-        boolean canRevive = false;
-
-        for (ItemStack content : plr.getInventory().getContents()) {
-            if (content != null && content.hasItemMeta() && content.getItemMeta().getDisplayName() != null) {
-                if (Utils.isInZone(plr.getLocation(), new Location(plr.getWorld(), -112, 255, -107), new Location(plr.getWorld(), 213, 29, 127))) {
-                    if (content.getItemMeta().getDisplayName().contains("Remnant of the Eye")) {
-                        po.resetHealth();
-                        plr.setHealth(plr.getMaxHealth());
-                        plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1.25F);
-                        plr.getInventory().removeItem(content);
-                        canRevive = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (canRevive) {
-            if (plr.getLastDamageCause().getCause().equals(EntityDamageEvent.DamageCause.VOID)) {
-                plr.sendMessage(Utils.chat("&5Your Remnant of the Eye saved you from certain death! You were safely teleported back to spawn!"));
-                plr.teleport(new Location(plr.getWorld(), 173.5, 101, -3));
-            } else {
-                plr.sendMessage(Utils.chat("&5Your Remnant of the Eye saved you from certain death!"));
-            }
-        } else {
-            double purse = po.getPurse();
-            po.setPurse(po.getPurse() / 2);
-
-            Location loc = e.getEntity().getWorld().getSpawnLocation();
-            loc.setPitch(0);
-            loc.setYaw(-180);
-            e.getEntity().teleport(loc);
-
-            plr.sendMessage(Utils.chat("&cYou died and lost " + String.format("%,.0f", purse / 2) + " coins!"));
-            plr.playSound(plr.getLocation(), Sound.ANVIL_LAND, 1F, 10F);
-        }
+        plugin.playerManager.savePlayerData(plr);
+        plugin.playerManager.playerObjects.remove(plr);
+        plugin.dragonEvent.playerDamage.remove(plr);
     }
 
     @EventHandler
@@ -188,66 +146,22 @@ public class SpawnEvents implements Listener {
         plr.sendMessage(Utils.chat("&7Welcome to &6SkyblockRemastered&7, " + plr.getName() + "!"));
         plr.sendMessage(Utils.chat("&6Discord: &bhttps://discord.gg/gbXcMta"));
         plr.sendMessage(Utils.chat("&6IP: &bplay.apollo30.xyz"));
-        plr.sendMessage(Utils.chat("&6Store: &bhttp://store.apollo30.xyz/"));
+        plr.sendMessage(Utils.chat("&6Store: &bhttps://skyblockremastered.tebex.io/"));
         plr.sendMessage(Utils.chat(" "));
         plr.sendMessage(Utils.chat("&aYou can change your skyblock stats using the /sr set command!"));
-        plr.sendMessage(Utils.chat("/sr set [stat] [amount]"));
-        plr.sendMessage(Utils.chat("Stats: health, intelligence, defense, critdamage, critchance, magicfind, speed"));
+        plr.sendMessage(Utils.chat("&a&l/sr set [stat] [amount]"));
+        plr.sendMessage(Utils.chat("&aStats: health, intelligence, defense, critdamage, critchance, magicfind, speed"));
+        plr.sendMessage(Utils.chat(" "));
+        plr.sendMessage(Utils.chat("&aTo open a selection of items do /item [page]"));
         plr.sendMessage(Utils.chat("&8&m--------------------------------------------------"));
 
         // Rank Joins
-        Utils.broadCast(Helper.getRank(plr) + " &7has joined the game!");
+        Utils.broadCast(Helper.getRank(plr, false) + " &7has joined the game!");
 
-        plr.getInventory().clear();
-
-        ItemStack midas = new ItemStack(Material.WOOD_SWORD, 1);
-        plr.getInventory().addItem(plugin.miscs.PLASMAFLUX_POWER_ORB);
-        plr.getInventory().addItem(
-                Utils.addLore(
-                        midas,
-                        "&dMythic Aspect of the Jerry",
-                        "&7Damage: &c+69,420",
-                        "&7Strength: &c+69,420",
-                        "&7Crit Damage: &c+3000%",
-                        "",
-                        "&7Item Ability: &6Inner Jerry",
-                        "&7WE LIKE FORTNITE",
-                        "&7WE LIKE FORTNITE",
-                        "&7WE LIKE FORTNITE",
-                        "&7WE LIKE FORTNITE",
-                        "&7WE LIKE FORTNITE",
-                        "",
-                        "&8This item can be reforged!",
-                        "&d&kL&r &d&lMYTHIC SWORD &r&d&kL&r"));
-
-        plr.getInventory().addItem(Utils.addLore(new ItemStack(Material.DIAMOND_SWORD), "&9Aspect of The End", "&7Damage: &c+110", "&7Strength: &c+112", "&7Crit Chance: &c+9%", "&7Crit Damage: &c+15%", "&7Bonus Attack Speed: &c+5%", "", "&7Intelligence: &a+12", "", "&6Item Ability: Instant Transmission &a&lRIGHT CLICK", "&7Teleport &a8 blocks&7 ahead of", "&7you and again &a+50 &f" + GuiUtils.getUnicode("speed") + " Speed", "&7for &a3 seconds&7.", "&8Mana Cost: &b50", "", "&9&lRARE"));
-        ItemStack bow = Utils.addLore(new ItemStack(Material.BOW), "&6ITS A BOW :O", "&7Damage: &c+110", "&7Strength: &c+112", "&7Crit Chance: &c+9%", "&7Crit Damage: &c+15%", "", "&6&lLEGENDARY");
-        bow.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 69);
-        plr.getInventory().addItem(bow);
-        plr.getInventory().addItem(new ItemStack(Material.ARROW, 1));
-
-        plr.getInventory().setHelmet(plugin.armor.SUPERIOR_DRAGON_HELMET);
-        plr.getInventory().setChestplate(plugin.armor.SUPERIOR_DRAGON_CHESTPLATE);
-        plr.getInventory().setLeggings(plugin.armor.SUPERIOR_DRAGON_LEGGINGS);
-        plr.getInventory().setBoots(plugin.armor.SUPERIOR_DRAGON_BOOTS);
-
-
-        ItemStack nether_star = plugin.miscs.skyblockMenu;
+        ItemStack nether_star = plugin.miscs.SKYBLOCK_MENU;
         plr.getInventory().remove(nether_star);
 
         Utils.addItem(plr.getInventory(), nether_star, 9);
-
-        // Load the Private Island
-        World clone = Bukkit.getServer().createWorld(new WorldCreator("private_island_template"));
-
-        // Now we copi pasta
-        Utils.copyWorld(clone, "playerislands/" + plr.getUniqueId().toString());
-
-        // Define Variables
-        World island = Bukkit.getServer().getWorld("playerislands/" + plr.getUniqueId().toString());
-        // Teleport them
-        Location loc = new Location(island, island.getSpawnLocation().getX(), island.getSpawnLocation().getY(), island.getSpawnLocation().getZ());
-        plr.teleport(loc);
 
         // Create Player.yml section for them
         PlayerManager.createPlayerData(plr, plr.getUniqueId().toString(), plugin.db.getPlayers());
@@ -258,6 +172,20 @@ public class SpawnEvents implements Listener {
 
         // If a player joins during a dragon fight
         plugin.dragonEvent.playerDamage.computeIfAbsent(plr, k -> (double) 0);
+
+        // Load the Private Island
+        World clone = Bukkit.getServer().createWorld(new WorldCreator("private_island_template"));
+
+        // Now we copi pasta
+        // File file = new File(Bukkit.getServer().getWorldContainer(), "playerislands/" + plr.getUniqueId().toString());
+        // if (!file.exists())
+        Utils.copyWorld(clone, "playerislands/" + plr.getUniqueId().toString());
+
+        // Define Variables
+        World island = Bukkit.getServer().getWorld("playerislands/" + plr.getUniqueId().toString());
+        // Teleport them
+        Location loc = new Location(island, island.getSpawnLocation().getX(), island.getSpawnLocation().getY(), island.getSpawnLocation().getZ());
+        plr.teleport(loc);
     }
 
     private void coinDrop(Entity e, int level) {
