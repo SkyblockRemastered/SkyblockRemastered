@@ -151,6 +151,14 @@ public class ProtectionEvents implements Listener {
     }
 
     @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent e) {
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            e.getItemDrop().getWorld().playEffect(e.getItemDrop().getLocation(), Effect.SMOKE, 5, 1);
+            e.getItemDrop().remove();
+        }, 5L);
+    }
+
+    @EventHandler
     public void onEntityTarget(EntityTargetEvent e) {
         if (e.getTarget() instanceof Player) {
             Player plr = (Player) e.getTarget();

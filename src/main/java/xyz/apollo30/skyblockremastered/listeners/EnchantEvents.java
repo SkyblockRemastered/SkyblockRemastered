@@ -46,17 +46,17 @@ public class EnchantEvents extends BukkitRunnable implements Listener {
 
     private void updateArrow(Arrow arrow) {
         outerloop:
-        for (double i = .5; i < 100; i += .5) { // This will rapidly increase the range so you don't get so many mobs at one, and instead checks a few blocks at a time
-            for (Entity e : arrow.getNearbyEntities(i, 3, i)) { // Gets ALL nearby entities using the loop variable above it
-                if (e != arrow.getShooter()) { // Checks to make sure the entities isn't the shooter
-                    if (e.getType().isAlive() && e instanceof LivingEntity) { // Checks to make sure the entity is alive
+        for (double i = .5; i < 100; i += .5) {
+            for (Entity e : arrow.getNearbyEntities(i, 3, i)) {
+                if (e != arrow.getShooter()) {
+                    if (e.getType().isAlive() && e instanceof LivingEntity) {
                         if (e.getType() == EntityType.PLAYER || e.getType() == EntityType.ARMOR_STAND) return;
-                        Location from = arrow.getLocation(); // Gets the arrows location
-                        Location to = e.getLocation().add(0, 2, 0); // Gets the entities Location
-                        Vector vFrom = from.toVector(); // Converts the from location to a vector
-                        Vector vTo = to.toVector(); // Converts the to location to a vector
-                        Vector direction = vTo.subtract(vFrom).normalize(); // Subtracts the to variable to the from variable and normalizes it.
-                        arrow.setVelocity(direction); // Sets the arrows newfound direction
+                        Location from = arrow.getLocation();
+                        Location to = e.getLocation().add(0, 2, 0);
+                        Vector vFrom = from.toVector();
+                        Vector vTo = to.toVector();
+                        Vector direction = vTo.subtract(vFrom).normalize();
+                        arrow.setVelocity(direction);
                         break outerloop;
                     }
                 }

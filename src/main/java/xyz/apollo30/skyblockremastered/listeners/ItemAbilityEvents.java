@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -61,7 +62,7 @@ public class ItemAbilityEvents implements Listener {
     public void onPlayerFlight(PlayerToggleFlightEvent e) {
 
         Player plr = e.getPlayer();
-        PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+        PlayerObject po = PlayerManager.playerObjects.get(plr);
 
         /**
          * Double Jump Ability Below
@@ -73,7 +74,7 @@ public class ItemAbilityEvents implements Listener {
         if (plr.getEquipment().getBoots() != null && plr.getEquipment().getBoots().hasItemMeta() && !plr.getEquipment().getBoots().getItemMeta().getDisplayName().isEmpty()) {
             if (plr.getEquipment().getBoots() != null && plr.getEquipment().getBoots().getItemMeta().getDisplayName().contains(Utils.chat("&5Tarantula Boots"))) {
                 if (!plr.getGameMode().equals(GameMode.CREATIVE) && !plr.getGameMode().equals(GameMode.SPECTATOR) || !plr.isFlying()) {
-                    if (po.getIntelligence() - 50 < 0 || po.getIntelligence() <= 0) {
+                    if (po.getIntelligence() - 40 < 0 || po.getIntelligence() <= 0) {
                         plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, .5F);
                         plr.sendMessage(Utils.chat("&cYou do not have enough mana"));
                         e.setCancelled(true);
@@ -85,9 +86,11 @@ public class ItemAbilityEvents implements Listener {
                     e.setCancelled(true);
                     plr.setAllowFlight(false);
                     plr.setFlying(false);
+                    for (int i = 0; i < 50; i++) {
+                        plr.getWorld().playEffect(plr.getLocation().add(Math.random() * 5, Math.random() * 5, Math.random() * 5), Effect.SMOKE, 5, 1);
+                    }
                     plr.setVelocity(e.getPlayer().getLocation().getDirection().multiply(1).setY(plr.getLocation().getPitch() < -70 ? 1.25 : plr.getLocation().getPitch() < -50 ? 1.125 : 1));
                     plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> plr.setAllowFlight(true), 20);
-
                 }
             }
         }
@@ -100,6 +103,7 @@ public class ItemAbilityEvents implements Listener {
     public void onProjectileLaunch(ProjectileLaunchEvent e) {
 
         Projectile projectile = e.getEntity();
+        if (!(projectile.getShooter() instanceof Player)) return;
         Player plr = (Player) projectile.getShooter();
         ItemStack itemInHand = ((Player) e.getEntity().getShooter()).getItemInHand();
 

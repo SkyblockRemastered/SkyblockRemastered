@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.objects.MobObject;
-import xyz.apollo30.skyblockremastered.constants.GUIs;
+import xyz.apollo30.skyblockremastered.GUIs.GUIs;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.*;
@@ -31,7 +31,7 @@ public class MobManager {
 
     World world = Bukkit.getWorld("hub");
 
-    public HashMap<LivingEntity, MobObject> mobObjects = new HashMap<>();
+    public static HashMap<LivingEntity, MobObject> mobObjects = new HashMap<>();
     public HashSet<Location> zealotSpawnPoints = new HashSet<>();
 
     public void createMob(LivingEntity entity, String name) {
@@ -282,7 +282,7 @@ public class MobManager {
         } else if (name.equalsIgnoreCase("old")) {
             mo.setMaxHealth(15000000);
             mo.setLevel(1000);
-            mo.setName("old Dragon");
+            mo.setName("Old Dragon");
             plugin.so.setEnderDragon(mo);
         } else if (name.equalsIgnoreCase("wise")) {
             mo.setMaxHealth(9000000);
@@ -313,6 +313,11 @@ public class MobManager {
             mo.setMaxHealth(20000000);
             mo.setLevel(1000);
             mo.setName("Holy Dragon");
+            plugin.so.setEnderDragon(mo);
+        } else if (name.equalsIgnoreCase("shitass")) {
+            mo.setMaxHealth(1000000000);
+            mo.setLevel(69420);
+            mo.setName("shitass");
             plugin.so.setEnderDragon(mo);
         } else {
             mo.setName(entity.getName());

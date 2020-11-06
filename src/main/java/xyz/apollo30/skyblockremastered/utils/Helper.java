@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 
 import java.io.ByteArrayInputStream;
@@ -29,7 +30,7 @@ public class Helper {
     }
 
     public static String getRank(Player plr, boolean a) {
-        String prefix = "";
+        String prefix;
         if (plr.hasPermission("groups.admin")) prefix = a ? "&c[ADMIN] " : "&c";
         else if (plr.hasPermission("groups.mod")) prefix = a ? "&2[MOD] " : "&2";
         else if (plr.hasPermission("groups.helper")) prefix = a ? "&9[HELPER] " : "&9";
@@ -120,7 +121,7 @@ public class Helper {
     public static void deathHandler(SkyblockRemastered plugin, Player plr, String type) {
 
         plr.setHealth(plr.getMaxHealth());
-        PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+        PlayerObject po = PlayerManager.playerObjects.get(plr);
         po.resetHealth();
 
         Bukkit.getScheduler().runTask(plugin, () -> plr.setFireTicks(0));
@@ -173,32 +174,39 @@ public class Helper {
         return leatherArmor;
     }
 
-    public static boolean consumeItem(Player player, int count, ItemStack item) {
-        Map<Integer, ? extends ItemStack> ammo = player.getInventory().all(item);
+    public static boolean consumeItem(Player plr, int count, ItemStack item) {
+        if ((plr.getInventory().firstEmpty() == -1)) {
+            plr.sendMessage(Utils.chat("&cYour inventory is full!"));
+            return true;
+        } else {
+            Map<Integer, ? extends ItemStack> filteredItem = (plr.getInventory().all(item.getType()) != null ? plr.getInventory().all(item.getType()) : plr.getInventory().all(item));
 
-        int found = 0;
-        for (ItemStack stack : ammo.values())
-            found += stack.getAmount();
-        if (count > found)
-            return false;
+            int found = 0;
+            for (ItemStack stack : filteredItem.values())
+                found += stack.getAmount();
+            Utils.broadCast(count + "");
+            Utils.broadCast(found + "");
+            if (count > found)
+                return false;
 
-        for (Integer index : ammo.keySet()) {
-            ItemStack stack = ammo.get(index);
+            for (Integer index : filteredItem.keySet()) {
+                ItemStack stack = filteredItem.get(index);
 
-            int removed = Math.min(count, stack.getAmount());
-            count -= removed;
+                int removed = Math.min(count, stack.getAmount());
+                count -= removed;
 
-            if (stack.getAmount() == removed)
-                player.getInventory().setItem(index, null);
-            else
-                stack.setAmount(stack.getAmount() - removed);
+                if (stack.getAmount() == removed)
+                    plr.getInventory().setItem(index, null);
+                else
+                    stack.setAmount(stack.getAmount() - removed);
 
-            if (count <= 0)
-                break;
+                if (count <= 0)
+                    break;
+            }
+
+            plr.updateInventory();
+            return true;
         }
-
-        player.updateInventory();
-        return true;
     }
 
 }

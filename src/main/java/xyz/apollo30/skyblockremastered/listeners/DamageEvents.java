@@ -12,9 +12,12 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.customMobs.CustomEnderDragon;
-import xyz.apollo30.skyblockremastered.events.Dragon;
+import xyz.apollo30.skyblockremastered.events.dragonHandler.CustomEnderDragon;
+import xyz.apollo30.skyblockremastered.events.dragonHandler.Dragon;
+import xyz.apollo30.skyblockremastered.managers.MobManager;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.objects.MobObject;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Helper;
@@ -76,8 +79,10 @@ public class DamageEvents implements Listener {
             LivingEntity target = (LivingEntity) e.getEntity();
 
             if (!(target instanceof Player)) {
-                PlayerObject po = plugin.playerManager.playerObjects.get(damager);
+                PlayerObject po = PlayerManager.playerObjects.get(damager);
                 MobObject mo = plugin.mobManager.mobObjects.get(target);
+
+                if (po == null || mo == null) return;
 
                 plr.playSound(plr.getLocation(), Sound.ORB_PICKUP, 1000F, .8F);
 
@@ -146,7 +151,7 @@ public class DamageEvents implements Listener {
             Player damager = (Player) e.getDamager();
             LivingEntity target = (LivingEntity) e.getEntity();
 
-            PlayerObject po = plugin.playerManager.playerObjects.get(damager);
+            PlayerObject po = PlayerManager.playerObjects.get(damager);
             MobObject mo = plugin.mobManager.mobObjects.get(target);
 
             // Defining the player's stats
@@ -204,20 +209,22 @@ public class DamageEvents implements Listener {
             Player target = (Player) e.getEntity();
             LivingEntity damager = (LivingEntity) e.getDamager();
 
-            PlayerObject po = plugin.playerManager.playerObjects.get(target);
-            MobObject mo = plugin.mobManager.mobObjects.get(damager);
+            PlayerObject po = PlayerManager.playerObjects.get(target);
+            MobObject mo = MobManager.mobObjects.get(damager);
 
             int damage = mo.getDamage() > 0 ? mo.getDamage() : (int) e.getDamage();
 
             if (e.getDamager().getType() == EntityType.ENDER_DRAGON) {
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> target.setVelocity(new Vector()), 1L);
                 damage = (int) Helper.triangularDistribution(300, 500, 700);
-                target.setVelocity(target.getLocation().getDirection().multiply(1).setY(.3));
+                target.setVelocity(new Vector(0, 1.5, 0));
+                target.playSound(target.getLocation(), Sound.EXPLODE, 100F, 1F);
                 if (!damager.getCustomName().isEmpty())
                     target.sendMessage(Utils.chat("&5❂ &c" + damager.getCustomName().replaceAll("&[0-9a-zA-z]", "") + " &dused &eRush &don you for &c" + damage + " damage"));
             }
 
             e.setDamage(0);
-            po.setHealth((po.getHealth() - damage));
+            po.subtractHealth(damage);
             if (po.getHealth() <= 0 && !target.isDead()) Helper.deathHandler(plugin, target, "other");
             Utils.damageIndicator(target, mo.getDamage(), "normal", plugin);
         }
@@ -232,8 +239,8 @@ public class DamageEvents implements Listener {
             Player damager = (Player) e.getDamager();
             Player target = (Player) e.getEntity();
 
-            PlayerObject po = plugin.playerManager.playerObjects.get(damager);
-            PlayerObject po2 = plugin.playerManager.playerObjects.get(target);
+            PlayerObject po = PlayerManager.playerObjects.get(damager);
+            PlayerObject po2 = PlayerManager.playerObjects.get(target);
 
             // Defining the player's stats
             int strength = po.getStrength();

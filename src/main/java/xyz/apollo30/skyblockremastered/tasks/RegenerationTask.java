@@ -10,6 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.commands.Gamemode;
 import xyz.apollo30.skyblockremastered.managers.PacketManager;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -17,17 +18,14 @@ import java.util.Date;
 
 public class RegenerationTask extends BukkitRunnable {
 
-    private final SkyblockRemastered plugin;
-
-    public RegenerationTask(SkyblockRemastered plugin) {
-        this.plugin = plugin;
+    public RegenerationTask() {
     }
 
     @Override
     public void run() {
         for (Player plr : Bukkit.getOnlinePlayers()) {
 
-            PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+            PlayerObject po = PlayerManager.playerObjects.get(plr);
 
             // Health Regeneration
             if ((po.getHealth()) < po.getMaxHealth()) {

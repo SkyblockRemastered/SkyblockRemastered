@@ -11,9 +11,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import xyz.apollo30.skyblockremastered.abilities.Miscs;
 import xyz.apollo30.skyblockremastered.abilities.Weapons;
 import xyz.apollo30.skyblockremastered.commands.*;
-import xyz.apollo30.skyblockremastered.customMobs.CustomEnderDragon;
-import xyz.apollo30.skyblockremastered.events.Dragon;
-import xyz.apollo30.skyblockremastered.events.TradeEvents;
+import xyz.apollo30.skyblockremastered.events.dragonHandler.CustomEnderDragon;
+import xyz.apollo30.skyblockremastered.events.dragonHandler.DragLootStructure;
+import xyz.apollo30.skyblockremastered.events.dragonHandler.Dragon;
+import xyz.apollo30.skyblockremastered.events.tradeHandler.TradeEvents;
 import xyz.apollo30.skyblockremastered.items.*;
 import xyz.apollo30.skyblockremastered.listeners.*;
 import xyz.apollo30.skyblockremastered.managers.ConfigManager;
@@ -21,13 +22,10 @@ import xyz.apollo30.skyblockremastered.managers.MobManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.objects.ServerObject;
 import xyz.apollo30.skyblockremastered.tasks.*;
-import xyz.apollo30.skyblockremastered.utils.NMSUtil;
 import xyz.apollo30.skyblockremastered.utils.MongoUtils;
-import xyz.apollo30.skyblockremastered.utils.Utils;
+import xyz.apollo30.skyblockremastered.utils.NMSUtil;
 
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 public class SkyblockRemastered extends JavaPlugin {
 
@@ -39,7 +37,7 @@ public class SkyblockRemastered extends JavaPlugin {
     public Miscs miscAbilities;
     public Weapons weaponAbilities;
     public Dragon dragonEvent;
-    public xyz.apollo30.skyblockremastered.dragons.Dragon dragon;
+    public DragLootStructure dragon;
     public ServerObject so = new ServerObject();
     public NMSUtil nmsu = new NMSUtil();
 
@@ -55,7 +53,11 @@ public class SkyblockRemastered extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        new MongoUtils("mongoStringHere", "databaseName", "collectionName");
+//        new MongoUtils(
+//                "mongodb+srv://console:t3rk1reyaseocmdb2skel@skyblockremastered.olzwn.mongodb.net/<dbname>?retryWrites=true&w=majority",
+//                "constants",
+//                "playerData");
+
         // Registering Custom Dragons
         nmsu.registerEntity("Dragon", 63, EntityEnderDragon.class, CustomEnderDragon.class);
 
@@ -95,7 +97,7 @@ public class SkyblockRemastered extends JavaPlugin {
 
         // When reloaded and the players still exist, it just recreates their database again.
         for (Player plr : Bukkit.getOnlinePlayers()) {
-            if (playerManager.getPlayerData(plr) == null) playerManager.createPlayerData(plr);
+            if (playerManager.getPlayerData(plr) == null) PlayerManager.createPlayerData(plr);
         }
         // Removes all entities in the server bc I am lazy to re-register them.
         for (World world : Bukkit.getWorlds()) {
@@ -108,7 +110,7 @@ public class SkyblockRemastered extends JavaPlugin {
         mobManager.initTimer();
         new ScoreboardTask(this).runTaskTimer(this, 30, 30);
         new ActionBarTask(this).runTaskTimer(this, 20, 20);
-        new RegenerationTask(this).runTaskTimer(this, 30, 30);
+        new RegenerationTask().runTaskTimer(this, 30, 30);
         new WheatCrystalTask(this).runTaskTimer(this, 1, 1);
         new LagPreventerTask(this).runTaskTimer(this, 0, 20);
         new EnchantEvents(this).runTaskTimer(this, 0, 1);
@@ -121,7 +123,7 @@ public class SkyblockRemastered extends JavaPlugin {
 
         // Saves all playerdata once the plugin deactivates.
         for (Player plr : Bukkit.getOnlinePlayers()) {
-            playerManager.savePlayerData(plr);
+            PlayerManager.savePlayerData(plr);
         }
 
     }

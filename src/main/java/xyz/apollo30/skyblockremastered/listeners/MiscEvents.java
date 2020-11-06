@@ -17,7 +17,7 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.constants.GUIs;
+import xyz.apollo30.skyblockremastered.GUIs.GUIs;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 public class MiscEvents implements Listener {
@@ -75,6 +75,15 @@ public class MiscEvents implements Listener {
 
             if (action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR) {
                 if (e.getItem() != null && e.getItem().hasItemMeta() && item.getItemMeta().getDisplayName() != null) {
+
+                    if (item.getItemMeta().getDisplayName().contains("Helmet")) {
+                        if (e.getPlayer().getInventory().getHelmet() == null) {
+                            e.getPlayer().getInventory().setHelmet(new ItemStack(e.getItem()));
+                            e.getPlayer().getInventory().setItemInHand(null);
+                            e.setCancelled(true);
+                            return;
+                        }
+                    }
 
                     if (item.getItemMeta().getDisplayName().equals(Utils.chat("&5Zealot Spawn Egg"))) {
                         Enderman enderman = (Enderman) e.getClickedBlock().getLocation().getWorld().spawnEntity(e.getClickedBlock().getLocation().add(0, 1, 0), EntityType.ENDERMAN);

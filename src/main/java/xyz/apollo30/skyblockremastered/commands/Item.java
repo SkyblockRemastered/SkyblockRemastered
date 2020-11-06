@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
@@ -26,6 +27,8 @@ public class Item implements CommandExecutor {
         }
 
         Player plr = (Player) sender;
+
+        plr.setVelocity(new Vector(0, 1.5, 0));
 
         Inventory inv = Bukkit.createInventory(plr, 54, "Item List (1/1)");
         inv.addItem(plugin.miscs.RADIANT_POWER_ORB, plugin.miscs.MANA_FLUX_POWER_ORB, plugin.miscs.OVERFLUX_POWER_ORB, plugin.miscs.PLASMAFLUX_POWER_ORB);

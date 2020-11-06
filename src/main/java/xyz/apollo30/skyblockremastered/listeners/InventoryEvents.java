@@ -9,13 +9,12 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.constants.Constants;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
-import xyz.apollo30.skyblockremastered.constants.GUIs;
+import xyz.apollo30.skyblockremastered.GUIs.GUIs;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -36,6 +35,18 @@ public class InventoryEvents implements Listener {
     public void onPlayerClick(InventoryClickEvent e) {
 
         if (e.getCurrentItem() == null) return;
+
+        /**
+         * Checks if the player shifts click a skull
+         * Then checks if the item name has the word "Helmet"
+         * Then it puts it on for them.
+         */
+        if (e.getInventory().getName().equalsIgnoreCase("container.crafting") && e.getClick().isShiftClick() && e.getCurrentItem().hasItemMeta() && !e.getCurrentItem().getItemMeta().getDisplayName().isEmpty() && e.getCurrentItem().getItemMeta().getDisplayName().contains("Helmet")) {
+            if (e.getWhoClicked().getInventory().getHelmet() == null) {
+                e.getWhoClicked().getInventory().setHelmet(new ItemStack(e.getCurrentItem()));
+                e.setCurrentItem(null);
+            }
+        }
 
         Player plr = (Player) e.getView().getPlayer();
         String title = e.getInventory().getTitle();
@@ -114,23 +125,19 @@ public class InventoryEvents implements Listener {
                     e.setCancelled(true);
             case "Trades":
                 e.setCancelled(true);
-                Inventory inv = plr.getInventory();
                 if (item.equals(Utils.chat("&fCoal &8x2"))) {
                     ItemStack need = new ItemStack(Material.LOG, 1, (short) 0);
-                    ItemStack give = new ItemStack(Material.COAL, 2);
-                    if (inv.containsAtLeast(need, 1))
-                        Utils.successTrade(plr, need, give, 1);
-                    else
-                        Utils.failTrade(plr);
+                    ItemStack give = new ItemStack(Material.COAL);
+                    if (Helper.consumeItem(plr, 1, need)) {
+                        Utils.successTrade(plr, give);
+                    } else Utils.failTrade(plr);
                 } else if (item.equals(Utils.chat("&fGrass &8x4"))) {
-                    ItemStack need = new ItemStack(Material.DIRT, 4);
+                    ItemStack need = new ItemStack(Material.DIRT);
                     ItemStack give = new ItemStack(Material.GRASS, 4);
-                    if (inv.containsAtLeast(need, 4))
-                        Utils.successTrade(plr, need, give, 4);
-                    else
-                        Utils.failTrade(plr);
+                    if (Helper.consumeItem(plr, 4, need)) {
+                        Utils.successTrade(plr, give);
+                    } else Utils.failTrade(plr);
                 }
-                // Bank
                 break;
             case "Bank":
                 e.setCancelled(true);
@@ -145,7 +152,7 @@ public class InventoryEvents implements Listener {
                 e.setCancelled(true);
                 if (item.equalsIgnoreCase(Utils.chat("&aYour whole purse"))) {
 
-                    PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+                    PlayerObject po = PlayerManager.playerObjects.get(plr);
 
                     if (po.getPurse() <= 0) {
                         plr.playSound(plr.getLocation(), Sound.VILLAGER_NO, 1F, 1F);
@@ -164,7 +171,7 @@ public class InventoryEvents implements Listener {
                     // Refreshing the Page
                     GUIs.bankDeposit(plr, plr.getUniqueId().toString(), plugin);
                 } else if (item.equalsIgnoreCase(Utils.chat("&aHalf your purse"))) {
-                    PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+                    PlayerObject po = PlayerManager.playerObjects.get(plr);
 
                     if (po.getPurse() <= 0) {
                         plr.playSound(plr.getLocation(), Sound.VILLAGER_NO, 1F, 1F);
@@ -189,7 +196,7 @@ public class InventoryEvents implements Listener {
                 e.setCancelled(true);
                 if (item.equalsIgnoreCase(Utils.chat("&aEverything in your account"))) {
 
-                    PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+                    PlayerObject po = PlayerManager.playerObjects.get(plr);
 
                     if (po.getBank() <= 0) {
                         plr.playSound(plr.getLocation(), Sound.VILLAGER_NO, 1F, 1F);
@@ -208,7 +215,7 @@ public class InventoryEvents implements Listener {
                     // Refreshing the Page
                     GUIs.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
                 } else if (item.equalsIgnoreCase(Utils.chat("&aHalf your account"))) {
-                    PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+                    PlayerObject po = PlayerManager.playerObjects.get(plr);
 
                     if (po.getBank() <= 1) {
                         plr.playSound(plr.getLocation(), Sound.VILLAGER_NO, 1F, 1F);
@@ -227,7 +234,7 @@ public class InventoryEvents implements Listener {
                     // Refreshing the Page
                     GUIs.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
                 } else if (item.equalsIgnoreCase(Utils.chat("&a20% of your account"))) {
-                    PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+                    PlayerObject po = PlayerManager.playerObjects.get(plr);
 
                     if (po.getBank() <= 1) {
                         plr.playSound(plr.getLocation(), Sound.VILLAGER_NO, 1F, 1F);
@@ -253,19 +260,13 @@ public class InventoryEvents implements Listener {
             e.setCancelled(true);
 
         }
-        if (e.getClick().isShiftClick() && !(e.getCurrentItem().getType() == Material.SKULL || e.getCurrentItem().getType() == Material.SKULL_ITEM)) {
-            if (e.getWhoClicked().getInventory().getHelmet() == null) {
-                e.setCurrentItem(null);
-                e.getWhoClicked().getInventory().setHelmet(new ItemStack(e.getCurrentItem()));
-            }
-        }
     }
 
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent e) {
         // Fetching the player's data
         Player plr = (Player) e.getPlayer();
-        PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+        PlayerObject po = PlayerManager.playerObjects.get(plr);
 
         // If the player is in their island or not.
         if (!plr.getWorld().getName().equals("playerislands/" + plr.getUniqueId().toString())) {
@@ -318,7 +319,7 @@ public class InventoryEvents implements Listener {
     @EventHandler
     public void onPlayerPickup(PlayerPickupItemEvent e) {
         Player plr = e.getPlayer();
-        PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+        PlayerObject po = PlayerManager.playerObjects.get(plr);
         ItemStack item = e.getItem().getItemStack();
 
         if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().startsWith("Coin")) {

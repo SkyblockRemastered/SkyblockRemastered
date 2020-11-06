@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.PacketManager;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
@@ -68,7 +69,7 @@ public class ConstantTask extends BukkitRunnable {
                 plr.getInventory().setItem(8, nether_star);
             }
 
-            PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+            PlayerObject po = PlayerManager.playerObjects.get(plr);
 
             /**
              * Checking if the player's inventory is full

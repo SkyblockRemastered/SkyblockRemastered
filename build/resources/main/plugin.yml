@@ -1,5 +1,6 @@
 name: SkyblockRemastered
-version: 1.0-SNAPSHOT
+#version: 1.0-SNAPSHOT
+version: 1.0
 main: xyz.apollo30.skyblockremastered.SkyblockRemastered
 load: STARTUP
 
