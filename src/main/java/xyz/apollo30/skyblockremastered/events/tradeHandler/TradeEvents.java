@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
@@ -121,18 +122,18 @@ public class TradeEvents implements Listener {
         // send msgs
         if (cooldown.containsKey(c.getName()) && cooldown.containsValue(plr.getName())) {
             Inventory menu1 = Bukkit.createInventory(null, 45, "You                  " + plr.getName());
-            Utils.createGlass(menu1, "STAINED_GLASS_PANE", 15, 1, 5, 14, 23, 32, 41);
-            Utils.createItemByte(menu1, 371, 0, 1, 1, "&6100M Coins");
-            Utils.createItemByte(menu1, 371, 0, 1, 37, "&6Coin Transaction", "", "&eClick to add coins to the trade menu", "&eYou can use prefixes like: K, M, B");
-            Utils.createItemByte(menu1, 351, 8, 1, 40, "&cInvalid Trade", "", "&7Place something in the trade menu in order", "&7to accept the trade");
-            Utils.createItemByte(menu1, 351, 8, 1, 42, "&7Other Person's Response", "", "&7You are currently", "&7trading with " + Helper.getRank(plr, true));
+            GUIHelper.addGlass(menu1, "STAINED_GLASS_PANE", 15, 1, 5, 14, 23, 32, 41);
+            GUIHelper.addItem(menu1, 371, 0, 1, 1, "&6100M Coins");
+            GUIHelper.addItem(menu1, 371, 0, 1, 37, "&6Coin Transaction", "", "&eClick to add coins to the trade menu", "&eYou can use prefixes like: K, M, B");
+            GUIHelper.addItem(menu1, 351, 8, 1, 40, "&cInvalid Trade", "", "&7Place something in the trade menu in order", "&7to accept the trade");
+            GUIHelper.addItem(menu1, 351, 8, 1, 42, "&7Other Person's Response", "", "&7You are currently", "&7trading with " + Helper.getRank(plr, true));
 
             Inventory menu2 = Bukkit.createInventory(null, 45, "You                  " + c.getName());
-            Utils.createGlass(menu2, "STAINED_GLASS_PANE", 15, 1, 5, 14, 23, 32, 41);
-            Utils.createItemByte(menu1, 371, 0, 1, 6, "&6100M Coins");
-            Utils.createItemByte(menu2, 371, 0, 1, 37, "&6Coin Transaction", "", "&eClick to add coins to the trade menu", "&eYou can use prefixes like: K, M, B");
-            Utils.createItemByte(menu1, 351, 8, 1, 40, "&cInvalid Trade", "", "&7Place something in the trade menu in order", "&7to accept the trade");
-            Utils.createItemByte(menu2, 351, 8, 1, 42, "&7Other Person's Response", "", "&7You are currently", "&7trading with " + Helper.getRank(c, true));
+            GUIHelper.addGlass(menu2, "STAINED_GLASS_PANE", 15, 1, 5, 14, 23, 32, 41);
+            GUIHelper.addItem(menu1, 371, 0, 1, 6, "&6100M Coins");
+            GUIHelper.addItem(menu2, 371, 0, 1, 37, "&6Coin Transaction", "", "&eClick to add coins to the trade menu", "&eYou can use prefixes like: K, M, B");
+            GUIHelper.addItem(menu1, 351, 8, 1, 40, "&cInvalid Trade", "", "&7Place something in the trade menu in order", "&7to accept the trade");
+            GUIHelper.addItem(menu2, 351, 8, 1, 42, "&7Other Person's Response", "", "&7You are currently", "&7trading with " + Helper.getRank(c, true));
 
             c.openInventory(menu1);
             plr.openInventory(menu2);

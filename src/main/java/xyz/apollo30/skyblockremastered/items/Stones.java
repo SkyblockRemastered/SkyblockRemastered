@@ -1,6 +1,7 @@
 package xyz.apollo30.skyblockremastered.items;
 
 import org.bukkit.inventory.ItemStack;
+import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -10,8 +11,8 @@ public class Stones {
     public Stones(SkyblockRemastered plugin) {
         this.plugin = plugin;
     }
-    public ItemStack EMPOWERED_STONE = Utils.addLore(
-            Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
+    public ItemStack EMPOWERED_STONE = GUIHelper.addLore(
+            GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
             "&6Empowered Stone",
             "&7Reforge Stone",
             "&7 ",
@@ -23,8 +24,8 @@ public class Stones {
             "&7Requires &eMining Skill XXXV",
             "",
             "&7&lLEGENDARY REFORGE STONE");
-    public ItemStack DRAGON_HORN = Utils.addLore(
-            Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
+    public ItemStack DRAGON_HORN = GUIHelper.addLore(
+            GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
             "&6Empowered Stone",
             "&7Reforge Stone",
             "&7 ",
@@ -36,8 +37,8 @@ public class Stones {
             "&7Requires &eMining Skill XXXV",
             "",
             "&7&lLEGENDARY REFORGE STONE");
-    public ItemStack DRAGON_SCALE = Utils.addLore(
-            Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
+    public ItemStack DRAGON_SCALE = GUIHelper.addLore(
+            GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
             "&6Empowered Stone",
             "&7Reforge Stone",
             "&7 ",
@@ -49,8 +50,8 @@ public class Stones {
             "&7Requires &eMining Skill XXXV",
             "",
             "&7&lLEGENDARY REFORGE STONE");
-    public ItemStack DRAGON_CLAW = Utils.addLore(
-            Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
+    public ItemStack DRAGON_CLAW = GUIHelper.addLore(
+            GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
             "&6Empowered Stone",
             "&7Reforge Stone",
             "&7 ",
@@ -62,8 +63,8 @@ public class Stones {
             "&7Requires &eMining Skill XXXV",
             "",
             "&7&lLEGENDARY REFORGE STONE");
-    public ItemStack WARPED_STONE = Utils.addLore(
-            Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
+    public ItemStack WARPED_STONE = GUIHelper.addLore(
+            GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
             "&6Empowered Stone",
             "&7Reforge Stone",
             "&7 ",

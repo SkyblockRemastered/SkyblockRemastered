@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.NMSUtil;
 import xyz.apollo30.skyblockremastered.utils.Utils;
@@ -41,16 +42,16 @@ public class SpawnEgg implements CommandExecutor {
         switch (args[0].toLowerCase()) {
             case "zealot":
                 ItemStack egg = new ItemStack(Material.MONSTER_EGG, 1, (byte) 0);
-                plr.getInventory().addItem(Utils.addLore(egg, "&5Zealot Spawn Egg", "&7Spawns a Zealot"));
+                plr.getInventory().addItem(GUIHelper.addLore(egg, "&5Zealot Spawn Egg", "&7Spawns a Zealot"));
                 break;
             case "specialzealot":
                 ItemStack egg1 = new ItemStack(Material.MONSTER_EGG, 1, (byte) 0);
-                plr.getInventory().addItem(Utils.addLore(egg1, "&5Special Zealot Spawn Egg", "&7Spawns a Special Zealot"));
+                plr.getInventory().addItem(GUIHelper.addLore(egg1, "&5Special Zealot Spawn Egg", "&7Spawns a Special Zealot"));
                 break;
             case "midas":
                 ItemStack midas = new ItemStack(Material.GOLD_SWORD, 1);
                 plr.getInventory().addItem(
-                        Utils.addLore(
+                        GUIHelper.addLore(
                                 midas,
                                 "&dGilded Midas' Sword",
                                 "&7Damage: &c+400",
@@ -79,8 +80,8 @@ public class SpawnEgg implements CommandExecutor {
                 break;
             case "dragon":
                 for (int i = 0; i < 8; i++) {
-                    plr.getInventory().addItem(Utils.addLore(
-                            Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGFhOGZjOGRlNjQxN2I0OGQ0OGM4MGI0NDNjZjUzMjZlM2Q5ZGE0ZGJlOWIyNWZjZDQ5NTQ5ZDk2MTY4ZmMwIn19fQ=="),
+                    plr.getInventory().addItem(GUIHelper.addLore(
+                            GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGFhOGZjOGRlNjQxN2I0OGQ0OGM4MGI0NDNjZjUzMjZlM2Q5ZGE0ZGJlOWIyNWZjZDQ5NTQ5ZDk2MTY4ZmMwIn19fQ=="),
                             "&5Summoning Eye",
                             "&7Use this at the &5Ender Altar",
                             "&7in the &5Dragon's Nest&7 to",
@@ -98,8 +99,8 @@ public class SpawnEgg implements CommandExecutor {
                 }
                 break;
             case "batphone":
-                plr.getInventory().addItem(Utils.addLore(
-                        Utils.getSkull(Utils.urlToBase64("https://textures.minecraft.net/texture/9336d7cc95cbf6689f5e8c954294ec8d1efc494a4031325bb427bc81d56a484d")),
+                plr.getInventory().addItem(GUIHelper.addLore(
+                        GUIHelper.addSkull(Utils.urlToBase64("https://textures.minecraft.net/texture/9336d7cc95cbf6689f5e8c954294ec8d1efc494a4031325bb427bc81d56a484d")),
                         "&aMaddox Batphone",
                         "&6Item Ability: Whassup? &e&lRIGHT CLICK",
                         "&7Lets you call &dMaddox&7, when",
@@ -108,7 +109,7 @@ public class SpawnEgg implements CommandExecutor {
                         "&a&lUNCOMMON"));
                 break;
             case "inkwand":
-                Utils.createInvisibleEnchantedItemByte(plr.getInventory(), 280, 0, 1, 1,
+                GUIHelper.addEnchantedItem(plr.getInventory(), 280, 0, 1, 1,
                         "&5Ink Wand",
                         "&7Damage: &c+130",
                         "&7Sterngth: &c+122",
@@ -117,7 +118,7 @@ public class SpawnEgg implements CommandExecutor {
                         "",
                         "&7Item Ability: Ink Bomb &e&lRIGHT CLICK",
                         "&7Shoot an ink bomb in front of",
-                        "&7you dealing, &c" + Utils.coinFormat((double) (po.getIntelligence() * 100)) + " &7damage",
+                        "&7you dealing, &c" + Utils.doubleFormat((double) (po.getIntelligence() * 100)) + " &7damage",
                         "&7and giving blindness!",
                         "&8Mana Cost:& &360",
                         "&8Cooldown: &a30s",

@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.PacketManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
@@ -63,7 +64,7 @@ public class ConstantTask extends BukkitRunnable {
              * This is temporary.
              */
             if (plr.getItemInHand() != null && plr.getItemInHand().getType() == Material.BOW) {
-                Utils.createInvisibleEnchantedItemByte(plr.getInventory(), 262, 0, 64, 9, "&8Quiver Arrow", "&7This item is in your", "&7inventory because you are", "&7holding your bow currently.", " ", "&7Switch your held item to", "&7see the item that was here", "&7before.");
+                GUIHelper.addEnchantedItem(plr.getInventory(), 262, 0, 64, 9, "&8Quiver Arrow", "&7This item is in your", "&7inventory because you are", "&7holding your bow currently.", " ", "&7Switch your held item to", "&7see the item that was here", "&7before.");
             } else {
                 ItemStack nether_star = plugin.miscs.SKYBLOCK_MENU;
                 plr.getInventory().setItem(8, nether_star);

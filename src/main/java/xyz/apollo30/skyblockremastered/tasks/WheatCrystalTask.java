@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -80,7 +81,7 @@ public class WheatCrystalTask extends BukkitRunnable {
             armorStand.setVisible(false);
             armorStand.setSmall(true);
 
-            ItemStack skull = Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjJjYjQ2ODM2Y2NjY2JhYjQyNGRhZDEzNTU3ZjIwOTYyM2Y5ZDZlYzVjNjY1ZjdiZTc2OWJlYmVjNGMxNTdmYSJ9fX0");
+            ItemStack skull = GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjJjYjQ2ODM2Y2NjY2JhYjQyNGRhZDEzNTU3ZjIwOTYyM2Y5ZDZlYzVjNjY1ZjdiZTc2OWJlYmVjNGMxNTdmYSJ9fX0");
 
             armorStand.setHelmet(skull);
 

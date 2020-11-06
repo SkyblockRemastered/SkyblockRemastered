@@ -8,7 +8,7 @@ plugins {
 apply plugin: 'java'
 
 shadowJar {
-    configurations.implementation.canBeResolved = true
+    project.configurations.implementation.canBeResolved = true
     configurations = [project.configurations.implementation]
 }
 
@@ -41,15 +41,15 @@ repositories {
 
 dependencies {
     implementation 'org.mongodb:mongo-java-driver:3.12.7'
-    compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
-    compile "com.mojang:authlib:1.5.21"
-    compile "org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT"
-    compile files("libs/craftbukkit-1.8.8.jar")
-    compileOnly 'org.projectlombok:lombok:1.18.12'
+    implementation 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+    implementation "com.mojang:authlib:1.5.21"
+    implementation "org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT"
+    implementation files("libs/bson-3.11.2-javadoc.jar")
+    implementation files("libs/craftbukkit-1.8.8.jar")
+    implementation 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
-    compileOnly group: "com.grinderwolf", name: "slimeworldmanager-api", version: "2.2.1"
 }
 
 processResources {

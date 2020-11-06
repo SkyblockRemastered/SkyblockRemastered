@@ -23,10 +23,9 @@ public class GUIHelper {
         return item;
     }
 
-    public static ItemStack getSkull(String url) {
-        String value = url;
+    public static ItemStack addSkull(String url) {
         GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
-        gameProfile.getProperties().put("textures", new Property("textures", value));
+        gameProfile.getProperties().put("textures", new Property("textures", url));
 
         ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
@@ -56,7 +55,7 @@ public class GUIHelper {
     }
 
     @SuppressWarnings({"unchecked"})
-    public static ItemStack createItem(Inventory inv, String material, int amount, int invSlot, String displayName,
+    public static ItemStack addItem(Inventory inv, String material, int amount, int invSlot, String displayName,
                                        String... loreString) {
 
         ItemStack item;
@@ -80,7 +79,7 @@ public class GUIHelper {
     }
 
     @SuppressWarnings({"deprecation", "unchecked"})
-    public static ItemStack createItemID(Inventory inv, int id, int amount, int invSlot, String displayName,
+    public static ItemStack addItem(Inventory inv, int id, int amount, int invSlot, String displayName,
                                          String... loreString) {
 
         ItemStack item;
@@ -102,7 +101,7 @@ public class GUIHelper {
     }
 
     @SuppressWarnings({"unchecked", "deprecation"})
-    public static ItemStack createItemByte(Inventory inv, int id, int byteID, int amount, int invSlot,
+    public static ItemStack addItem(Inventory inv, int id, int byteID, int amount, int invSlot,
                                            String displayName, String... loreString) {
 
         ItemStack item;
@@ -124,7 +123,7 @@ public class GUIHelper {
         return item;
     }
 
-    public static ItemStack createGlass(Inventory inv, String material, int byteID, int amount, int... slots) {
+    public static ItemStack addGlass(Inventory inv, String material, int byteID, int amount, int... slots) {
 
         ItemStack item;
 
@@ -141,7 +140,7 @@ public class GUIHelper {
     }
 
     @SuppressWarnings({"unchecked", "deprecation"})
-    public static ItemStack createInvisibleEnchantedItem(Inventory inv, int id, int amount, int invSlot,
+    public static ItemStack addEnchantedItem(Inventory inv, int id, int amount, int invSlot,
                                                          String displayName, String... loreString) {
 
         ItemStack item;
@@ -167,7 +166,7 @@ public class GUIHelper {
     }
 
     @SuppressWarnings({"unchecked", "deprecation"})
-    public static ItemStack createInvisibleEnchantedItemByte(Inventory inv, int id, int byteID, int amount, int invSlot,
+    public static ItemStack addEnchantedItem(Inventory inv, int id, int byteID, int amount, int invSlot,
                                                              String displayName, String... loreString) {
 
         ItemStack item;
@@ -192,7 +191,7 @@ public class GUIHelper {
     }
 
     @SuppressWarnings({"unchecked"})
-    public static ItemStack createSkull(Inventory inv, String IGN, int amount, int invSlot, String displayName,
+    public static ItemStack addSkull(Inventory inv, String IGN, int amount, int invSlot, String displayName,
                                         String... loreString) {
 
         ItemStack skull;
@@ -205,7 +204,7 @@ public class GUIHelper {
         meta.setOwner(IGN);
         meta.setDisplayName(Utils.chat(displayName));
         for (String s : loreString) {
-            if (s.length() != 0) if (s.length() != 0) lore.add(Utils.chat(s));
+            if (s.length() != 0) lore.add(Utils.chat(s));
         }
 
         meta.setLore(lore);

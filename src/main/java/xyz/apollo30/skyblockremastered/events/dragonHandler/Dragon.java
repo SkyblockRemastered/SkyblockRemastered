@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
+import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.NMSUtil;
@@ -111,7 +112,7 @@ public class Dragon implements Listener {
                     } else {
                         if (new Date().getTime() < cooldown.get(blocc.getLocation())) {
                             long kek = (cooldown.get(blocc.getLocation()) - new Date().getTime()) / 1000;
-                            e.getPlayer().sendMessage(Utils.chat("&cYou must wait &e" + Utils.coinFormat((double) kek) + "s&c to do that!"));
+                            e.getPlayer().sendMessage(Utils.chat("&cYou must wait &e" + Utils.doubleFormat((double) kek) + "s&c to do that!"));
                             e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 1F, .5F);
                             return;
                         }
@@ -328,7 +329,7 @@ public class Dragon implements Listener {
                         armorStand.setVisible(false);
                         armorStand.setGravity(false);
                         armorStand.setRemoveWhenFarAway(true);
-                        armorStand.setHelmet(Utils.getSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWZlOGU3ZjJkYjhlYWE4OGEwNDFjODlkNGMzNTNkMDY2Y2M0ZWRlZjc3ZWRjZjVlMDhiYjVkM2JhYWQifX19"));
+                        armorStand.setHelmet(GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWZlOGU3ZjJkYjhlYWE4OGEwNDFjODlkNGMzNTNkMDY2Y2M0ZWRlZjc3ZWRjZjVlMDhiYjVkM2JhYWQifX19"));
                         armorStand.setSmall(true);
 
                         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, armorStand::remove, 80);
@@ -727,11 +728,11 @@ public class Dragon implements Listener {
 
                 for (Map.Entry<String, Double> entry : sortByValues(playerDamage2)) {
                     if (numberOne == null && entry.getKey() != null)
-                        numberOne = entry.getKey() + " &7- &e" + Utils.coinFormat(entry.getValue());
+                        numberOne = entry.getKey() + " &7- &e" + Utils.doubleFormat(entry.getValue());
                     else if (numberTwo == null && entry.getKey() != null)
-                        numberTwo = entry.getKey() + " &7- &6" + Utils.coinFormat(entry.getValue());
+                        numberTwo = entry.getKey() + " &7- &6" + Utils.doubleFormat(entry.getValue());
                     else if (numberThree == null && entry.getKey() != null)
-                        numberThree = entry.getKey() + " &7- &c" + Utils.coinFormat(entry.getValue());
+                        numberThree = entry.getKey() + " &7- &c" + Utils.doubleFormat(entry.getValue());
                 }
 
                 if (numberOne == null) numberOne = "&7&kApollon was here&r - &e0";
@@ -751,7 +752,7 @@ public class Dragon implements Listener {
                 plr.sendMessage(Utils.chat(centerText("        &6&l2nd Damager &7- " + numberTwo + "        ")));
                 plr.sendMessage(Utils.chat(centerText("              &c&l3rd Damager &7- " + numberThree + "           ")));
                 plr.sendMessage(Utils.chat(centerText("                                                                ")));
-                plr.sendMessage(Utils.chat(centerText("                   &eYour Damage: &a" + Utils.coinFormat(plugin.dragonEvent.playerDamage.get(plr)) + " &7(Position #" + position + ")                         ")));
+                plr.sendMessage(Utils.chat(centerText("                   &eYour Damage: &a" + Utils.doubleFormat(plugin.dragonEvent.playerDamage.get(plr)) + " &7(Position #" + position + ")                         ")));
                 plr.sendMessage(Utils.chat(centerText("                                                                ")));
                 plr.sendMessage(Utils.chat(centerText("&a&l&m------------------------------------------------")));
             }

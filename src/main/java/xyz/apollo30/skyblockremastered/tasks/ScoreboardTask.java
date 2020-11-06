@@ -8,6 +8,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.objects.MobObject;
 import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.GUIs.GUIs;
@@ -36,7 +37,7 @@ public class ScoreboardTask extends BukkitRunnable {
             obj.setDisplaySlot(DisplaySlot.SIDEBAR);
             obj.setDisplayName(Utils.chat(title));
 
-            PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+            PlayerObject po = PlayerManager.playerObjects.get(plr);
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
             DateTimeFormatter d = DateTimeFormatter.ofPattern("dd");
@@ -55,8 +56,8 @@ public class ScoreboardTask extends BukkitRunnable {
                 po.setPurse(po.getPurse() + po.getCoins_gained());
             }
 
-            String purse = "&fPurse: &6" + Utils.coinFormat(po.getPurse()) + coins_gained;
-            String bits = "&fBits: &b" + Utils.coinFormat(po.getBits());
+            String purse = "&fPurse: &6" + Utils.doubleFormat(po.getPurse()) + coins_gained;
+            String bits = "&fBits: &b" + Utils.doubleFormat(po.getBits());
 
             String number = d.format(now).startsWith("0") ? d.format(now) : d.format(now);
             List<String> contents = new ArrayList<>();
@@ -74,8 +75,8 @@ public class ScoreboardTask extends BukkitRunnable {
                 if (mo != null) {
                     if (plugin.dragonEvent.playerDamage.get(plr) != null) {
                         contents.add("&7&8 ");
-                        contents.add("&fDragon HP: &a" + Utils.coinFormat(mo.getHealth() < 0 ? (double) 0 : (double) mo.getHealth()) + " &c" + GUIs.getUnicode("heart"));
-                        contents.add("&fYour Damage: &c" + Utils.coinFormat(plugin.dragonEvent.playerDamage.get(plr)));
+                        contents.add("&fDragon HP: &a" + Utils.doubleFormat(mo.getHealth() < 0 ? (double) 0 : (double) mo.getHealth()) + " &c" + GUIs.getUnicode("heart"));
+                        contents.add("&fYour Damage: &c" + Utils.doubleFormat(plugin.dragonEvent.playerDamage.get(plr)));
                     } else plugin.dragonEvent.playerDamage.put(plr, (double) 0);
                 }
             }

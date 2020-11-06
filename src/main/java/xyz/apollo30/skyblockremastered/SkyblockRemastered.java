@@ -53,10 +53,10 @@ public class SkyblockRemastered extends JavaPlugin {
     @Override
     public void onEnable() {
 
-//        new MongoUtils(
-//                "mongodb+srv://console:t3rk1reyaseocmdb2skel@skyblockremastered.olzwn.mongodb.net/<dbname>?retryWrites=true&w=majority",
-//                "constants",
-//                "playerData");
+        new MongoUtils(
+                "mongodb+srv://console:t3rk1reyaseocmdb2skel@skyblockremastered.olzwn.mongodb.net/<dbname>?retryWrites=true&w=majority",
+                "constants",
+                "playerData");
 
         // Registering Custom Dragons
         nmsu.registerEntity("Dragon", 63, EntityEnderDragon.class, CustomEnderDragon.class);
