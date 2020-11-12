@@ -5,10 +5,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.util.Vector;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
+import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -23,13 +29,130 @@ public class PlayerEvents implements Listener {
     }
 
     @EventHandler
+    public void playerLeave(PlayerQuitEvent e) {
+        Player plr = e.getPlayer();
+        Utils.broadCast("&c[-] " + Helper.getRank(plr, true));
+
+        PlayerManager.savePlayerData(plr);
+        PlayerManager.playerObjects.remove(plr);
+        plugin.dragonEvent.playerDamage.remove(plr);
+    }
+
+    @EventHandler
+    public void playerJoin(PlayerJoinEvent e) {
+
+        Player plr = e.getPlayer();
+
+        e.setJoinMessage("");
+
+        if (!plr.isOp()) {
+            plr.setGameMode(GameMode.SURVIVAL);
+        }
+
+        plr.sendMessage(Utils.chat("&8»&m--------------------------------------------------&r&8«"));
+        plr.sendMessage(Utils.chat("&aWelcome to &6SkyblockRemastered&7, " + plr.getName() + "!"));
+        plr.sendMessage(Utils.chat("&6Discord &8» &ahttps://discord.gg/gbXcMta"));
+        plr.sendMessage(Utils.chat("&6IP &8» &aplay.apollo30.xyz"));
+        plr.sendMessage(Utils.chat("&6Youtube &8» &ahttps://youtube.com/c/Apollo30"));
+        plr.sendMessage(Utils.chat("&6Store &8» &ahttps://store.apollo30.xyz/"));
+        plr.sendMessage(Utils.chat("&8»&m--------------------------------------------------&r&8«"));
+
+        // Rank Joins
+        Utils.broadCast("&a[+] " + Helper.getRank(plr, true));
+
+        ItemStack nether_star = plugin.miscs.SKYBLOCK_MENU;
+        plr.getInventory().remove(nether_star);
+
+        GUIHelper.addItem(plr.getInventory(), nether_star, 9);
+
+        // Create section for them
+        PlayerManager.createPlayerData(plr);
+
+        // Give the player a temporary database.
+        if (plugin.playerManager.getPlayerData(plr) == null) PlayerManager.createPlayerData(plr);
+
+        // If a player joins during a dragon fight
+        plugin.dragonEvent.playerDamage.computeIfAbsent(plr, k -> (double) 0);
+
+        // Load the Private Island
+        World clone = Bukkit.getServer().createWorld(new WorldCreator("private_island_template"));
+
+        // Now we copi pasta
+        // File file = new File(Bukkit.getServer().getWorldContainer(), "playerislands/" + plr.getUniqueId().toString());
+        // if (!file.exists())
+        Utils.copyWorld(clone, "playerislands/" + plr.getUniqueId().toString());
+
+        // Define Variables
+        World island = Bukkit.getServer().getWorld("playerislands/" + plr.getUniqueId().toString());
+        // Teleport them
+        Location loc = new Location(island, island.getSpawnLocation().getX(), island.getSpawnLocation().getY(), island.getSpawnLocation().getZ());
+        plr.teleport(loc);
+    }
+
+    @EventHandler
+    public void playerShootArrow(ProjectileLaunchEvent e) {
+
+        if (!(e.getEntity().getShooter() instanceof Player)) return;
+        Player plr = (Player) e.getEntity().getShooter();
+        PlayerTemplate po = plugin.playerManager.getPlayerData(plr);
+        if (po == null) return;
+
+        int arrows = 0;
+
+        if (po.getQuiverBag() == null) return;
+        Inventory inv = Helper.stringToInventory(po.getQuiverBag());
+
+        assert inv != null;
+        for (ItemStack item : inv.getContents()) {
+            if (item == null) break;
+            if (item.getType() == Material.ARROW) arrows += item.getAmount();
+            else if (item.getType() == Material.PRISMARINE_SHARD) arrows += item.getAmount();
+            else if (item.getType() == Material.MAGMA_CREAM) arrows += item.getAmount();
+        }
+
+        if (arrows > 0) {
+            ItemStack item = plr.getItemInHand();
+            if (item.getType() != Material.BOW)
+                return;
+            String itemName = !item.hasItemMeta() || item.hasItemMeta() && item.getItemMeta().getDisplayName().isEmpty() ? "Bow" : item.getItemMeta().getDisplayName();
+
+            if (itemName.contains("Magma Bow")) {
+                for (ItemStack arrow : inv.getContents()) {
+                    if (arrow != null) {
+                        if (arrow.getType() == Material.MAGMA_CREAM) {
+                            arrow.setAmount(arrow.getAmount() - 1);
+                            po.setQuiverBag(Helper.inventoryToString(inv));
+                            return;
+                        } else if (arrow.getType() == Material.ARROW) {
+                            arrow.setAmount(arrow.getAmount() - 1);
+                            po.setQuiverBag(Helper.inventoryToString(inv));
+                            return;
+                        }
+                    }
+                }
+            } else {
+                for (ItemStack arrow : inv.getContents()) {
+                    if (arrow != null) {
+                        if (arrow.getType() == Material.ARROW) {
+                            arrow.setAmount(arrow.getAmount() - 1);
+                            po.setQuiverBag(Helper.inventoryToString(inv));
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
     public void playerMove(PlayerMoveEvent e) {
         Player plr = e.getPlayer();
-        PlayerObject po = plugin.playerManager.getPlayerData(plr);
+        PlayerTemplate po = plugin.playerManager.getPlayerData(plr);
+        if (po == null) return;
 
         // Island Border
         if (plr.getWorld().getName().startsWith("playerislands/")) {
-            if (!Utils.isInZone(plr.getLocation(), new Location(plr.getWorld(), -80, 255, -80), new Location(plr.getWorld(), 80, 0, 80))){
+            if (!Utils.isInZone(plr.getLocation(), new Location(plr.getWorld(), -80, 255, -80), new Location(plr.getWorld(), 80, 0, 80))) {
                 plr.sendMessage(Utils.chat("&cYou've reached the world border.\n&aTo expand it, you can use your &2gems&a by heading to the Community Center!"));
                 e.setCancelled(true);
                 plr.teleport(plr.getWorld().getSpawnLocation());
@@ -69,7 +192,7 @@ public class PlayerEvents implements Listener {
 
     @EventHandler
     public void onPlayerRegainHealth(EntityRegainHealthEvent event) {
-        if(event.getRegainReason() == EntityRegainHealthEvent.RegainReason.SATIATED || event.getRegainReason() == EntityRegainHealthEvent.RegainReason.REGEN)
+        if (event.getRegainReason() == EntityRegainHealthEvent.RegainReason.SATIATED || event.getRegainReason() == EntityRegainHealthEvent.RegainReason.REGEN)
             event.setCancelled(true);
     }
 

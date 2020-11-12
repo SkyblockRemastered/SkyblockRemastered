@@ -8,9 +8,9 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
+import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 public class ProtectionEvents implements Listener {
@@ -28,7 +28,7 @@ public class ProtectionEvents implements Listener {
 
         // Fetching the player's data
         Player plr = e.getPlayer();
-        PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+        PlayerTemplate po = PlayerManager.playerObjects.get(plr);
 
         // Check if the player is in the hub or not.
         if (plr.getWorld().getName().equals("hub")) {
@@ -59,7 +59,7 @@ public class ProtectionEvents implements Listener {
     @EventHandler
     public void onArmorStandManipulate(PlayerArmorStandManipulateEvent e) {
         Player plr = e.getPlayer();
-        PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+        PlayerTemplate po = PlayerManager.playerObjects.get(plr);
         // Check if the player is in the hub or not.
         if (plr.getWorld().getName().equals("hub")) {
             // Checking if their settings is allowed.
@@ -78,7 +78,8 @@ public class ProtectionEvents implements Listener {
 
         // Fetching the player's data
         Player plr = e.getPlayer();
-        PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+        PlayerTemplate po = PlayerManager.playerObjects.get(plr);
+        if (po == null) return;
         ItemStack item = plr.getItemInHand();
 
         // Island Border
@@ -160,6 +161,9 @@ public class ProtectionEvents implements Listener {
 
     @EventHandler
     public void onEntityTarget(EntityTargetEvent e) {
+
+        if (!(e.getTarget() instanceof Player)) e.setCancelled(true);
+
         if (e.getTarget() instanceof Player) {
             Player plr = (Player) e.getTarget();
             if (plr.getWorld().getName().startsWith("playerislands/") && !plr.getWorld().getName().equals("playerislands/" + plr.getUniqueId().toString())) {
@@ -191,7 +195,7 @@ public class ProtectionEvents implements Listener {
     public void onPlayerBucketEmpty(PlayerBucketEmptyEvent e) {
         // Fetching the player's data
         Player plr = e.getPlayer();
-        PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+        PlayerTemplate po = PlayerManager.playerObjects.get(plr);
 
         // Check if the player is in the hub or not.
         if (plr.getWorld().getName().equals("hub")) {
@@ -214,7 +218,7 @@ public class ProtectionEvents implements Listener {
     public void onPlayerBucketFill(PlayerBucketFillEvent e) {
         // Fetching the player's data
         Player plr = e.getPlayer();
-        PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+        PlayerTemplate po = plugin.playerManager.playerObjects.get(plr);
 
         // Check if the player is in the hub or not.
         if (plr.getWorld().getName().equals("hub")) {

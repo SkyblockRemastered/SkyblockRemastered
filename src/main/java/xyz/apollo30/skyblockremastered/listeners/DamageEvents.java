@@ -1,6 +1,7 @@
 package xyz.apollo30.skyblockremastered.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
@@ -18,10 +19,13 @@ import xyz.apollo30.skyblockremastered.events.dragonHandler.CustomEnderDragon;
 import xyz.apollo30.skyblockremastered.events.dragonHandler.Dragon;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.objects.MobObject;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.templates.MobTemplate;
+import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DamageEvents implements Listener {
 
@@ -71,6 +75,7 @@ public class DamageEvents implements Listener {
         if (e.getDamager().getType() == EntityType.ARROW && e.getEntity() instanceof LivingEntity && !e.getEntity().getType().equals(EntityType.PLAYER)) {
 
             Arrow arrow = (Arrow) e.getDamager();
+            if (!(arrow.getShooter() instanceof Player)) return;
             Player plr = (Player) arrow.getShooter();
 
             ItemStack bow = plr.getInventory().getItemInHand();
@@ -79,8 +84,8 @@ public class DamageEvents implements Listener {
             LivingEntity target = (LivingEntity) e.getEntity();
 
             if (!(target instanceof Player)) {
-                PlayerObject po = PlayerManager.playerObjects.get(damager);
-                MobObject mo = plugin.mobManager.mobObjects.get(target);
+                PlayerTemplate po = PlayerManager.playerObjects.get(damager);
+                MobTemplate mo = MobManager.mobObjects.get(target);
 
                 if (po == null || mo == null) return;
 
@@ -151,8 +156,8 @@ public class DamageEvents implements Listener {
             Player damager = (Player) e.getDamager();
             LivingEntity target = (LivingEntity) e.getEntity();
 
-            PlayerObject po = PlayerManager.playerObjects.get(damager);
-            MobObject mo = plugin.mobManager.mobObjects.get(target);
+            PlayerTemplate po = PlayerManager.playerObjects.get(damager);
+            MobTemplate mo = plugin.mobManager.mobObjects.get(target);
 
             // Defining the player's stats
             int strength = po.getStrength();
@@ -209,8 +214,8 @@ public class DamageEvents implements Listener {
             Player target = (Player) e.getEntity();
             LivingEntity damager = (LivingEntity) e.getDamager();
 
-            PlayerObject po = PlayerManager.playerObjects.get(target);
-            MobObject mo = MobManager.mobObjects.get(damager);
+            PlayerTemplate po = PlayerManager.playerObjects.get(target);
+            MobTemplate mo = MobManager.mobObjects.get(damager);
 
             int damage = mo.getDamage() > 0 ? mo.getDamage() : (int) e.getDamage();
 
@@ -239,8 +244,8 @@ public class DamageEvents implements Listener {
             Player damager = (Player) e.getDamager();
             Player target = (Player) e.getEntity();
 
-            PlayerObject po = PlayerManager.playerObjects.get(damager);
-            PlayerObject po2 = PlayerManager.playerObjects.get(target);
+            PlayerTemplate po = PlayerManager.playerObjects.get(damager);
+            PlayerTemplate po2 = PlayerManager.playerObjects.get(target);
 
             // Defining the player's stats
             int strength = po.getStrength();
@@ -310,8 +315,8 @@ public class DamageEvents implements Listener {
                 return;
             }
 
-            PlayerObject po = plugin.playerManager.playerObjects.get(damager);
-            PlayerObject po2 = plugin.playerManager.playerObjects.get(target);
+            PlayerTemplate po = PlayerManager.playerObjects.get(damager);
+            PlayerTemplate po2 = PlayerManager.playerObjects.get(target);
 
             plr.playSound(plr.getLocation(), Sound.ORB_PICKUP, 1000F, .8F);
 
@@ -366,7 +371,13 @@ public class DamageEvents implements Listener {
 
         try {
 
-            if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION && e.getEntityType() == EntityType.ENDER_DRAGON || e.getCause() == EntityDamageEvent.DamageCause.FALL) {
+            if ((e.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION || e.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK || e.getCause() == EntityDamageEvent.DamageCause.FIRE || e.getCause() == EntityDamageEvent.DamageCause.LAVA) && e.getEntityType() == EntityType.ENDERMAN) {
+                List<Location> locs = new ArrayList<>(plugin.endSpawnpoints.keySet());
+                Location loc = locs.get((int) Math.floor(Math.random() * plugin.endSpawnpoints.size()));
+                e.getEntity().setFireTicks(0);
+                e.getEntity().setFallDistance(100);
+                e.getEntity().teleport(loc);
+            } else if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION && e.getEntityType() == EntityType.ENDER_DRAGON || e.getCause() == EntityDamageEvent.DamageCause.FALL) {
                 e.setCancelled(true);
                 return;
             } else if (e.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
@@ -402,10 +413,15 @@ public class DamageEvents implements Listener {
                         EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
                 };
 
+                if (e.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
+                    e.setCancelled(true);
+                    return;
+                }
+
                 if (e.getEntity().getType() == EntityType.PLAYER) {
 
                     Player target = (Player) e.getEntity();
-                    PlayerObject po = plugin.playerManager.playerObjects.get(target);
+                    PlayerTemplate po = PlayerManager.playerObjects.get(target);
 
                     String type = "normal";
                     int damage = 5;
@@ -419,7 +435,7 @@ public class DamageEvents implements Listener {
                     for (EntityDamageEvent.DamageCause cause : uniqueCauses) {
                         if (e.getCause() == cause) {
                             type = cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.LAVA ? "fire" : cause == EntityDamageEvent.DamageCause.DROWNING ? "water" : cause == EntityDamageEvent.DamageCause.WITHER ? "wither" : cause == EntityDamageEvent.DamageCause.POISON ? "poison" : "normal";
-                            damage = cause == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION || cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION ? 200 : cause == EntityDamageEvent.DamageCause.LAVA ? 20 : 5;
+                            damage = cause == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION || cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION ? 200 : cause == EntityDamageEvent.DamageCause.LAVA ? 20 : cause == EntityDamageEvent.DamageCause.WITHER ? 25 : 5;
                             break;
                         }
                     }
@@ -434,7 +450,7 @@ public class DamageEvents implements Listener {
                 } else {
 
                     LivingEntity target = (LivingEntity) e.getEntity();
-                    MobObject mo = plugin.mobManager.mobObjects.get(target);
+                    MobTemplate mo = MobManager.mobObjects.get(target);
                     String type = "normal";
                     int damage = 5;
 
@@ -444,7 +460,7 @@ public class DamageEvents implements Listener {
                     for (EntityDamageEvent.DamageCause cause : uniqueCauses) {
                         if (e.getCause() == cause) {
                             type = cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.LAVA ? "fire" : cause == EntityDamageEvent.DamageCause.DROWNING ? "water" : cause == EntityDamageEvent.DamageCause.WITHER ? "wither" : cause == EntityDamageEvent.DamageCause.POISON ? "poison" : "normal";
-                            damage = cause == EntityDamageEvent.DamageCause.LAVA ? 20 : 5;
+                            damage = cause == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION || cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION ? 200 : cause == EntityDamageEvent.DamageCause.LAVA ? 20 : cause == EntityDamageEvent.DamageCause.WITHER ? 25 : 5;
                             break;
                         }
                     }
@@ -472,7 +488,7 @@ public class DamageEvents implements Listener {
         if (e.getEntityType() == EntityType.ENDER_DRAGON) {
             if (e.getRegainReason() == EntityRegainHealthEvent.RegainReason.CUSTOM || e.getRegainReason() == EntityRegainHealthEvent.RegainReason.ENDER_CRYSTAL) {
                 LivingEntity mob = (LivingEntity) e.getEntity();
-                MobObject mo = plugin.mobManager.mobObjects.get(mob);
+                MobTemplate mo = MobManager.mobObjects.get(mob);
                 e.setCancelled(true);
                 mo.setHealth(Math.min(mo.getHealth() + 22500, mo.getMaxHealth()));
                 mob.setHealth(((mo.getHealth() / (double) mo.getMaxHealth()) * mob.getMaxHealth()));

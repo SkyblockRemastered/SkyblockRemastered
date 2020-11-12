@@ -50,7 +50,7 @@ public class EnchantEvents extends BukkitRunnable implements Listener {
             for (Entity e : arrow.getNearbyEntities(i, 3, i)) {
                 if (e != arrow.getShooter()) {
                     if (e.getType().isAlive() && e instanceof LivingEntity) {
-                        if (e.getType() == EntityType.PLAYER || e.getType() == EntityType.ARMOR_STAND) return;
+                        if (e.getType() == EntityType.PLAYER || e.getType() == EntityType.ARMOR_STAND || e.getType() == EntityType.ENDERMAN) return;
                         Location from = arrow.getLocation();
                         Location to = e.getLocation().add(0, 2, 0);
                         Vector vFrom = from.toVector();

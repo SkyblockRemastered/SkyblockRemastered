@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.Date;
@@ -62,7 +62,7 @@ public class ItemAbilityEvents implements Listener {
     public void onPlayerFlight(PlayerToggleFlightEvent e) {
 
         Player plr = e.getPlayer();
-        PlayerObject po = PlayerManager.playerObjects.get(plr);
+        PlayerTemplate po = PlayerManager.playerObjects.get(plr);
 
         /**
          * Double Jump Ability Below

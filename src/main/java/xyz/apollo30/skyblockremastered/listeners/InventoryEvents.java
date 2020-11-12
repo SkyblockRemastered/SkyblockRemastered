@@ -9,11 +9,16 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import xyz.apollo30.skyblockremastered.GUIs.CreditsMenu;
+import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
+import xyz.apollo30.skyblockremastered.GUIs.SkyblockMenu;
+import xyz.apollo30.skyblockremastered.GUIs.constructor.Menu;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.constants.Constants;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.GUIs.GUIs;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
@@ -34,6 +39,18 @@ public class InventoryEvents implements Listener {
     @EventHandler
     public void onPlayerClick(InventoryClickEvent e) {
 
+        if (e.getInventory().getHolder() instanceof Menu) {
+            e.setCancelled(true);
+            if (e.getCurrentItem() == null) { //deal with null exceptions
+                return;
+            }
+            // Since we know our inventoryholder is a menu, get the Menu Object representing
+            // the menu we clicked on
+            Menu menu = (Menu) e.getInventory().getHolder();
+            // Call the handleMenu object which takes the event and processes it
+            menu.handleMenu(e);
+        }
+
         if (e.getCurrentItem() == null) return;
 
         /**
@@ -53,33 +70,42 @@ public class InventoryEvents implements Listener {
         String item = e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() ? e.getCurrentItem().getItemMeta().getDisplayName() : null;
         String clickType = e.getClick().toString();
 
+        PlayerTemplate po = plugin.playerManager.getPlayerData(plr);
+
         if (title == null || item == null)
             return;
 
-        // Skyblock Menu
-        if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
-            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+        if (item.equals("&aCredits")) {
+            new CreditsMenu(SkyblockRemastered.getMenuUtility(plr)).open();
+        } else if (item.equals(Utils.chat("&aPotion Bag"))) {
+            if (po.getPotionBag() == null) {
+                Inventory inv = Bukkit.createInventory(plr, 18, "Potion Bag");
+                GUIHelper.addGlass(inv, "STAINED_GLASS_PANE", 15, 1, 10, 11, 12, 15, 16, 17, 18);
+                GUIHelper.addItem(inv, 262, 1, 13, "&aGo Back");
+                GUIHelper.addItem(inv, 166, 1, 14, "&cClose");
+                po.setPotionBag(Helper.inventoryToString(inv));
+            }
+            Inventory inv = Helper.stringToInventory(po.getPotionBag());
+            plr.openInventory(inv);
+        } else if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
+            SkyblockMenu.skyblockMenu(plr, plr.getUniqueId().toString(), plugin);
             e.setCancelled(true);
-            // Personal Vault
         } else if (item.equals(Utils.chat("&8Quiver Arrow"))) {
-            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            SkyblockMenu.skyblockMenu(plr, plr.getUniqueId().toString(), plugin);
             e.setCancelled(true);
         } else if (item.equals(Utils.chat("&aPersonal Vault"))) {
             plr.openInventory(plr.getEnderChest());
             plr.playSound(plr.getLocation(), Sound.CHEST_OPEN, 1F, 0.3F);
             e.setCancelled(true);
-            // Crafting Table
         } else if (item.equals(Utils.chat("&aCrafting Table"))) {
             GUIs.craftingMenu(plr, plr.getUniqueId().toString(), "empty");
             e.setCancelled(true);
         } else if (item.equals(Utils.chat("&aTrades"))) {
             GUIs.tradeMenu(plr, plr.getUniqueId().toString());
             e.setCancelled(true);
-            // Close Button
         } else if (item.equals(Utils.chat("&cClose"))) {
             plr.closeInventory();
             e.setCancelled(true);
-            // Personal Bank
         } else if (item.equals(Utils.chat("&aPersonal Bank"))) {
             GUIs.bankMenu(plr, plr.getUniqueId().toString(), plugin);
             e.setCancelled(true);
@@ -108,10 +134,10 @@ public class InventoryEvents implements Listener {
                 }
             }
         } else if (item.equals(Utils.chat("&aYour Skills"))) {
-            GUIs.skillMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers());
+            GUIs.skillMenu(plr, plr.getUniqueId().toString());
             e.setCancelled(true);
         } else if (item.equals(Utils.chat("&aGo Back"))) {
-            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            SkyblockMenu.skyblockMenu(plr, plr.getUniqueId().toString(), plugin);
             e.setCancelled(true);
         } else if (item.equals(Utils.chat("&aPlugin Developer Menu"))) {
             GUIs.adminPanel(plr, plr.getUniqueId().toString());
@@ -152,8 +178,6 @@ public class InventoryEvents implements Listener {
                 e.setCancelled(true);
                 if (item.equalsIgnoreCase(Utils.chat("&aYour whole purse"))) {
 
-                    PlayerObject po = PlayerManager.playerObjects.get(plr);
-
                     if (po.getPurse() <= 0) {
                         plr.playSound(plr.getLocation(), Sound.VILLAGER_NO, 1F, 1F);
                         plr.sendMessage(Utils.chat("&cYou cannot deposit this little!"));
@@ -171,7 +195,6 @@ public class InventoryEvents implements Listener {
                     // Refreshing the Page
                     GUIs.bankDeposit(plr, plr.getUniqueId().toString(), plugin);
                 } else if (item.equalsIgnoreCase(Utils.chat("&aHalf your purse"))) {
-                    PlayerObject po = PlayerManager.playerObjects.get(plr);
 
                     if (po.getPurse() <= 0) {
                         plr.playSound(plr.getLocation(), Sound.VILLAGER_NO, 1F, 1F);
@@ -196,8 +219,6 @@ public class InventoryEvents implements Listener {
                 e.setCancelled(true);
                 if (item.equalsIgnoreCase(Utils.chat("&aEverything in your account"))) {
 
-                    PlayerObject po = PlayerManager.playerObjects.get(plr);
-
                     if (po.getBank() <= 0) {
                         plr.playSound(plr.getLocation(), Sound.VILLAGER_NO, 1F, 1F);
                         plr.sendMessage(Utils.chat("&cYou cannot withdraw this little!"));
@@ -215,7 +236,6 @@ public class InventoryEvents implements Listener {
                     // Refreshing the Page
                     GUIs.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
                 } else if (item.equalsIgnoreCase(Utils.chat("&aHalf your account"))) {
-                    PlayerObject po = PlayerManager.playerObjects.get(plr);
 
                     if (po.getBank() <= 1) {
                         plr.playSound(plr.getLocation(), Sound.VILLAGER_NO, 1F, 1F);
@@ -234,7 +254,6 @@ public class InventoryEvents implements Listener {
                     // Refreshing the Page
                     GUIs.bankWithdrawal(plr, plr.getUniqueId().toString(), plugin);
                 } else if (item.equalsIgnoreCase(Utils.chat("&a20% of your account"))) {
-                    PlayerObject po = PlayerManager.playerObjects.get(plr);
 
                     if (po.getBank() <= 1) {
                         plr.playSound(plr.getLocation(), Sound.VILLAGER_NO, 1F, 1F);
@@ -266,7 +285,7 @@ public class InventoryEvents implements Listener {
     public void onInventoryOpen(InventoryOpenEvent e) {
         // Fetching the player's data
         Player plr = (Player) e.getPlayer();
-        PlayerObject po = PlayerManager.playerObjects.get(plr);
+        PlayerTemplate po = PlayerManager.playerObjects.get(plr);
 
         // If the player is in their island or not.
         if (!plr.getWorld().getName().equals("playerislands/" + plr.getUniqueId().toString())) {
@@ -293,10 +312,10 @@ public class InventoryEvents implements Listener {
             return;
 
         if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
-            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            SkyblockMenu.skyblockMenu(plr, plr.getUniqueId().toString(), plugin);
             e.setCancelled(true);
         } else if (item.equals(Utils.chat("&8Quiver Arrow"))) {
-            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            SkyblockMenu.skyblockMenu(plr, plr.getUniqueId().toString(), plugin);
             e.setCancelled(true);
         }
     }
@@ -308,10 +327,10 @@ public class InventoryEvents implements Listener {
         if (item == null)
             return;
         if (item.equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
-            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            SkyblockMenu.skyblockMenu(plr, plr.getUniqueId().toString(), plugin);
             e.setCancelled(true);
         } else if (item.equals(Utils.chat("&8Quiver Arrow"))) {
-            GUIs.skyblockMenu(plr, plr.getUniqueId().toString(), plugin.db.getPlayers(), plugin);
+            SkyblockMenu.skyblockMenu(plr, plr.getUniqueId().toString(), plugin);
             e.setCancelled(true);
         }
     }
@@ -319,7 +338,7 @@ public class InventoryEvents implements Listener {
     @EventHandler
     public void onPlayerPickup(PlayerPickupItemEvent e) {
         Player plr = e.getPlayer();
-        PlayerObject po = PlayerManager.playerObjects.get(plr);
+        PlayerTemplate po = PlayerManager.playerObjects.get(plr);
         ItemStack item = e.getItem().getItemStack();
 
         if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().startsWith("Coin")) {

@@ -1,11 +1,11 @@
 package xyz.apollo30.skyblockremastered.commands;
 
-import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
+import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
@@ -28,7 +28,7 @@ public class Build implements CommandExecutor {
         Player plr = (Player) sender;
 
         if (!plr.hasPermission("sbr.buildbypass") || !plr.isOp()) return false;
-        PlayerObject po = plugin.playerManager.playerObjects.get(plr);
+        PlayerTemplate po = PlayerManager.playerObjects.get(plr);
         plr.sendMessage(Utils.chat(po.isBlockBreak() ? "&cYou can no longer alter any islands" : "&aYou can now alter islands."));
         po.setBlockBreak(!po.isBlockBreak());
 

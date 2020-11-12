@@ -7,7 +7,7 @@ import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.GUIs.GUIs;
 import xyz.apollo30.skyblockremastered.managers.PacketManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 public class ActionBarTask extends BukkitRunnable {
@@ -22,7 +22,7 @@ public class ActionBarTask extends BukkitRunnable {
     public void run() {
         for (Player plr : Bukkit.getOnlinePlayers()) {
 
-            PlayerObject po = PlayerManager.playerObjects.get(plr);
+            PlayerTemplate po = PlayerManager.playerObjects.get(plr);
 
             String hp = Integer.toString(po.getHealth() + po.getExtraHealth() + po.getAbsorptionHealth());
             String maxhp = Integer.toString(po.getMaxHealth());

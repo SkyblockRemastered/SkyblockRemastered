@@ -46,7 +46,7 @@ public class Miscs {
             else {
                 plr.sendMessage(ResponsesUtils.callSuccess());
                 plr.playSound(plr.getLocation(), Sound.CLICK, 1F, 1F);
-                GUIs.batphoneMenu(plr, plr.getUniqueId().toString(), plugin);
+                // GUIs.batphoneMenu(plr, plr.getUniqueId().toString(), plugin);
                 bcd.put(plr.getUniqueId(), 0);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> bcd.remove(plr.getUniqueId()), 600L);
             }

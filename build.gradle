@@ -5,13 +5,6 @@ plugins {
     id 'java'
 }
 
-apply plugin: 'java'
-
-shadowJar {
-    project.configurations.implementation.canBeResolved = true
-    configurations = [project.configurations.implementation]
-}
-
 group = 'xyz.Apollo30'
 version = '1.0-SNAPSHOT'
 
@@ -30,13 +23,6 @@ repositories {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
-    maven {
-        name = "spigot-repo"
-        url = "https://hub.spigotmc.org/nexus/content/groups/public/"
-    }
-    maven {
-        url "https://plugins.gradle.org/m2/"
-    }
 }
 
 dependencies {
@@ -44,12 +30,17 @@ dependencies {
     implementation 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     implementation "com.mojang:authlib:1.5.21"
     implementation "org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT"
-    implementation files("libs/bson-3.11.2-javadoc.jar")
     implementation files("libs/craftbukkit-1.8.8.jar")
     implementation 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+}
+
+shadowJar {
+    project.configurations.implementation.canBeResolved = true
+    configurations = [project.configurations.implementation]
+    destinationDir = "/exports/${project.name}" as File
 }
 
 processResources {
@@ -60,6 +51,11 @@ processResources {
 
 libsDirName = 'C:\\Users\\Apollo\\Downloads\\Recreating Hypixel Skyblock 1.8\\plugins'
 compileJava.options.encoding = 'UTF-8'
+
+task runApp(type: JavaExec) {
+    main = "SkyblockRemastered.java"
+    classpath = shadowJar.archiveFile as FileCollection // use archivePath before Gradle 5.1
+}
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'

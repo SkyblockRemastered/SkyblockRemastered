@@ -19,6 +19,7 @@ import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.GUIs.GUIs;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -40,6 +41,16 @@ public class Utils {
 
     public static String doubleFormat(Double coins) {
         return String.format("%,.0f", coins);
+    }
+
+    public static Object getValueOf(Object clazz, String lookingForValue) throws Exception {
+        Field field = clazz.getClass().getField(lookingForValue);
+        Class clazzType = field.getType();
+        if (clazzType.toString().equals("double"))
+            return field.getDouble(clazz);
+        else if (clazzType.toString().equals("int"))
+            return field.getInt(clazz);
+        return field.get(clazz);
     }
 
     public static String urlToBase64(String url) {
@@ -138,8 +149,10 @@ public class Utils {
 //            else if (Utils.isInZone(loc, new Location(loc.getWorld(), -40, 76, -115), new Location(plr.getWorld(), -28, 63, -105))) location = "&cRedstone House";
 //            else if (Utils.isInZone(loc, new Location(loc.getWorld(), 9, 104, -190), new Location(plr.getWorld(), 80, 55, -116))) location = "&6Farm";
 //            else if (Utils.isInZone(loc, new Location(loc.getWorld(), -80, 255, -152), new Location(plr.getWorld(), 95, 0, -26))) location = "&bVillage";
-            if (Utils.isInZone(loc, new Location(loc.getWorld(), -64, 101, -68), new Location(plr.getWorld(), 72, 1, 67))) location = "&5Dragon's Nest";
-            else if (Utils.isInZone(loc, new Location(loc.getWorld(), -112, 255, -107), new Location(plr.getWorld(), 213, 29, 127))) location = "&dThe End";
+            if (Utils.isInZone(loc, new Location(loc.getWorld(), -64, 101, -68), new Location(plr.getWorld(), 72, 1, 67)))
+                location = "&5Dragon's Nest";
+            else if (Utils.isInZone(loc, new Location(loc.getWorld(), -112, 255, -107), new Location(plr.getWorld(), 213, 29, 127)))
+                location = "&dThe End";
         }
 
         return location;

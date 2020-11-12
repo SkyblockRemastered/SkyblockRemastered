@@ -2,25 +2,32 @@ package xyz.apollo30.skyblockremastered;
 
 import net.minecraft.server.v1_8_R3.EntityEnderDragon;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import xyz.apollo30.skyblockremastered.GUIs.constructor.Menu;
+import xyz.apollo30.skyblockremastered.GUIs.constructor.MenuUtility;
 import xyz.apollo30.skyblockremastered.abilities.Miscs;
 import xyz.apollo30.skyblockremastered.abilities.Weapons;
 import xyz.apollo30.skyblockremastered.commands.*;
+import xyz.apollo30.skyblockremastered.events.bagHandler.AccessoryBag;
+import xyz.apollo30.skyblockremastered.events.bagHandler.PotionBag;
+import xyz.apollo30.skyblockremastered.events.bagHandler.QuiverBag;
 import xyz.apollo30.skyblockremastered.events.dragonHandler.CustomEnderDragon;
 import xyz.apollo30.skyblockremastered.events.dragonHandler.DragLootStructure;
 import xyz.apollo30.skyblockremastered.events.dragonHandler.Dragon;
 import xyz.apollo30.skyblockremastered.events.tradeHandler.TradeEvents;
 import xyz.apollo30.skyblockremastered.items.*;
 import xyz.apollo30.skyblockremastered.listeners.*;
-import xyz.apollo30.skyblockremastered.managers.ConfigManager;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.objects.ServerObject;
+import xyz.apollo30.skyblockremastered.templates.ServerTemplate;
 import xyz.apollo30.skyblockremastered.tasks.*;
 import xyz.apollo30.skyblockremastered.utils.MongoUtils;
 import xyz.apollo30.skyblockremastered.utils.NMSUtil;
@@ -29,7 +36,6 @@ import java.util.HashMap;
 
 public class SkyblockRemastered extends JavaPlugin {
 
-    public ConfigManager db;
     public HashMap<Entity, Entity> health_indicator = new HashMap<>();
     public PlayerManager playerManager;
     public MobManager mobManager;
@@ -38,8 +44,12 @@ public class SkyblockRemastered extends JavaPlugin {
     public Weapons weaponAbilities;
     public Dragon dragonEvent;
     public DragLootStructure dragon;
-    public ServerObject so = new ServerObject();
+    public ServerTemplate so = new ServerTemplate();
     public NMSUtil nmsu = new NMSUtil();
+    public MobSpawnTask mobSpawnTask = new MobSpawnTask(this);
+
+    // Spawnpoints
+    public HashMap<Location, Block> endSpawnpoints = new HashMap<>();
 
     // ItemStack Defining
     public xyz.apollo30.skyblockremastered.items.Weapons weapons = new xyz.apollo30.skyblockremastered.items.Weapons(this);
@@ -49,22 +59,18 @@ public class SkyblockRemastered extends JavaPlugin {
     public Fragments fragments = new Fragments(this);
     public Bows bows = new Bows(this);
     public Stones stones = new Stones(this);
+    public Accessories accessories = new Accessories(this);
 
     @Override
     public void onEnable() {
 
         new MongoUtils(
-                "mongodb+srv://console:t3rk1reyaseocmdb2skel@skyblockremastered.olzwn.mongodb.net/<dbname>?retryWrites=true&w=majority",
+                "mongodb+srv://console:t3rk1reyaseocmdb2skel@skyblockremastered.olzwn.mongodb.net/constants?retryWrites=true&w=majority",
                 "constants",
                 "playerData");
 
         // Registering Custom Dragons
         nmsu.registerEntity("Dragon", 63, EntityEnderDragon.class, CustomEnderDragon.class);
-
-        db = new ConfigManager(this);
-        db.saveDefaultPlayers();
-        db.saveDefaultMinions();
-        db.saveDefaultSpawns();
 
         // Listener
         new DamageEvents(this);
@@ -76,6 +82,10 @@ public class SkyblockRemastered extends JavaPlugin {
         new EnchantEvents(this);
         new TradeEvents(this);
         new ItemAbilityEvents(this);
+        new DeathEvents(this);
+        new PotionBag(this);
+        new QuiverBag(this);
+        new AccessoryBag(this);
 
         // Command
         new Gamemode(this);
@@ -83,8 +93,8 @@ public class SkyblockRemastered extends JavaPlugin {
         new Visit(this);
         new Hub(this);
         new Build(this);
-        new SpawnEgg(this);
-        new Item(this);
+        new AuctionHouse(this);
+        new Debug(this);
 
         // Abilities
         this.miscAbilities = new Miscs(this);
@@ -106,8 +116,27 @@ public class SkyblockRemastered extends JavaPlugin {
             }
         }
 
+        // Loads all spawnpoints in the map
+
+        try {
+            // Dragon's Nest
+            for (int x = -90; x < 78; x++) {
+                for (int y = 0; y < 13; y++) {
+                    for (int z = -96; z < 69; z++) {
+                        Block block = Bukkit.getWorld("hub").getBlockAt(x, y, z);
+                        if (block.getType().equals(Material.CARPET) && block.getData() == 5) {
+                            // Utils.broadCast("Block Saved at " + x + ", " + y + ", " + z);
+                            endSpawnpoints.put(new Location(Bukkit.getWorld("hub"), x, y, z), block);
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception err) {
+            System.out.println("[ERROR] Spawnpoints of the dragon's nest did not load.");
+        }
+
         // Inits the timer for all managers.
-        mobManager.initTimer();
         new ScoreboardTask(this).runTaskTimer(this, 30, 30);
         new ActionBarTask(this).runTaskTimer(this, 20, 20);
         new RegenerationTask().runTaskTimer(this, 30, 30);
@@ -115,7 +144,21 @@ public class SkyblockRemastered extends JavaPlugin {
         new LagPreventerTask(this).runTaskTimer(this, 0, 20);
         new EnchantEvents(this).runTaskTimer(this, 0, 1);
         new ConstantTask(this).runTaskTimer(this, 0, 1);
+        mobSpawnTask.runTaskTimer(this, 0, 20 * 15);
 
+    }
+
+    private static final HashMap<Player, MenuUtility> menuUtilityMap = new HashMap<>();
+
+    public static MenuUtility getMenuUtility(Player plr) {
+        MenuUtility menuUtility;
+        if (menuUtilityMap.containsKey(plr)) {
+            return menuUtilityMap.get(plr);
+        } else {
+            menuUtility = new MenuUtility(plr);
+            menuUtilityMap.put(plr, menuUtility);
+            return menuUtility;
+        }
     }
 
     @Override
@@ -127,20 +170,4 @@ public class SkyblockRemastered extends JavaPlugin {
         }
 
     }
-
-    // Overflux
-    // eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODQ4NTlkMGFkZmM5M2JlMTliYjQ0MWU2ZWRmZDQzZjZiZmU2OTEyNzIzMDMzZjk2M2QwMDlhMTFjNDgyNDUxMCJ9fX0
-
-    // Mana Flux
-    // eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODJhZGExYzdmY2M4Y2YzNWRlZmViOTQ0YTRmOGZmYTlhOWQyNjA1NjBmYzdmNWY1ODI2ZGU4MDg1NDM1OTY3YyJ9fX0=
-
-    // Radiant
-    // eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2FiNGM0ZDZlZTY5YmMyNGJiYTJiOGZhZjY3YjlmNzA0YTA2YjAxYWE5M2YzZWZhNmFlZjdhOTY5NmM0ZmVlZiJ9fX0=
-
-    // Skeletor:
-    // eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODlkMDc0YWQ5Yjk5NzE4NzllYjMyNWJkZGZmMzY3NWY3MjI0ODU2YmQ2ZDU2OWZjOGQ0ODNjMTMzZDczMDA1ZCJ9fX0
-
-    // Parrot:
-    // eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWRmNGIzNDAxYTRkMDZhZDY2YWM4YjVjNGQxODk2MThhZTYxN2Y5YzE0MzA3MWM4YWMzOWE1NjNjZjRlNDIwOCJ9fX0
-
 }

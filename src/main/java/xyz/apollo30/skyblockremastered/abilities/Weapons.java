@@ -1,6 +1,5 @@
 package xyz.apollo30.skyblockremastered.abilities;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -8,7 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.Collections;
@@ -25,7 +24,7 @@ public class Weapons {
     }
 
     public void aspect_of_the_end(Player plr) {
-        PlayerObject po = PlayerManager.playerObjects.get(plr);
+        PlayerTemplate po = PlayerManager.playerObjects.get(plr);
         if (po.getIntelligence() - 50 < 0 || po.getIntelligence() <= 0) {
             plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, .5F);
             plr.sendMessage(Utils.chat("&cYou do not have enough mana"));

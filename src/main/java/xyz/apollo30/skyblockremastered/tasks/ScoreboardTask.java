@@ -9,8 +9,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.objects.MobObject;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.templates.MobTemplate;
+import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.GUIs.GUIs;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -21,7 +21,6 @@ import java.util.*;
 public class ScoreboardTask extends BukkitRunnable {
 
     private final SkyblockRemastered plugin;
-    private String title = "&e&lSKYBLOCK";
 
     public ScoreboardTask(SkyblockRemastered plugin) {
         this.plugin = plugin;
@@ -35,9 +34,10 @@ public class ScoreboardTask extends BukkitRunnable {
             Scoreboard sb = plugin.getServer().getScoreboardManager().getNewScoreboard();
             Objective obj = sb.registerNewObjective("dummy", "dummy");
             obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+            String title = "&e&lSKYBLOCK";
             obj.setDisplayName(Utils.chat(title));
 
-            PlayerObject po = PlayerManager.playerObjects.get(plr);
+            PlayerTemplate po = PlayerManager.playerObjects.get(plr);
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
             DateTimeFormatter d = DateTimeFormatter.ofPattern("dd");
@@ -71,7 +71,7 @@ public class ScoreboardTask extends BukkitRunnable {
 
             if (plugin.so.isDragonFight()) {
                 if (!plr.getWorld().getName().equals("hub")) return;
-                MobObject mo = plugin.so.getEnderDragon();
+                MobTemplate mo = plugin.so.getEnderDragon();
                 if (mo != null) {
                     if (plugin.dragonEvent.playerDamage.get(plr) != null) {
                         contents.add("&7&8 ");
@@ -82,7 +82,7 @@ public class ScoreboardTask extends BukkitRunnable {
             }
 
             contents.add("&2&5");
-            contents.add("&eplay.apollo30.xyz");
+            contents.add(plugin.so.isHypixelip() ? "&ewww.hypixel.net" : "&eplay.apollo30.xyz");
 
             int cycle = contents.size();
             for (String list : contents) {
@@ -91,10 +91,7 @@ public class ScoreboardTask extends BukkitRunnable {
             }
             plr.setScoreboard(sb);
             po.setCoins_gained(0);
-
         }
-
-
     }
 
 }

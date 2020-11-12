@@ -14,8 +14,8 @@ import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.objects.MobObject;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.templates.MobTemplate;
+import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -200,10 +200,10 @@ public class CustomEnderDragon extends EntityEnderDragon {
                  * Because the code above doesn't fucking work.
                  */
                 LivingEntity entity = (LivingEntity) getBukkitEntity();
-                MobObject mo = MobManager.mobObjects.get(entity);
+                MobTemplate mo = MobManager.mobObjects.get(entity);
                 if (mo.getHealth() <= 0) return;
 
-                if (Math.random() > (entity.getHealth() / entity.getMaxHealth()) && canAbility) {
+                if (Math.random() > .5) {
                     if (stopsLeft > 0 && Math.random() > .75) {
                         /**
                          * Randomly Stopping the Dragon
@@ -240,7 +240,7 @@ public class CustomEnderDragon extends EntityEnderDragon {
                             for (Player plr : getBukkitEntity().getWorld().getPlayers()) {
                                 int damage = (int) Helper.triangularDistribution(700, 1100, 1500);
                                 plr.getWorld().strikeLightningEffect(plr.getLocation());
-                                PlayerObject po = PlayerManager.playerObjects.get(plr);
+                                PlayerTemplate po = PlayerManager.playerObjects.get(plr);
                                 po.subtractHealth(damage);
                                 if (po.getHealth() <= 0 && !plr.isDead())
                                     Helper.deathHandler(JavaPlugin.getPlugin(SkyblockRemastered.class), plr, "other");

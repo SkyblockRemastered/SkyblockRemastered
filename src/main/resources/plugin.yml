@@ -8,6 +8,9 @@ commands:
   skyblockremastered:
     description: SkyblockRemasted Main Command
     aliases: [sr]
+  auctionhouse:
+    description: free items daddi
+    aliases: [ah]
   gamemode:
     description: Change a players gamemode.
     permissions:
@@ -30,11 +33,5 @@ commands:
         description: Allows the player to bypass build.
         default: false
     aliases: [bypass, buildbypass, bb]
-  spawnegg:
-    description: Gives the player a spawn egg :O
-    permissions:
-      sbr.give:
-        description: Allows the player to give them custom spawn eggs
-        default: false
-  item:
-    description: free items daddi
+  debug:
+    description: oh.

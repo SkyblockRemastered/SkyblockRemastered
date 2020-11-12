@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.apollo30.skyblockremastered.GUIs.GUIs;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.utils.ResponsesUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -45,7 +45,7 @@ public class SkyblockRemastered implements CommandExecutor {
 
         Player plr = (Player) sender;
 
-        PlayerObject player_data = plugin.playerManager.getPlayerData(plr);
+        PlayerTemplate player_data = plugin.playerManager.getPlayerData(plr);
         //if (!plr.isOp()) return false;
         String prefix = "&6Skyblock &8» &7";
 
@@ -161,6 +161,10 @@ public class SkyblockRemastered implements CommandExecutor {
                 player.playSound(player.getLocation(), Sound.NOTE_PLING, 100F, 1F);
                 player.sendMessage(Utils.chat("&7PVP has been " + (plugin.so.isPvp() ? "&aEnabled&7!" : "&cDisabled&7!")));
             }
+        } else if (args[0].equalsIgnoreCase("ip")) {
+            if (!plr.isOp()) return false;
+            plugin.so.setHypixelip(!plugin.so.isHypixelip());
+            plr.sendMessage(Utils.chat("IP has been changed!"));
         } else if (args[0].equalsIgnoreCase("bank")) {
             GUIs.bankMenu(plr, plr.getUniqueId().toString(), plugin);
         } else if (args[0].equalsIgnoreCase("dialogs")) {

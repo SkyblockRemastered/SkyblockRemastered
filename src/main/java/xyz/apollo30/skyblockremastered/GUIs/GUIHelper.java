@@ -215,4 +215,53 @@ public class GUIHelper {
 
     }
 
+    public static String getUnicode(String type) {
+        String unicode = "";
+        if (type.equalsIgnoreCase("seacreature"))
+            unicode = "α";
+        else if (type.equalsIgnoreCase("intel"))
+            unicode = "✎";
+        else if (type.equalsIgnoreCase("heart"))
+            unicode = "❤";
+        else if (type.equalsIgnoreCase("defense"))
+            unicode = "❈";
+        else if (type.equalsIgnoreCase("cc"))
+            unicode = "☣";
+        else if (type.equalsIgnoreCase("infinite"))
+            unicode = "∞";
+        else if (type.equalsIgnoreCase("trademark"))
+            unicode = "™";
+        else if (type.equalsIgnoreCase("speed"))
+            unicode = "✦";
+        else if (type.equalsIgnoreCase("cd"))
+            unicode = "☠";
+        else if (type.equalsIgnoreCase("petluck"))
+            unicode = "♣";
+        else if (type.equalsIgnoreCase("truedefense") || type.equalsIgnoreCase("td"))
+            unicode = "❂";
+        else if (type.equalsIgnoreCase("strength"))
+            unicode = "❁";
+        else if (type.equalsIgnoreCase("atkspeed"))
+            unicode = "⚔";
+        else if (type.equalsIgnoreCase("moonleft"))
+            unicode = "☽";
+        else if (type.equalsIgnoreCase("moonright"))
+            unicode = "☾";
+        else if (type.equalsIgnoreCase("mf"))
+            unicode = "✯";
+        else if (type.equalsIgnoreCase("crithit"))
+            unicode = "✯";
+        else if (type.equalsIgnoreCase("ferocity"))
+            unicode = "⫽";
+        else if (type.equalsIgnoreCase("star"))
+            unicode = "✪";
+        else if (type.equalsIgnoreCase("rune"))
+            unicode = "◆";
+        else if (type.equalsIgnoreCase("arrow"))
+            unicode = "➜";
+        else if (type.equalsIgnoreCase("requirement"))
+            unicode = "\t❣";
+        return unicode;
+    }
+
 }

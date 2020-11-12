@@ -3,13 +3,14 @@ package xyz.apollo30.skyblockremastered.tasks;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.PacketManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -64,13 +65,30 @@ public class ConstantTask extends BukkitRunnable {
              * This is temporary.
              */
             if (plr.getItemInHand() != null && plr.getItemInHand().getType() == Material.BOW) {
-                GUIHelper.addEnchantedItem(plr.getInventory(), 262, 0, 64, 9, "&8Quiver Arrow", "&7This item is in your", "&7inventory because you are", "&7holding your bow currently.", " ", "&7Switch your held item to", "&7see the item that was here", "&7before.");
+                PlayerTemplate po = plugin.playerManager.getPlayerData(plr);
+                int arrows = -1;
+
+                if (po.getQuiverBag() == null) return;
+                Inventory inv = Helper.stringToInventory(po.getQuiverBag());
+
+                assert inv != null;
+                for (ItemStack item : inv.getContents()) {
+                    if (item != null) {
+                        if (item.getType() == Material.ARROW) arrows += item.getAmount();
+                        else if (item.getType() == Material.PRISMARINE_SHARD) arrows += item.getAmount();
+                        else if (item.getType() == Material.MAGMA_CREAM) arrows += item.getAmount();
+                    }
+                }
+
+                if (arrows > 0)
+                    GUIHelper.addEnchantedItem(plr.getInventory(), 262, 0, Math.min(arrows, 64), 9, "&8Quiver Arrow", "&7This item is in your", "&7inventory because you are", "&7holding your bow currently.", " ", "&7Switch your held item to", "&7see the item that was here", "&7before.");
             } else {
                 ItemStack nether_star = plugin.miscs.SKYBLOCK_MENU;
                 plr.getInventory().setItem(8, nether_star);
             }
 
-            PlayerObject po = PlayerManager.playerObjects.get(plr);
+            PlayerTemplate po = PlayerManager.playerObjects.get(plr);
+            if (po == null) return;
 
             /**
              * Checking if the player's inventory is full

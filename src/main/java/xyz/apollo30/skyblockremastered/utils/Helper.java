@@ -2,7 +2,6 @@ package xyz.apollo30.skyblockremastered.utils;
 
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.Inventory;
@@ -15,7 +14,7 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -43,7 +42,6 @@ public class Helper {
         else if (plr.hasPermission("groups.vip+")) prefix = a ? "&a[VIP&6+&a] " : "&a";
         else if (plr.hasPermission("groups.vip")) prefix = a ? "&a[VIP] " : "&a";
         else prefix = "&7";
-
         return prefix + plr.getName();
     }
 
@@ -121,7 +119,7 @@ public class Helper {
     public static void deathHandler(SkyblockRemastered plugin, Player plr, String type) {
 
         plr.setHealth(plr.getMaxHealth());
-        PlayerObject po = PlayerManager.playerObjects.get(plr);
+        PlayerTemplate po = PlayerManager.playerObjects.get(plr);
         po.resetHealth();
 
         Bukkit.getScheduler().runTask(plugin, () -> plr.setFireTicks(0));

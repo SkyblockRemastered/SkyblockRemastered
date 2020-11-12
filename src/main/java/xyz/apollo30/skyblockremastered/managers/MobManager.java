@@ -3,7 +3,6 @@ package xyz.apollo30.skyblockremastered.managers;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -12,12 +11,12 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.objects.MobObject;
+import xyz.apollo30.skyblockremastered.templates.MobTemplate;
 import xyz.apollo30.skyblockremastered.GUIs.GUIs;
+import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -31,12 +30,12 @@ public class MobManager {
 
     World world = Bukkit.getWorld("hub");
 
-    public static HashMap<LivingEntity, MobObject> mobObjects = new HashMap<>();
+    public static HashMap<LivingEntity, MobTemplate> mobObjects = new HashMap<>();
     public HashSet<Location> zealotSpawnPoints = new HashSet<>();
 
     public void createMob(LivingEntity entity, String name) {
 
-        MobObject mo = new MobObject();
+        MobTemplate mo = new MobTemplate();
 
         // Custom Mobs
         if (name.equalsIgnoreCase("zombie villager")) {
@@ -55,6 +54,34 @@ public class MobManager {
             zombie.getEquipment().setBoots(new ItemStack(Material.LEATHER_BOOTS));
 
             zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999999, 1, true));
+
+        } else if (name.equalsIgnoreCase("watcher")) {
+
+            mo.setMaxHealth(9500);
+            mo.setLevel(55);
+            mo.setDamage((int) Helper.triangularDistribution(20, 25, 30));
+            mo.setLocation("Dragon's Nest");
+            mo.setName("Watcher");
+
+            Skeleton skeleton = (Skeleton) entity;
+            skeleton.getEquipment().setHelmet(plugin.miscs.SUMMONING_EYE);
+            skeleton.getEquipment().setChestplate(Helper.setLeatherColor(new ItemStack(Material.LEATHER_CHESTPLATE), 0, 0, 0));
+            skeleton.getEquipment().setLeggings(Helper.setLeatherColor(new ItemStack(Material.LEATHER_LEGGINGS), 0, 0, 0));
+            skeleton.getEquipment().setBoots(Helper.setLeatherColor(new ItemStack(Material.LEATHER_BOOTS), 0, 0, 0));
+            skeleton.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100000, 3, true, false), true);
+        } else if (name.equalsIgnoreCase("obsidian defender")) {
+
+            mo.setMaxHealth(10000);
+            mo.setLevel(55);
+            mo.setDamage((int) Helper.triangularDistribution(50, 60, 70));
+            mo.setLocation("Dragon's Nest");
+            mo.setName("Obsidian Defender");
+
+            Skeleton skeleton = (Skeleton) entity;
+            skeleton.getEquipment().setItemInHand(null);
+            skeleton.getEquipment().setHelmet(new ItemStack(Material.OBSIDIAN));
+            skeleton.getEquipment().setChestplate(Helper.setLeatherColor(new ItemStack(Material.LEATHER_CHESTPLATE), 0, 0, 0));
+            skeleton.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100000, 3, true, false), true);
 
         } else if (name.equalsIgnoreCase("zombie")) {
             mo.setMaxHealth(100);
@@ -139,12 +166,6 @@ public class MobManager {
             zombie.getEquipment().setChestplate(chestplate);
             zombie.getEquipment().setLeggings(leggings);
             zombie.getEquipment().setBoots(boots);
-
-            zombie.getEquipment().setBootsDropChance(0F);
-            zombie.getEquipment().setHelmetDropChance(0F);
-            zombie.getEquipment().setChestplateDropChance(0F);
-            zombie.getEquipment().setLeggingsDropChance(0F);
-
         } else if (name.equalsIgnoreCase("diamond zombie")) {
             mo.setMaxHealth(200);
             mo.setLocation("Graveyard");
@@ -171,11 +192,6 @@ public class MobManager {
             zombie.getEquipment().setChestplate(chestplate);
             zombie.getEquipment().setLeggings(leggings);
             zombie.getEquipment().setBoots(boots);
-
-            zombie.getEquipment().setBootsDropChance(0F);
-            zombie.getEquipment().setHelmetDropChance(0F);
-            zombie.getEquipment().setChestplateDropChance(0F);
-            zombie.getEquipment().setLeggingsDropChance(0F);
         } else if (name.equalsIgnoreCase("zealot")) {
             mo.setMaxHealth(13000);
             mo.setLocation("The End");
@@ -217,11 +233,6 @@ public class MobManager {
             zombie.getEquipment().setChestplate(chestplate);
             zombie.getEquipment().setLeggings(leggings);
             zombie.getEquipment().setBoots(boots);
-
-            zombie.getEquipment().setBootsDropChance(0F);
-            zombie.getEquipment().setChestplateDropChance(0F);
-            zombie.getEquipment().setLeggingsDropChance(0F);
-
         } else if (name.equalsIgnoreCase("blaze")) {
             if (Math.random() > .5) {
                 mo.setMaxHealth(500);
@@ -327,6 +338,11 @@ public class MobManager {
             mo.setLevel(2147483647);
         }
 
+        entity.getEquipment().setBootsDropChance(0F);
+        entity.getEquipment().setHelmetDropChance(0F);
+        entity.getEquipment().setChestplateDropChance(0F);
+        entity.getEquipment().setLeggingsDropChance(0F);
+        entity.getEquipment().setItemInHandDropChance(0F);
 
         ArmorStand armorStand = entity.getWorld().spawn(entity.getLocation(), ArmorStand.class);
         armorStand.setGravity(false);
@@ -339,43 +355,4 @@ public class MobManager {
         plugin.health_indicator.put(entity, armorStand);
         mobObjects.put(entity, mo);
     }
-
-    public void initBloccCheck() {
-        // The End
-        // -780, 255, -399
-        // -466, 0, -131
-
-        for (int i = -780; i < -466; i++) {
-            for (int j = 0; j < 255; j++) {
-                for (int k = -399; k < -131; k++) {
-                    Block blocc = world.getBlockAt(i, j, k);
-                    if (blocc.getType() == Material.CARPET && blocc.getData() == 5) {
-                        // blocc.setType(Material.AIR);
-                        zealotSpawnPoints.add(blocc.getLocation());
-
-                        // ConfigurationSection config = plugin.db.getSpawns().getConfigurationSection();
-                    }
-                }
-            }
-        }
-    }
-
-    public void initTimer() {
-
-        plugin.db.getSpawns();
-
-        Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            List<Location> list = new ArrayList<>(zealotSpawnPoints);
-            for (Location loc : list) {
-                Block block = world.getBlockAt(loc);
-                if (Arrays.stream(block.getChunk().getEntities()).filter(e -> e.getPassenger() != null && e.getPassenger().getCustomName().contains("Zealot")).collect(Collectors.toList()).size() > 3)
-                    return;
-
-                Enderman enderman = (Enderman) Bukkit.getWorld("hub").spawnEntity(loc, EntityType.ENDERMAN);
-                plugin.mobManager.createMob(enderman, "Zealot");
-            }
-        }, 240L, 240L);
-    }
 }
-
-// Was it wrong that Akhilleus shamed Hector's body just because he killed his best friend.

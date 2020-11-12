@@ -23,7 +23,7 @@ public class Stones {
             "&7 ",
             "&7Requires &eMining Skill XXXV",
             "",
-            "&7&lLEGENDARY REFORGE STONE");
+            "&6&lLEGENDARY REFORGE STONE");
     public ItemStack DRAGON_HORN = GUIHelper.addLore(
             GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
             "&6Empowered Stone",
@@ -36,7 +36,7 @@ public class Stones {
             "&7 ",
             "&7Requires &eMining Skill XXXV",
             "",
-            "&7&lLEGENDARY REFORGE STONE");
+            "&6&lLEGENDARY REFORGE STONE");
     public ItemStack DRAGON_SCALE = GUIHelper.addLore(
             GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
             "&6Empowered Stone",
@@ -49,7 +49,7 @@ public class Stones {
             "&7 ",
             "&7Requires &eMining Skill XXXV",
             "",
-            "&7&lLEGENDARY REFORGE STONE");
+            "&6&lLEGENDARY REFORGE STONE");
     public ItemStack DRAGON_CLAW = GUIHelper.addLore(
             GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
             "&6Empowered Stone",
@@ -62,7 +62,7 @@ public class Stones {
             "&7 ",
             "&7Requires &eMining Skill XXXV",
             "",
-            "&7&lLEGENDARY REFORGE STONE");
+            "&6&lLEGENDARY REFORGE STONE");
     public ItemStack WARPED_STONE = GUIHelper.addLore(
             GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
             "&6Empowered Stone",
@@ -75,5 +75,5 @@ public class Stones {
             "&7 ",
             "&7Requires &eMining Skill XXXV",
             "",
-            "&7&lLEGENDARY REFORGE STONE");
+            "&6&lLEGENDARY REFORGE STONE");
 }
