@@ -2,6 +2,7 @@ package xyz.apollo30.skyblockremastered.GUIs;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +13,6 @@ import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 public class CreditsMenu extends PaginatedMenu {
@@ -71,25 +71,33 @@ public class CreditsMenu extends PaginatedMenu {
         credits.put("eb094132-4eec-4793-a38c-a37576d07c63", "&eCore Contributor");
         credits.put("abd3e676-f320-44f9-9021-043a2b31c387", "&eCore Contributor");
 
+        ArrayList<String> uuids = new ArrayList<>(credits.keySet());
+
         addMenuBorder();
 
-        for (String uuid : credits.keySet()) {
-            Player plr = Bukkit.getPlayer(UUID.fromString(uuid));
-            if (plr == null) break;
+        if (!uuids.isEmpty()) {
+            for (int i = 0; i < super.maxItemsPerPage; i++) {
+                index = super.maxItemsPerPage * page + i;
+                if (index >= uuids.size()) break;
+                if (uuids.get(index) != null) {
+                    OfflinePlayer plr = Bukkit.getOfflinePlayer(UUID.fromString(uuids.get(index)));
+                    if (plr != null) {
+                        ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
 
-            ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+                        SkullMeta meta = (SkullMeta) skull.getItemMeta();
+                        meta.setOwner(plr.getName());
+                        meta.setDisplayName(Utils.chat("&a" + plr.getName()));
+                        ArrayList<String> lore = new ArrayList<>();
+                        lore.add(Utils.chat(credits.get(uuids.get(index))));
 
-            SkullMeta meta = (SkullMeta) skull.getItemMeta();
-            meta.setOwner(plr.getName());
-            meta.setDisplayName(Utils.chat(plr.getName()));
-            List<String> lore = new ArrayList();
-            lore.add(Utils.chat(credits.get(uuid)));
-
-            meta.setLore(lore);
-            skull.setItemMeta(meta);
-            inv.addItem(skull);
+                        meta.setLore(lore);
+                        skull.setItemMeta(meta);
+                        inv.addItem(skull);
+                    }
+                }
+            }
         }
 
-        itemCount = credits.size();
+        itemCount = uuids.size();
     }
 }

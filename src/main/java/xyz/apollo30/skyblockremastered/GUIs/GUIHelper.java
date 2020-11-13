@@ -29,7 +29,7 @@ public class GUIHelper {
 
         ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-        Field profileField = null;
+        Field profileField;
         try {
             profileField = skullMeta.getClass().getDeclaredField("profile");
             profileField.setAccessible(true);

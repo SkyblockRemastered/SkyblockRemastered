@@ -31,11 +31,6 @@ public class Weapons {
             return;
         }
 
-        int usedMana = 50;
-        po.setIntelligence(po.getIntelligence() - usedMana);
-
-        plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1F);
-
         Set<Material> whitelisted = new HashSet<>();
         whitelisted.add(Material.AIR);
         whitelisted.add(Material.WATER);
@@ -44,37 +39,36 @@ public class Weapons {
         whitelisted.add(Material.LAVA);
         whitelisted.add(Material.STATIONARY_LAVA);
 
-        List<Block> blocks = plr.getLineOfSight(whitelisted, 8);
-        Collections.reverse(blocks);
-
-        Block block = null;
-        for (Block blocc : blocks) {
-            if (whitelisted.contains(blocc.getType())) {
-                block = blocc;
-                break;
-            }
-        }
+        Block block = plr.getTargetBlock(whitelisted, 8);
 
         if (block == null || !whitelisted.contains(block.getType())) {
             plr.sendMessage(Utils.chat("&cThere are blocks in the way!"));
             return;
         }
 
+        int usedMana = 50;
+        po.setIntelligence(po.getIntelligence() - usedMana);
+
+        plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1F);
+
         Location location = block.getLocation();
 
-        if (plr.getLocation().getYaw() >= 0 && plr.getLocation().getYaw() <= -180) {
-            location.setX(location.getX() > 0 ? location.getX() + .5 : location.getX() - .5);
-            location.setZ(location.getX() > 0 ? location.getZ() - .5 : location.getZ() + .5);
+//        if (plr.getLocation().getYaw() >= 0 && plr.getLocation().getYaw() <= -180) {
+//            location.setX(location.getX() > 0 ? location.getX() + .5 : location.getX() - .5);
+//            location.setZ(location.getX() > 0 ? location.getZ() - .5 : location.getZ() + .5);
+//
+//            location.setYaw(plr.getLocation().getYaw());
+//            location.setPitch(plr.getLocation().getPitch());
+//        } else {
+//            location.setX(location.getX() > 0 ? location.getX() - .5 + 1 : location.getX() + .5 + 1);
+//            location.setZ(location.getX() > 0 ? location.getZ() + .5 : location.getZ() - .5);
+//
+//            location.setYaw(plr.getLocation().getYaw());
+//            location.setPitch(plr.getLocation().getPitch());
+//        }
 
-            location.setYaw(plr.getLocation().getYaw());
-            location.setPitch(plr.getLocation().getPitch());
-        } else {
-            location.setX(location.getX() > 0 ? location.getX() - .5 + 1 : location.getX() + .5 + 1);
-            location.setZ(location.getX() > 0 ? location.getZ() + .5 : location.getZ() - .5);
-
-            location.setYaw(plr.getLocation().getYaw());
-            location.setPitch(plr.getLocation().getPitch());
-        }
+        location.setPitch(plr.getLocation().getPitch());
+        location.setYaw(plr.getLocation().getYaw());
 
         plr.teleport(location);
         plr.sendMessage(Utils.chat("&aUsed &6Instant Transmission &b(" + usedMana + " Mana)"));

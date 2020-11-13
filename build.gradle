@@ -49,7 +49,6 @@ processResources {
     }
 }
 
-libsDirName = 'C:\\Users\\Apollo\\Downloads\\Recreating Hypixel Skyblock 1.8\\plugins'
 compileJava.options.encoding = 'UTF-8'
 
 task runApp(type: JavaExec) {

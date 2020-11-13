@@ -38,7 +38,7 @@ public class Stones {
             "",
             "&6&lLEGENDARY REFORGE STONE");
     public ItemStack DRAGON_SCALE = GUIHelper.addLore(
-            GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEyNmNkMDU1ZjhiOTY3NmQxMmI5Nzg3MGY5YjA5OGMyN2MxNTM0Y2ZhYjhmYzQ1NTJjZTIxOWUxOTU1OTI1YiJ9fX0="),
+            GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjM4ZDNmNzE4Mzk2ZWY3NzE0OTljNDNlOGYwOThkZTBiY2ZlMzg0ZTcwNzE1MGRiNzQyNDcwNzQ1OTZlMGRjIn19fQ"),
             "&6Empowered Stone",
             "&7Reforge Stone",
             "&7 ",

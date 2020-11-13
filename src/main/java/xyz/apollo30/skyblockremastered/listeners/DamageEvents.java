@@ -41,6 +41,17 @@ public class DamageEvents implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
 
         /**
+         * Reworking on the enderman physics.
+         * Disabling their teleportation when shot by an arrow, potion or projectile.
+         */
+        if (e.getDamager().getType() == EntityType.ARROW || e.getDamager().getType() == EntityType.SNOWBALL || e.getDamager().getType() == EntityType.SNOWMAN || e.getDamager().getType() == EntityType.SPLASH_POTION || e.getDamager().getType() == EntityType.FIREBALL) {
+            if (e.getEntityType() == EntityType.ENDERMAN) {
+                e.setCancelled(true);
+                e.getEntity().teleport(e.getDamager().getLocation());
+            }
+        }
+
+        /**
          * Ender Crystal Handler
          * Checks if an arrow shot by a player or a player hitting it
          * If so, we give them the crystal.
@@ -157,7 +168,9 @@ public class DamageEvents implements Listener {
             LivingEntity target = (LivingEntity) e.getEntity();
 
             PlayerTemplate po = PlayerManager.playerObjects.get(damager);
-            MobTemplate mo = plugin.mobManager.mobObjects.get(target);
+            MobTemplate mo = MobManager.mobObjects.get(target);
+
+            if (po == null || mo == null) return;
 
             // Defining the player's stats
             int strength = po.getStrength();

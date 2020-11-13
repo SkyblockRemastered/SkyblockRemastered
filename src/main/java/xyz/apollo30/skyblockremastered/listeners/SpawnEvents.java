@@ -20,7 +20,6 @@ public class SpawnEvents implements Listener {
     @EventHandler
     public void onEntitySpawn(CreatureSpawnEvent e) {
         if (e.getEntity() != null) {
-            Entity entity = e.getEntity();
             EntityType type = e.getEntityType();
 
             // If the entity's armor stand just return

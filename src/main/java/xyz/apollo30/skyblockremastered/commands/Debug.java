@@ -21,9 +21,14 @@ public class Debug implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if (args.length == 0) sender.sendMessage(Utils.chat("&cUsage: /debug [reload] [player]"));
-        if (args[0].equalsIgnoreCase("reload")) {
-            if (args[1].equalsIgnoreCase("all")) {
+        if (args.length == 0) {
+            sender.sendMessage(Utils.chat("&cUsage: /debug [reload] [player]"));
+            return false;
+        } else if (args[0].equalsIgnoreCase("reload")) {
+            if (args.length == 1) {
+                sender.sendMessage(Utils.chat("&cUsage: /debug [reload] [player]"));
+                return false;
+            } else if (args[1].equalsIgnoreCase("all")) {
                 sender.sendMessage(Utils.chat("&aReloading everyone's profile"));
                 for (Player plr : Bukkit.getOnlinePlayers()) {
                     try {

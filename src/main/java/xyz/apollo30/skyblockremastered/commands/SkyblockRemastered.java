@@ -25,20 +25,20 @@ public class SkyblockRemastered implements CommandExecutor {
         if (!(sender instanceof Player)) {
 
             if (args[0].equalsIgnoreCase("announce")) {
-                String announcement = "";
+                StringBuilder announcement = new StringBuilder();
                 for (int i = 1; i < args.length; i++) {
-                    announcement += args[i] + " ";
+                    announcement.append(args[i]).append(" ");
                 }
-                Utils.broadCast(Utils.chat(announcement));
+                Utils.broadCast(Utils.chat(announcement.toString()));
             } else if (args[0].equalsIgnoreCase("plrannounce")) {
                 String uuid = Utils.getUuid(args[1]);
                 Player plr = Bukkit.getPlayer(uuid);
                 if (plr == null) return false;
-                String announcement = "";
+                StringBuilder announcement = new StringBuilder();
                 for (int i = 2; i < args.length; i++) {
-                    announcement += args[i] + " ";
+                    announcement.append(args[i]).append(" ");
                 }
-                plr.sendMessage(Utils.chat(announcement));
+                plr.sendMessage(Utils.chat(announcement.toString()));
             }
             return false;
         }

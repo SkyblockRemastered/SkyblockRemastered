@@ -16,7 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
-import xyz.apollo30.skyblockremastered.managers.PacketManager;
+import xyz.apollo30.skyblockremastered.utils.PacketUtils;
 import xyz.apollo30.skyblockremastered.templates.MobTemplate;
 import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.utils.NMSUtil;
@@ -73,7 +73,7 @@ public class DeathEvents implements Listener {
             }
         } else if (e.getEntityType() == EntityType.ENDERMAN && entityName.contains(Utils.chat("Special Zealot"))) {
             plr.sendMessage(Utils.chat("&6&lRARE DROP!&r &5Summoning Eye&7!"));
-            PacketManager.sendTitle(plr, 0, 15, 1, Utils.chat("&cSpecial Zealot!"), "");
+            PacketUtils.sendTitle(plr, 0, 15, 1, Utils.chat("&cSpecial Zealot!"), "");
             e.getEntity().getWorld().dropItem(e.getEntity().getLocation(), NMSUtil.addString(plugin.miscs.SUMMONING_EYE, "UUID", UUID.randomUUID().toString()));
             plr.playSound(plr.getLocation(), Sound.SUCCESSFUL_HIT, 1F, .5F);
         }

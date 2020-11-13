@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.managers.PacketManager;
+import xyz.apollo30.skyblockremastered.utils.PacketUtils;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.utils.Helper;
@@ -97,7 +97,7 @@ public class ConstantTask extends BukkitRunnable {
             if ((plr.getInventory().firstEmpty() == -1)) {
                 if (po.getLastInvFullNotification() > new Date().getTime()) return;
                 plr.sendMessage(Utils.chat("&cYour inventory is full!"));
-                PacketManager.sendTitle(plr, 0, 180, 40, Utils.chat("&cInventory Full!"), "");
+                PacketUtils.sendTitle(plr, 0, 180, 40, Utils.chat("&cInventory Full!"), "");
                 plr.playSound(plr.getLocation(), Sound.CHEST_OPEN, 1000L, 5L);
                 po.setLastInvFullNotification(new Date().getTime() + 30000);
             }

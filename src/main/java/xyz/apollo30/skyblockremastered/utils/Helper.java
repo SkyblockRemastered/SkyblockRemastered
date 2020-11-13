@@ -9,6 +9,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
@@ -121,6 +123,10 @@ public class Helper {
         plr.setHealth(plr.getMaxHealth());
         PlayerTemplate po = PlayerManager.playerObjects.get(plr);
         po.resetHealth();
+
+        for (PotionEffect potionEffect : plr.getActivePotionEffects()) {
+            plr.removePotionEffect(potionEffect.getType());
+        }
 
         Bukkit.getScheduler().runTask(plugin, () -> plr.setFireTicks(0));
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> plr.setVelocity(new Vector()), 1L);

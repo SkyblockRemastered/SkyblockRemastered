@@ -75,7 +75,7 @@ public class InventoryEvents implements Listener {
         if (title == null || item == null)
             return;
 
-        if (item.equals("&aCredits")) {
+        if (item.equals(Utils.chat("&aCredits"))) {
             new CreditsMenu(SkyblockRemastered.getMenuUtility(plr)).open();
         } else if (item.equals(Utils.chat("&aPotion Bag"))) {
             if (po.getPotionBag() == null) {
@@ -113,14 +113,13 @@ public class InventoryEvents implements Listener {
             if (clickType.equals("RIGHT")) {
                 if (plr.getWorld().getName().equals("playerislands/" + plr.getUniqueId().toString())) {
                     plr.sendMessage(Utils.chat("&cYou are already at your island"));
-                    e.setCancelled(true);
                 } else {
                     plr.sendMessage(Utils.chat("&7Sending you to your island."));
                     World island = Bukkit.getServer().createWorld(new WorldCreator("playerislands/" + plr.getUniqueId().toString()));
                     Location loc = new Location(island, island.getSpawnLocation().getX(), island.getSpawnLocation().getY(), island.getSpawnLocation().getZ());
                     plr.teleport(loc);
-                    e.setCancelled(true);
                 }
+                e.setCancelled(true);
             } else if (clickType.equals("LEFT")) {
                 if (plr.getWorld().getName().equals("hub")) {
                     plr.sendMessage(Utils.chat("&cYou are already at the hub."));

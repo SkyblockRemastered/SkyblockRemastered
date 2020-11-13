@@ -11,7 +11,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.apollo30.skyblockremastered.GUIs.constructor.Menu;
 import xyz.apollo30.skyblockremastered.GUIs.constructor.MenuUtility;
 import xyz.apollo30.skyblockremastered.abilities.Miscs;
 import xyz.apollo30.skyblockremastered.abilities.Weapons;
@@ -22,7 +21,8 @@ import xyz.apollo30.skyblockremastered.events.bagHandler.QuiverBag;
 import xyz.apollo30.skyblockremastered.events.dragonHandler.CustomEnderDragon;
 import xyz.apollo30.skyblockremastered.events.dragonHandler.DragLootStructure;
 import xyz.apollo30.skyblockremastered.events.dragonHandler.Dragon;
-import xyz.apollo30.skyblockremastered.events.tradeHandler.TradeEvents;
+import xyz.apollo30.skyblockremastered.events.playerHandler.ProfileViewer;
+import xyz.apollo30.skyblockremastered.events.playerHandler.TradeMenu;
 import xyz.apollo30.skyblockremastered.items.*;
 import xyz.apollo30.skyblockremastered.listeners.*;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
@@ -80,12 +80,13 @@ public class SkyblockRemastered extends JavaPlugin {
         new ProtectionEvents(this);
         new SpawnEvents(this);
         new EnchantEvents(this);
-        new TradeEvents(this);
+        new TradeMenu(this);
         new ItemAbilityEvents(this);
         new DeathEvents(this);
         new PotionBag(this);
         new QuiverBag(this);
         new AccessoryBag(this);
+        new ProfileViewer(this);
 
         // Command
         new Gamemode(this);
@@ -95,6 +96,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new Build(this);
         new AuctionHouse(this);
         new Debug(this);
+        new Mob(this);
 
         // Abilities
         this.miscAbilities = new Miscs(this);

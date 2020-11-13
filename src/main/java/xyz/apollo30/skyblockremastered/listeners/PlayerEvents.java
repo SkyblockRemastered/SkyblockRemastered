@@ -30,8 +30,10 @@ public class PlayerEvents implements Listener {
 
     @EventHandler
     public void playerLeave(PlayerQuitEvent e) {
+        e.setQuitMessage("");
+
         Player plr = e.getPlayer();
-        Utils.broadCast("&c[-] " + Helper.getRank(plr, true));
+        Utils.broadCast("&8[&c-&8] " + Helper.getRank(plr, false));
 
         PlayerManager.savePlayerData(plr);
         PlayerManager.playerObjects.remove(plr);
@@ -49,16 +51,8 @@ public class PlayerEvents implements Listener {
             plr.setGameMode(GameMode.SURVIVAL);
         }
 
-        plr.sendMessage(Utils.chat("&8»&m--------------------------------------------------&r&8«"));
-        plr.sendMessage(Utils.chat("&aWelcome to &6SkyblockRemastered&7, " + plr.getName() + "!"));
-        plr.sendMessage(Utils.chat("&6Discord &8» &ahttps://discord.gg/gbXcMta"));
-        plr.sendMessage(Utils.chat("&6IP &8» &aplay.apollo30.xyz"));
-        plr.sendMessage(Utils.chat("&6Youtube &8» &ahttps://youtube.com/c/Apollo30"));
-        plr.sendMessage(Utils.chat("&6Store &8» &ahttps://store.apollo30.xyz/"));
-        plr.sendMessage(Utils.chat("&8»&m--------------------------------------------------&r&8«"));
-
         // Rank Joins
-        Utils.broadCast("&a[+] " + Helper.getRank(plr, true));
+        Utils.broadCast("&8[&a+&8] " + Helper.getRank(plr, false));
 
         ItemStack nether_star = plugin.miscs.SKYBLOCK_MENU;
         plr.getInventory().remove(nether_star);

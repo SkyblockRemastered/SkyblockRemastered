@@ -637,10 +637,6 @@ public class Dragon implements Listener {
         else return CommonDragons.values()[(int) (Math.random() * CommonDragons.values().length)].toString();
     }
 
-    private double negativeOrPositive(double num) {
-        return Math.random() > .5 ? num - (num * 2) : num;
-    }
-
     private String centerText(String text) {
         int maxWidth = 80,
                 spaces = (int) Math.round((maxWidth - 1.4 * ChatColor.stripColor(text).length()) / 2);
