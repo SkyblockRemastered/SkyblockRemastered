@@ -1,15 +1,18 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
+
     id 'com.github.johnrengelman.shadow' version '6.1.0'
     id 'java'
 }
-
 group = 'xyz.Apollo30'
 version = '1.0-SNAPSHOT'
 
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
 repositories {
-    mavenCentral()
+    mavenLocal()
     maven { url "https://repo.glaremasters.me/repository/concuncan/" }
     maven {
         name = 'spigotmc-repo'
@@ -19,24 +22,24 @@ repositories {
         name = "minecraft-repo"
         url = "https://libraries.minecraft.net/"
     }
+
     maven {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+
 }
 
 dependencies {
+    implementation 'org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT'
     implementation 'org.mongodb:mongo-java-driver:3.12.7'
-    implementation 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     implementation "com.mojang:authlib:1.5.21"
-    implementation "org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT"
-    implementation files("libs/craftbukkit-1.8.8.jar")
     implementation 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
-
 shadowJar {
     project.configurations.implementation.canBeResolved = true
     configurations = [project.configurations.implementation]

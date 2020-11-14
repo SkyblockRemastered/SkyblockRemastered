@@ -35,3 +35,6 @@ commands:
     aliases: [bypass, buildbypass, bb]
   debug:
     description: oh.
+  API:
+    description: generate yourself a new API key
+    aliases: [apikey]
