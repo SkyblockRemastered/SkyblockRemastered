@@ -1,7 +1,7 @@
 package xyz.apollo30.skyblockremastered.events.dragonHandler;
 
-import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.Helper;
+import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
 public class ProtectorDragon extends DragLootStructure {
     private final SkyblockRemastered plugin;

@@ -80,6 +80,9 @@ public class QuiverBag implements Listener {
                 GUIHelper.addGlass(inv, "STAINED_GLASS_PANE", 15, 1, 10, 11, 12, 15, 16, 17, 18);
                 GUIHelper.addItem(inv, 262, 1, 13, "&aGo Back");
                 GUIHelper.addItem(inv, 166, 1, 14, "&cClose");
+                for (int i = 0; i < 9; i++) {
+                    inv.addItem(new ItemStack(Material.ARROW, 64));
+                }
                 po.setQuiverBag(Helper.inventoryToString(inv));
             }
             Inventory inv = Helper.stringToInventory(po.getQuiverBag());

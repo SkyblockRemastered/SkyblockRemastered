@@ -27,8 +27,8 @@ import xyz.apollo30.skyblockremastered.items.*;
 import xyz.apollo30.skyblockremastered.listeners.*;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.templates.ServerTemplate;
 import xyz.apollo30.skyblockremastered.tasks.*;
+import xyz.apollo30.skyblockremastered.templates.ServerTemplate;
 import xyz.apollo30.skyblockremastered.utils.MongoUtils;
 import xyz.apollo30.skyblockremastered.utils.NMSUtil;
 
@@ -36,6 +36,7 @@ import java.util.HashMap;
 
 public class SkyblockRemastered extends JavaPlugin {
 
+    public static HashMap<Player, Location> frozenPlayers = new HashMap<>();
     public HashMap<Entity, Entity> health_indicator = new HashMap<>();
     public PlayerManager playerManager;
     public MobManager mobManager;

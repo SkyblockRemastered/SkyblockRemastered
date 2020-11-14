@@ -20,8 +20,12 @@ public class ProfileViewer implements Listener {
     @EventHandler
     public void onPlayerInteractToPlayer(PlayerInteractEntityEvent e) {
 
+        if (!(e.getRightClicked() instanceof Player)) return;
+
         Player plr = e.getPlayer();
         Player clicked = (Player) e.getRightClicked();
+
+        if (!Bukkit.getOnlinePlayers().contains(clicked)) return;
 
         if (!plr.isSneaking()) {
             new xyz.apollo30.skyblockremastered.GUIs.ProfileViewer(SkyblockRemastered.getMenuUtility(plr), plr, clicked).open();

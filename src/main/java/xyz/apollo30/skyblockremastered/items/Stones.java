@@ -3,7 +3,6 @@ package xyz.apollo30.skyblockremastered.items;
 import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.utils.Utils;
 
 public class Stones {
     private final SkyblockRemastered plugin;

@@ -7,9 +7,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
+import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.PacketUtils;
-import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
@@ -27,7 +27,22 @@ public class ConstantTask extends BukkitRunnable {
     @Override
     public void run() {
 
+        /**
+         * Checking for frozen players :)
+         */
+        for (Player plr : SkyblockRemastered.frozenPlayers.keySet()) {
+            plr.teleport(SkyblockRemastered.frozenPlayers.get(plr));
+            plr.sendTitle(Utils.chat("&bYou have been frozen!"), "");
+        }
+
         for (Player plr : Bukkit.getOnlinePlayers()) {
+
+            EntityEquipment equipment = plr.getEquipment();
+            ItemStack helmet = equipment.getHelmet();
+            ItemStack chestplate = equipment.getChestplate();
+            ItemStack leggings = equipment.getLeggings();
+            ItemStack boots = equipment.getBoots();
+            ItemStack heldItem = plr.getItemInHand();
 
             /**
              * Just to update all concurrent items in a player's inventory to check for missing rarities,
@@ -64,7 +79,7 @@ public class ConstantTask extends BukkitRunnable {
              * Infinite Quiver (Replaces Skyblock Menu)
              * This is temporary.
              */
-            if (plr.getItemInHand() != null && plr.getItemInHand().getType() == Material.BOW) {
+            if (heldItem != null && heldItem.getType() == Material.BOW) {
                 PlayerTemplate po = plugin.playerManager.getPlayerData(plr);
                 int arrows = -1;
 
@@ -116,12 +131,10 @@ public class ConstantTask extends BukkitRunnable {
             int trueDamage = 0;
             int trueDefense = 0;
 
-            EntityEquipment equipment = plr.getEquipment();
-
-            if (equipment.getHelmet() != null && po.getHelmet() != equipment.getHelmet()) {
-                po.setHelmet(equipment.getHelmet());
-                if (equipment.getHelmet().hasItemMeta()) {
-                    for (String lore : equipment.getHelmet().getItemMeta().getLore()) {
+            if (helmet != null && po.getHelmet() != helmet) {
+                po.setHelmet(helmet);
+                if (Helper.hasLore(helmet)) {
+                    for (String lore : helmet.getItemMeta().getLore()) {
                         if (lore.startsWith(Utils.chat("&7Health"))) health += parseLore(lore);
                         if (lore.startsWith(Utils.chat("&7Defense"))) defense += parseLore(lore);
                         if (lore.startsWith(Utils.chat("&7Strength"))) strength += parseLore(lore);
@@ -140,10 +153,10 @@ public class ConstantTask extends BukkitRunnable {
                 }
             }
 
-            if (equipment.getChestplate() != null && po.getChestplate() != equipment.getChestplate()) {
-                po.setChestplate(equipment.getChestplate());
-                if (equipment.getChestplate().hasItemMeta()) {
-                    for (String lore : equipment.getChestplate().getItemMeta().getLore()) {
+            if (chestplate != null && po.getChestplate() != chestplate) {
+                po.setChestplate(chestplate);
+                if (Helper.hasLore(chestplate)) {
+                    for (String lore : chestplate.getItemMeta().getLore()) {
                         if (lore.startsWith(Utils.chat("&7Health"))) health += parseLore(lore);
                         if (lore.startsWith(Utils.chat("&7Defense"))) defense += parseLore(lore);
                         if (lore.startsWith(Utils.chat("&7Strength"))) strength += parseLore(lore);
@@ -162,10 +175,10 @@ public class ConstantTask extends BukkitRunnable {
                 }
             }
 
-            if (equipment.getLeggings() != null && po.getLeggings() != equipment.getLeggings()) {
-                po.setLeggings(equipment.getLeggings());
-                if (equipment.getLeggings().hasItemMeta()) {
-                    for (String lore : equipment.getLeggings().getItemMeta().getLore()) {
+            if (leggings != null && po.getLeggings() != leggings) {
+                po.setLeggings(leggings);
+                if (Helper.hasLore(leggings)) {
+                    for (String lore : leggings.getItemMeta().getLore()) {
                         if (lore.startsWith(Utils.chat("&7Health"))) health += parseLore(lore);
                         if (lore.startsWith(Utils.chat("&7Defense"))) defense += parseLore(lore);
                         if (lore.startsWith(Utils.chat("&7Strength"))) strength += parseLore(lore);
@@ -184,10 +197,10 @@ public class ConstantTask extends BukkitRunnable {
                 }
             }
 
-            if (equipment.getBoots() != null && po.getBoots() != equipment.getBoots()) {
-                po.setBoots(equipment.getBoots());
-                if (equipment.getBoots().hasItemMeta()) {
-                    for (String lore : equipment.getBoots().getItemMeta().getLore()) {
+            if (boots != null && po.getBoots() != boots) {
+                po.setBoots(boots);
+                if (Helper.hasLore(boots)) {
+                    for (String lore : boots.getItemMeta().getLore()) {
                         if (lore.startsWith(Utils.chat("&7Health"))) health += parseLore(lore);
                         if (lore.startsWith(Utils.chat("&7Defense"))) defense += parseLore(lore);
                         if (lore.startsWith(Utils.chat("&7Strength"))) strength += parseLore(lore);
@@ -206,10 +219,10 @@ public class ConstantTask extends BukkitRunnable {
                 }
             }
 
-            if (po.getHeldItem() != plr.getItemInHand()) {
-                po.setHeldItem(plr.getItemInHand());
-                if (plr.getItemInHand().hasItemMeta() && plr.getItemInHand().getItemMeta().getLore().size() > 0) {
-                    for (String lore : plr.getItemInHand().getItemMeta().getLore()) {
+            if (po.getHeldItem() != heldItem) {
+                po.setHeldItem(heldItem);
+                if (heldItem != null && heldItem.hasItemMeta() && heldItem.getItemMeta().getLore().size() > 0) {
+                    for (String lore : heldItem.getItemMeta().getLore()) {
                         if (lore.startsWith(Utils.chat("&7Health"))) health += parseLore(lore);
                         if (lore.startsWith(Utils.chat("&7Defense"))) defense += parseLore(lore);
                         if (lore.startsWith(Utils.chat("&7Strength"))) strength += parseLore(lore);
@@ -235,7 +248,7 @@ public class ConstantTask extends BukkitRunnable {
             if (plr.getEquipment().getBoots() != null && plr.getEquipment().getBoots().hasItemMeta() && !plr.getEquipment().getBoots().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getBoots().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Young Dragon Boots"))) {
                 if (plr.getEquipment().getChestplate() != null && plr.getEquipment().getChestplate().hasItemMeta() && !plr.getEquipment().getChestplate().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getChestplate().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Young Dragon Chestplate"))) {
                     if (plr.getEquipment().getLeggings() != null && plr.getEquipment().getLeggings().hasItemMeta() && !plr.getEquipment().getLeggings().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getLeggings().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Young Dragon Leggings"))) {
-                        if (plr.getEquipment().getHelmet() != null && plr.getEquipment().getHelmet().hasItemMeta() && !plr.getEquipment().getHelmet().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getHelmet().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Young Dragon Helmet"))) {
+                        if (helmet != null && helmet.hasItemMeta() && !helmet.getItemMeta().getDisplayName().isEmpty() && helmet.getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Young Dragon Helmet"))) {
                             if ((po.getHealth() / 2) > po.getMaxHealth()) {
                                 speed += 70;
                             }
@@ -254,7 +267,7 @@ public class ConstantTask extends BukkitRunnable {
              * Tarantula Helmet Ability
              * 1% Crit Damage per 10 strength
              */
-            if (plr.getEquipment().getHelmet() != null && plr.getEquipment().getHelmet().hasItemMeta() && !plr.getEquipment().getHelmet().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getHelmet().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Tarantula Helmet"))) {
+            if (Helper.hasCustomName(helmet) && Helper.getCustomName(helmet).contains(Utils.chat("Tarantula Helmet"))) {
                 critDamage += (strength / 10);
             }
 
@@ -265,7 +278,7 @@ public class ConstantTask extends BukkitRunnable {
             if (plr.getEquipment().getBoots() != null && plr.getEquipment().getBoots().hasItemMeta() && !plr.getEquipment().getBoots().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getBoots().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Superior Dragon Boots"))) {
                 if (plr.getEquipment().getChestplate() != null && plr.getEquipment().getChestplate().hasItemMeta() && !plr.getEquipment().getChestplate().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getChestplate().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Superior Dragon Chestplate"))) {
                     if (plr.getEquipment().getLeggings() != null && plr.getEquipment().getLeggings().hasItemMeta() && !plr.getEquipment().getLeggings().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getLeggings().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Superior Dragon Leggings"))) {
-                        if (plr.getEquipment().getHelmet() != null && plr.getEquipment().getHelmet().hasItemMeta() && !plr.getEquipment().getHelmet().getItemMeta().getDisplayName().isEmpty() && plr.getEquipment().getHelmet().getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Superior Dragon Helmet"))) {
+                        if (helmet != null && helmet.hasItemMeta() && !helmet.getItemMeta().getDisplayName().isEmpty() && helmet.getItemMeta().getDisplayName().replaceAll("&[0-9a-zA-Z]", "").contains(Utils.chat("Superior Dragon Helmet"))) {
                             health += (health * 0.05);
                             defense += (defense * 0.05);
                             strength += (strength * 0.05);

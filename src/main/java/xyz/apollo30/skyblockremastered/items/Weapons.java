@@ -3,10 +3,9 @@ package xyz.apollo30.skyblockremastered.items;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
-import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.GUIs.GUIs;
+import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.NMSUtil;
-import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.UUID;
 

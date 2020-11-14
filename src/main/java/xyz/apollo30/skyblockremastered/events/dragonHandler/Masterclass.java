@@ -1,9 +1,9 @@
 package xyz.apollo30.skyblockremastered.events.dragonHandler;
 
 import org.bukkit.entity.Player;
-import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
+import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
 import java.util.HashMap;
 

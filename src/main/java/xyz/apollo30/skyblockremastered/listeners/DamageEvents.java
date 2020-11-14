@@ -3,10 +3,7 @@ package xyz.apollo30.skyblockremastered.listeners;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -39,6 +36,25 @@ public class DamageEvents implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
+
+        /**
+         * Detecting if a player threw another projectile to another player
+         * If so check if theres pvp or not.
+         */
+
+        ArrayList<EntityType> projectiles = new ArrayList<>();
+        projectiles.add(EntityType.ARROW);
+        projectiles.add(EntityType.SNOWBALL);
+        projectiles.add(EntityType.ENDER_PEARL);
+        projectiles.add(EntityType.EGG);
+        projectiles.add(EntityType.FISHING_HOOK);
+        projectiles.add(EntityType.SPLASH_POTION);
+        if (projectiles.contains(e.getDamager().getType()) && e.getEntityType() == EntityType.PLAYER) {
+            Projectile proj = (Projectile) e.getDamager();
+            if (proj.getShooter() instanceof Player) {
+                if (!plugin.so.isPvp()) e.setCancelled(true);
+            }
+        }
 
         /**
          * Reworking on the enderman physics.

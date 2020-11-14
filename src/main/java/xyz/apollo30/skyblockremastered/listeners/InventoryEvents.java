@@ -15,13 +15,13 @@ import xyz.apollo30.skyblockremastered.GUIs.CreditsMenu;
 import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
 import xyz.apollo30.skyblockremastered.GUIs.SkyblockMenu;
 import xyz.apollo30.skyblockremastered.GUIs.constructor.Menu;
-import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.GUIs.GUIs;
 import xyz.apollo30.skyblockremastered.constants.Constants;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
-import xyz.apollo30.skyblockremastered.GUIs.GUIs;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
+import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
 import java.util.ArrayList;
 import java.util.List;

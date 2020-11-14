@@ -33,7 +33,6 @@ public class PlayerEvents implements Listener {
         e.setQuitMessage("");
 
         Player plr = e.getPlayer();
-        Utils.broadCast("&8[&c-&8] " + Helper.getRank(plr, false));
 
         PlayerManager.savePlayerData(plr);
         PlayerManager.playerObjects.remove(plr);
@@ -50,9 +49,6 @@ public class PlayerEvents implements Listener {
         if (!plr.isOp()) {
             plr.setGameMode(GameMode.SURVIVAL);
         }
-
-        // Rank Joins
-        Utils.broadCast("&8[&a+&8] " + Helper.getRank(plr, false));
 
         ItemStack nether_star = plugin.miscs.SKYBLOCK_MENU;
         plr.getInventory().remove(nether_star);

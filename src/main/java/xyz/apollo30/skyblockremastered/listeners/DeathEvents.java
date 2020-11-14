@@ -14,13 +14,13 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
+import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
+import xyz.apollo30.skyblockremastered.utils.PacketUtils;
+import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
-import xyz.apollo30.skyblockremastered.utils.PacketUtils;
 import xyz.apollo30.skyblockremastered.templates.MobTemplate;
-import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 import xyz.apollo30.skyblockremastered.utils.NMSUtil;
-import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.util.UUID;
 
@@ -120,25 +120,25 @@ public class DeathEvents implements Listener {
             one_coins = coins;
         } else one_coins = 1;
 
-        ItemStack thousand_coin = GUIHelper.addSkull(Utils.urlToBase64("http://textures.minecraft.net/texture/d7c4f6630597a49ad223d12cf648af2283d34a65bf9dd057d198d2980779c34"));
+        ItemStack thousand_coin = GUIHelper.addSkull(Utils.urlToBase64("d7c4f6630597a49ad223d12cf648af2283d34a65bf9dd057d198d2980779c34"));
         thousand_coin.setAmount(thousand_coins);
         ItemMeta meta = thousand_coin.getItemMeta();
         meta.setDisplayName(Utils.chat("Coin 1000"));
         thousand_coin.setItemMeta(meta);
 
-        ItemStack hundred_coin = GUIHelper.addSkull(Utils.urlToBase64("http://textures.minecraft.net/texture/1c0e914476e1b15da2a91f45696dd217669d4dac4fa621650929bace03de2254"));
+        ItemStack hundred_coin = GUIHelper.addSkull(Utils.urlToBase64("1c0e914476e1b15da2a91f45696dd217669d4dac4fa621650929bace03de2254"));
         hundred_coin.setAmount(hundred_coins);
         ItemMeta meta1 = hundred_coin.getItemMeta();
         meta1.setDisplayName(Utils.chat("Coin 100"));
         hundred_coin.setItemMeta(meta1);
 
-        ItemStack fifty_coin = GUIHelper.addSkull(Utils.urlToBase64("http://textures.minecraft.net/texture/c43f12c8369f9c3888a45aaf6d7761578402b4241958f7d4ae4eceb56a867d2a"));
+        ItemStack fifty_coin = GUIHelper.addSkull(Utils.urlToBase64("c43f12c8369f9c3888a45aaf6d7761578402b4241958f7d4ae4eceb56a867d2a"));
         fifty_coin.setAmount(fifty_coins);
         ItemMeta meta2 = fifty_coin.getItemMeta();
         meta2.setDisplayName(Utils.chat("Coin 50"));
         fifty_coin.setItemMeta(meta2);
 
-        ItemStack one_coin = GUIHelper.addSkull(Utils.urlToBase64("http://textures.minecraft.net/texture/740d6e362bc7eee4f911dbd0446307e7458d1050d09aee538ebcb0273cf75742"));
+        ItemStack one_coin = GUIHelper.addSkull(Utils.urlToBase64("740d6e362bc7eee4f911dbd0446307e7458d1050d09aee538ebcb0273cf75742"));
         one_coin.setAmount(one_coins);
         ItemMeta meta3 = one_coin.getItemMeta();
         meta3.setDisplayName(Utils.chat("Coin 1"));

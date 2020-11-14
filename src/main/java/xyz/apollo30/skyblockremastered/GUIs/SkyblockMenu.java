@@ -1,7 +1,6 @@
 package xyz.apollo30.skyblockremastered.GUIs;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
@@ -93,9 +92,9 @@ public class SkyblockMenu {
                 "&7plugin.", " ", "&7Profiles: &e1&6/&e1",
                 "&7Playing on: " + po.getProfile());
         GUIHelper.addItem(inv, 76, 1, 51, "&aSettings", "&7View and edit your SkyBlock settings.", " ", "&eClick to altar!");
-        GUIHelper.addItem(inv, GUIHelper.addLore(GUIHelper.addSkull(Utils.urlToBase64("https://textures.minecraft.net/4cb3acdc11ca747bf710e59f4c8e9b3d949fdd364c6869831ca878f0763d1787")), "&aQuiver", "&7A masterfully crafted Quiver", "&7which holds any kind of", "&7projectile you can think of!", " ", "&eClick to open!"), 45);
-        GUIHelper.addItem(inv, GUIHelper.addLore(GUIHelper.addSkull(Utils.urlToBase64("https://textures.minecraft.net/372466603bae9063ce7d94351103469beca3c5fe2b1e977e6427def37699ec9")), "&aPotion Bag", "&7A handy bag for holding your", "&7Potions in.", " ", "&eClick to open!"), 53);
-        GUIHelper.addItem(inv, GUIHelper.addLore(GUIHelper.addSkull(Utils.urlToBase64("https://textures.minecraft.net/961a918c0c49ba8d053e522cb91abc74689367b4d8aa06bfc1ba9154730985ff")), "&aAccessory Bag", "&7A special bag which can hold", "&7Talismans, Rings, Artificats and", "&7Orbs within it. All will still", "&7work while in this bag!", " ", "&eClick to open!"), 54);
+        GUIHelper.addItem(inv, GUIHelper.addLore(GUIHelper.addSkull(Utils.urlToBase64("4cb3acdc11ca747bf710e59f4c8e9b3d949fdd364c6869831ca878f0763d1787")), "&aQuiver", "&7A masterfully crafted Quiver", "&7which holds any kind of", "&7projectile you can think of!", " ", "&eClick to open!"), 45);
+        GUIHelper.addItem(inv, GUIHelper.addLore(GUIHelper.addSkull(Utils.urlToBase64("372466603bae9063ce7d94351103469beca3c5fe2b1e977e6427def37699ec9")), "&aPotion Bag", "&7A handy bag for holding your", "&7Potions in.", " ", "&eClick to open!"), 53);
+        GUIHelper.addItem(inv, GUIHelper.addLore(GUIHelper.addSkull(Utils.urlToBase64("961a918c0c49ba8d053e522cb91abc74689367b4d8aa06bfc1ba9154730985ff")), "&aAccessory Bag", "&7A special bag which can hold", "&7Talismans, Rings, Artificats and", "&7Orbs within it. All will still", "&7work while in this bag!", " ", "&eClick to open!"), 54);
         plr.openInventory(inv);
         // } catch (Exception e) {
         //     Utils.broadCast(e.toString());

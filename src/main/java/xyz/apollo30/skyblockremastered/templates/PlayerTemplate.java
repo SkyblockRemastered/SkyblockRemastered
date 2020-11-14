@@ -5,10 +5,6 @@ import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 import xyz.apollo30.skyblockremastered.constants.Constants;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 @Getter
 @Setter
 public class PlayerTemplate {

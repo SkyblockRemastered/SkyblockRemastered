@@ -9,9 +9,9 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
-import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
+import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
 import java.util.HashMap;
 
@@ -99,12 +99,10 @@ public class TradeMenu implements Listener {
     @EventHandler
     public void onPlayerInteractToPlayer(PlayerInteractEntityEvent e) {
         Player plr = e.getPlayer();
-        // if sneaking, return
-        if (!plr.isSneaking()) {
-            return;
-        }
-
         Player c = (Player) e.getRightClicked();
+
+        if (!plr.isSneaking() || !Bukkit.getOnlinePlayers().contains(c))
+            return;
 
         openTradeMenu(plr, c);
     }

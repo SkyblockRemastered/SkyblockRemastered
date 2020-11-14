@@ -4,7 +4,6 @@ import net.minecraft.server.v1_8_R3.EntityInsentient;
 import net.minecraft.server.v1_8_R3.EntityTypes;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
-import org.bukkit.entity.EntityType;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -56,6 +55,12 @@ public class NMSUtil {
     public static org.bukkit.inventory.ItemStack addString(org.bukkit.inventory.ItemStack item, String name, String value) {
         NBTTagCompound tag = NMSUtil.getTag(item);
         tag.setString(name, value);
+        return NMSUtil.setTag(item, tag);
+    }
+
+    public static org.bukkit.inventory.ItemStack setBoolean(org.bukkit.inventory.ItemStack item, String name, boolean value) {
+        NBTTagCompound tag = NMSUtil.getTag(item);
+        tag.setBoolean(name, value);
         return NMSUtil.setTag(item, tag);
     }
 

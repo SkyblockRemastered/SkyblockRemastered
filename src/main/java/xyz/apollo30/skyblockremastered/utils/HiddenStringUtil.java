@@ -1,4 +1,4 @@
-package com.awooga.profiles.util;
+package xyz.apollo30.skyblockremastered.utils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

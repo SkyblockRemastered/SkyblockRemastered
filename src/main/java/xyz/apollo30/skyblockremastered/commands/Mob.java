@@ -8,17 +8,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.managers.MobManager;
 import xyz.apollo30.skyblockremastered.utils.Utils;
+import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.HashSet;
 
 public class Mob implements CommandExecutor {
 
-    private final xyz.apollo30.skyblockremastered.SkyblockRemastered plugin;
+    private final SkyblockRemastered plugin;
 
     public Mob(SkyblockRemastered plugin) {
         this.plugin = plugin;

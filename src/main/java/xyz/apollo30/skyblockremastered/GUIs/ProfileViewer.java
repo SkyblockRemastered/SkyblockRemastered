@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import xyz.apollo30.skyblockremastered.GUIs.constructor.Menu;
 import xyz.apollo30.skyblockremastered.GUIs.constructor.MenuUtility;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
@@ -48,6 +50,18 @@ public class ProfileViewer extends Menu {
                 plr.closeInventory();
             } else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(Utils.chat("&aEnderchest"))) {
                 new EnderChestViewer(SkyblockRemastered.getMenuUtility(plr), target).open();
+            } else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(Utils.chat("&cKick Player"))) {
+                target.kickPlayer("Kicked by a staff");
+                plr.closeInventory();
+            } else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(Utils.chat("&cBan Player"))) {
+                Bukkit.getBanList(BanList.Type.NAME).addBan(target.getName(), "Banned by Player Profile", null, plr.getName());
+                plr.closeInventory();
+            } else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(Utils.chat("&bFreeze Player"))) {
+                SkyblockRemastered.frozenPlayers.put(target, target.getLocation());
+                new ProfileViewer(SkyblockRemastered.getMenuUtility(plr), plr, target).open();
+            } else if (e.getCurrentItem().getItemMeta().getDisplayName().equals(Utils.chat("&bUnfreeze Player"))) {
+                SkyblockRemastered.frozenPlayers.remove(target);
+                new ProfileViewer(SkyblockRemastered.getMenuUtility(plr), plr, target).open();
             }
         }
     }
@@ -58,6 +72,7 @@ public class ProfileViewer extends Menu {
         PlayerTemplate po = PlayerManager.playerObjects.get(target);
         if (po == null) {
             plr.sendMessage(Utils.chat("&cCouldn't load " + target.getName() + "'s Profile! Please try again later!"));
+            plr.closeInventory();
             return;
         }
 
@@ -133,6 +148,15 @@ public class ProfileViewer extends Menu {
 
         if (pet != null) GUIHelper.addItem(inv, pet, 30);
         else GUIHelper.addItem(inv, 160, 8, 1, 30, "&7Pet &8[&cEMPTY&8]");
+
+        if (plr.isOp()) {
+            GUIHelper.addItem(inv, 145, 1, 14, "&cKick Player");
+            GUIHelper.addItem(inv, 166, 1, 32, "&cBan Player");
+            if (SkyblockRemastered.frozenPlayers.containsKey(target))
+                GUIHelper.addItem(inv, 79, 1, 41, "&bUnfreeze Player");
+            else
+                GUIHelper.addItem(inv, 79, 1, 41, "&bFreeze Player");
+        }
     }
 
 }

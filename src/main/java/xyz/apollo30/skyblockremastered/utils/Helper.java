@@ -10,12 +10,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
-import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
+import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
 
 import java.io.ByteArrayInputStream;
@@ -30,13 +29,29 @@ public class Helper {
         this.plugin = plugin;
     }
 
+    public static boolean hasCustomName(ItemStack item) {
+        return item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName() != null && !item.getItemMeta().getDisplayName().isEmpty();
+    }
+
+    public static boolean hasLore(ItemStack item) {
+        return item != null && item.hasItemMeta() && item.getItemMeta().hasLore();
+    }
+
+    public static String getCustomName(ItemStack item) {
+        return item.getItemMeta().getDisplayName();
+    }
+
+    public static List<String> getLore(ItemStack item) {
+        return item.getItemMeta().getLore();
+    }
+
     public static String getRank(Player plr, boolean a) {
         String prefix;
         if (plr.hasPermission("groups.admin")) prefix = a ? "&c[ADMIN] " : "&c";
         else if (plr.hasPermission("groups.mod")) prefix = a ? "&2[MOD] " : "&2";
         else if (plr.hasPermission("groups.helper")) prefix = a ? "&9[HELPER] " : "&9";
         else if (plr.hasPermission("groups.builder")) prefix = a ? "&d[BUILDER] " : "&d";
-        else if (plr.hasPermission("groups.tester")) prefix = a ? "&9[BETA] " : "&9";
+        else if (plr.hasPermission("groups.tester")) prefix = a ? "&6[BETA] " : "&6";
         else if (plr.hasPermission("groups.youtuber")) prefix = a ? "&c[&fYOUTUBE&c] " : "&c";
         else if (plr.hasPermission("groups.mvp++")) prefix = a ? "&e»» &6[MVP&0++&6] " : "&6";
         else if (plr.hasPermission("groups.mvp+")) prefix = a ? "&b[MVP&0+&b] " : "&b";
@@ -81,13 +96,12 @@ public class Helper {
     }
 
     public static ItemStack addEnchantGlow(ItemStack item) {
-
         ItemMeta meta = item.getItemMeta();
         meta.addEnchant(Enchantment.DURABILITY, 1, true);
         meta.addItemFlags(ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_UNBREAKABLE);
         item.setItemMeta(meta);
 
-        return NMSUtil.addString(item, "Unbreakable", "1");
+        return NMSUtil.setBoolean(item, "Unbreakable", true);
     }
 
     public static void addItem(Inventory inv, ItemStack item, String uuid) {
