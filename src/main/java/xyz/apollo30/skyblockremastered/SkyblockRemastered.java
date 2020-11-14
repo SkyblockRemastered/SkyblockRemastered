@@ -67,7 +67,8 @@ public class SkyblockRemastered extends JavaPlugin {
         new MongoUtils(
                 "mongodb+srv://console:t3rk1reyaseocmdb2skel@skyblockremastered.olzwn.mongodb.net/constants?retryWrites=true&w=majority",
                 "constants",
-                "playerData");
+                "playerData",
+                "apiKeys");
 
         // Registering Custom Dragons
         nmsu.registerEntity("Dragon", 63, EntityEnderDragon.class, CustomEnderDragon.class);
@@ -97,6 +98,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new AuctionHouse(this);
         new Debug(this);
         new Mob(this);
+        new API(this);
 
         // Abilities
         this.miscAbilities = new Miscs(this);

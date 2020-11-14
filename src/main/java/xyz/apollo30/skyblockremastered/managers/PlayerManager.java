@@ -1,6 +1,5 @@
 package xyz.apollo30.skyblockremastered.managers;
 
-import com.mongodb.DBCollection;
 import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
 import org.bson.Document;
@@ -220,7 +219,7 @@ public class PlayerManager {
         }
         doc.append("collections", tempDoc);
 
-        MongoUtils.insertOrUpdate(new Document("UUID", plr.getUniqueId().toString()), doc);
+        MongoUtils.insertOrReplace(new Document("UUID", plr.getUniqueId().toString()), doc);
     }
 
     public static void createPlayerData(Player plr) {

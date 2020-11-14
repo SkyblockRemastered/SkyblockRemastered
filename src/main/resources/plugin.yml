@@ -37,3 +37,6 @@ commands:
     description: oh.
   mob:
     description: spawns a mob.
+  API:
+    description: generate yourself a new API key
+    aliases: [apikey]
