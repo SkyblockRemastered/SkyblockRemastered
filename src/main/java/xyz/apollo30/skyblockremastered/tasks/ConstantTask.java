@@ -1,33 +1,81 @@
 package xyz.apollo30.skyblockremastered.tasks;
 
+import net.minecraft.server.v1_8_R3.EnumParticle;
+import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
 import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
+import org.bukkit.util.Vector;
+import xyz.apollo30.skyblockremastered.guis.GUIHelper;
+import xyz.apollo30.skyblockremastered.items.Miscs;
+import xyz.apollo30.skyblockremastered.listeners.ItemEvents;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.PacketUtils;
-import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
+import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
-import java.util.Date;
+import java.util.*;
 
 public class ConstantTask extends BukkitRunnable {
 
-    private final SkyblockRemastered plugin;
+    private int currentTickRotCount = 0;
+    public static HashMap<ArmorStand, ArrayList> orbs = new HashMap<>();
+    public static HashMap<ArmorStand, Boolean> motion = new HashMap<>();
 
-    public ConstantTask(SkyblockRemastered plugin) {
-        this.plugin = plugin;
+    public ConstantTask() {
     }
 
     @Override
     public void run() {
 
-        /**
+        /*
+         * Checking for orbs to spin :o
+         */
+        for (Map.Entry<Player, ArmorStand> entry : ItemEvents.orbs.entrySet()) {
+
+            ArmorStand orb = entry.getValue();
+
+            double originalLoc = (double) orbs.get(orb).get(1);
+
+            motion.putIfAbsent(orb, false);
+            boolean motionUpDown = motion.get(orb);
+            if (!motionUpDown) {
+                orb.setVelocity(new Vector(0, .05, 0));
+                if ((orb.getLocation().getY() - originalLoc) >= 1) {
+                    motion.remove(orb);
+                    motion.put(orb, true);
+                }
+            } else {
+                orb.setVelocity(new Vector(0, -.05, 0));
+                if ((orb.getLocation().getY() - originalLoc) <= -1) {
+                    motion.remove(orb);
+                    motion.put(orb, false);
+                }
+            }
+
+            Location newLoc = orb.getLocation();
+
+            currentTickRotCount = currentTickRotCount + 1;
+            if (currentTickRotCount == 8) currentTickRotCount = 0;
+
+            int yaw = currentTickRotCount * 45;
+            yaw = this.normalizeYaw(yaw);
+
+            newLoc.setYaw(yaw);
+            orb.teleport(newLoc);
+
+            if (currentTickRotCount == 2 || currentTickRotCount == 6)
+                spawnParticles(orb.getLocation().add(0, 1, 0), 255, 0, 0);
+        }
+
+        /*
          * Checking for frozen players :)
          */
         for (Player plr : SkyblockRemastered.frozenPlayers.keySet()) {
@@ -44,7 +92,7 @@ public class ConstantTask extends BukkitRunnable {
             ItemStack boots = equipment.getBoots();
             ItemStack heldItem = plr.getItemInHand();
 
-            /**
+            /*
              * Just to update all concurrent items in a player's inventory to check for missing rarities,
              * Or maybe to remove some attributes/flags.
              */
@@ -57,7 +105,7 @@ public class ConstantTask extends BukkitRunnable {
                 }
             }
 
-            /**
+            /*
              * Checking if the player is wearing Taran Boots or Spider Boots
              * If true, we enable fly and ItemAbilityEvents can handle the rest.
              */
@@ -75,12 +123,12 @@ public class ConstantTask extends BukkitRunnable {
                 plr.setAllowFlight(false);
             }
 
-            /**
+            /*
              * Infinite Quiver (Replaces Skyblock Menu)
              * This is temporary.
              */
             if (heldItem != null && heldItem.getType() == Material.BOW) {
-                PlayerTemplate po = plugin.playerManager.getPlayerData(plr);
+                PlayerObject po = SkyblockRemastered.playerManager.getPlayerData(plr);
                 int arrows = -1;
 
                 if (po.getQuiverBag() == null) return;
@@ -98,21 +146,21 @@ public class ConstantTask extends BukkitRunnable {
                 if (arrows > 0)
                     GUIHelper.addEnchantedItem(plr.getInventory(), 262, 0, Math.min(arrows, 64), 9, "&8Quiver Arrow", "&7This item is in your", "&7inventory because you are", "&7holding your bow currently.", " ", "&7Switch your held item to", "&7see the item that was here", "&7before.");
             } else {
-                ItemStack nether_star = plugin.miscs.SKYBLOCK_MENU;
+                ItemStack nether_star = Miscs.SKYBLOCK_MENU;
                 plr.getInventory().setItem(8, nether_star);
             }
 
-            PlayerTemplate po = PlayerManager.playerObjects.get(plr);
+            PlayerObject po = PlayerManager.playerObjects.get(plr);
             if (po == null) return;
 
-            /**
+            /*
              * Checking if the player's inventory is full
              * If so, it notifies them with a 30 second cooldown.
              */
             if ((plr.getInventory().firstEmpty() == -1)) {
                 if (po.getLastInvFullNotification() > new Date().getTime()) return;
                 plr.sendMessage(Utils.chat("&cYour inventory is full!"));
-                PacketUtils.sendTitle(plr, 0, 180, 40, Utils.chat("&cInventory Full!"), "");
+                PacketUtils.sendTitle(plr, 0, 180, 40, Utils.chat("&cInventory Full"), "");
                 plr.playSound(plr.getLocation(), Sound.CHEST_OPEN, 1000L, 5L);
                 po.setLastInvFullNotification(new Date().getTime() + 30000);
             }
@@ -241,7 +289,7 @@ public class ConstantTask extends BukkitRunnable {
                 }
             }
 
-            /**
+            /*
              * Young Armor Full Set Ability
              * When a full set is worn, the player gains +70 speed while above 50% health.
              */
@@ -257,13 +305,13 @@ public class ConstantTask extends BukkitRunnable {
                 }
             }
 
-            /**
+            /*
              * Protector Dragon Helmet
              * Increases the defense of each armor piece by 1% defense for each missing percent of hp.
              */
 
 
-            /**
+            /*
              * Tarantula Helmet Ability
              * 1% Crit Damage per 10 strength
              */
@@ -271,7 +319,7 @@ public class ConstantTask extends BukkitRunnable {
                 critDamage += (strength / 10);
             }
 
-            /**
+            /*
              * Superior Armor Full Set Ability
              * When a full set is worn, the player's stats are increased by 5%
              */
@@ -336,5 +384,34 @@ public class ConstantTask extends BukkitRunnable {
         } catch (Exception ignored) {
         }
         return 0;
+    }
+
+    private int normalizeYaw(int yaw) {
+        int newYaw = yaw;
+        while (newYaw <= -180) newYaw += 360;
+        while (newYaw > 180) newYaw -= 360;
+        return newYaw;
+    }
+
+    private void spawnParticles(Location location, int r, int g, int b) {
+        Random random = new Random();
+        int randomNum = random.nextInt((10 - 3) + 1) + 3;
+
+        ArrayList<PacketPlayOutWorldParticles> particles = new ArrayList<>();
+
+        for (int i = 0; i < randomNum; i++) {
+            float randomPos = (float) (.1 + random.nextFloat() * (1.75f - .1));
+            float randomPos1 = (float) (.1 + random.nextFloat() * (1.5f - .1));
+            float randomPos2 = (float) (.1 + random.nextFloat() * (1.75f - .1));
+
+            PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(EnumParticle.REDSTONE, true, (float) location.getX() - randomPos + 1f, (float) location.getY() + randomPos1, (float) location.getZ() - randomPos2 + 1f, r / 255, g / 255, b / 255, 0, 1);
+            particles.add(packet);
+        }
+
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            for (PacketPlayOutWorldParticles packetPlayOut : particles) {
+                ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packetPlayOut);
+            }
+        }
     }
 }

@@ -6,7 +6,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
+import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
@@ -22,7 +22,7 @@ public class Weapons {
     }
 
     public void aspect_of_the_end(Player plr) {
-        PlayerTemplate po = PlayerManager.playerObjects.get(plr);
+        PlayerObject po = PlayerManager.playerObjects.get(plr);
         if (po.getIntelligence() - 50 < 0 || po.getIntelligence() <= 0) {
             plr.playSound(plr.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, .5F);
             plr.sendMessage(Utils.chat("&cYou do not have enough mana"));
@@ -37,7 +37,11 @@ public class Weapons {
         whitelisted.add(Material.LAVA);
         whitelisted.add(Material.STATIONARY_LAVA);
 
-        Block block = plr.getTargetBlock(whitelisted, 8);
+        Block block = null;
+        for (int i = 8; i > 0; i--) {
+            if (block != null && whitelisted.contains(block.getType())) break;
+            block = plr.getTargetBlock(whitelisted, i);
+        }
 
         if (block == null || !whitelisted.contains(block.getType())) {
             plr.sendMessage(Utils.chat("&cThere are blocks in the way!"));
@@ -51,29 +55,11 @@ public class Weapons {
 
         Location location = block.getLocation();
 
-//        if (plr.getLocation().getYaw() >= 0 && plr.getLocation().getYaw() <= -180) {
-//            location.setX(location.getX() > 0 ? location.getX() + .5 : location.getX() - .5);
-//            location.setZ(location.getX() > 0 ? location.getZ() - .5 : location.getZ() + .5);
-//
-//            location.setYaw(plr.getLocation().getYaw());
-//            location.setPitch(plr.getLocation().getPitch());
-//        } else {
-//            location.setX(location.getX() > 0 ? location.getX() - .5 + 1 : location.getX() + .5 + 1);
-//            location.setZ(location.getX() > 0 ? location.getZ() + .5 : location.getZ() - .5);
-//
-//            location.setYaw(plr.getLocation().getYaw());
-//            location.setPitch(plr.getLocation().getPitch());
-//        }
-
         location.setPitch(plr.getLocation().getPitch());
         location.setYaw(plr.getLocation().getYaw());
 
         plr.teleport(location);
         plr.sendMessage(Utils.chat("&aUsed &6Instant Transmission &b(" + usedMana + " Mana)"));
-    }
-
-    public void inkWand(Player plr) {
-
     }
 
 }

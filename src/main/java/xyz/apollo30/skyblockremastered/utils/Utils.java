@@ -11,7 +11,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.GUIs.GUIs;
+import xyz.apollo30.skyblockremastered.guis.GUIs;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -199,11 +199,11 @@ public class Utils {
         }
     }
 
-    public static void damageIndicator(Entity entity, int damage, String type, SkyblockRemastered plugin) {
+    public static void damageIndicator(Entity entity, int damage, String type) {
         if (entity == null || entity.getType() == EntityType.ARMOR_STAND) return;
-        int x = new Random().nextInt(2 - -1) + -1;
-        int y = (int) (new Random().nextInt((int) (4 - -.5)) + -.5);
-        int z = new Random().nextInt(2 - -1) + -1;
+        int x = (int) (new Random().nextInt(2 - -1) + -Math.random() * 1);
+        int y = (int) (new Random().nextInt((int) (4 - -.5)) + -Math.random() * .5);
+        int z = (int) (new Random().nextInt(2 - -1) + -Math.random() * 1);
         StringBuilder color = new StringBuilder(type.equals("fire") ? "&6" + damage : type.equals("water") ? "&9" + damage : type.equals("normal") ? "&7" + damage : type.equals("wither") ? "&0" + damage : type.equals("poison") ? "&2" + damage : "&7" + damage);
         if (type.equals("crithit")) {
             color = new StringBuilder();
@@ -222,7 +222,7 @@ public class Utils {
         armorStand.setRemoveWhenFarAway(true);
         armorStand.setVisible(false);
         armorStand.setMarker(true);
-        plugin.indicator.put(armorStand, new Date().getTime());
+        SkyblockRemastered.indicator.put(armorStand, new Date().getTime());
     }
 
     public static String getDisplayHP(int level, String mobname, int current_health, int max_health) {

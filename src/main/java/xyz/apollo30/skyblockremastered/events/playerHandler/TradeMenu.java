@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
+import xyz.apollo30.skyblockremastered.guis.GUIHelper;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
@@ -98,6 +98,9 @@ public class TradeMenu implements Listener {
 
     @EventHandler
     public void onPlayerInteractToPlayer(PlayerInteractEntityEvent e) {
+
+        if (!(e.getRightClicked() instanceof Player)) return;
+
         Player plr = e.getPlayer();
         Player c = (Player) e.getRightClicked();
 

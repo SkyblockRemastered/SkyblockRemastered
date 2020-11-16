@@ -13,13 +13,14 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
-import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
+import xyz.apollo30.skyblockremastered.guis.GUIHelper;
+import xyz.apollo30.skyblockremastered.items.Miscs;
+import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.PacketUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
-import xyz.apollo30.skyblockremastered.templates.MobTemplate;
+import xyz.apollo30.skyblockremastered.objects.MobObject;
 import xyz.apollo30.skyblockremastered.utils.NMSUtil;
 
 import java.util.UUID;
@@ -42,8 +43,8 @@ public class DeathEvents implements Listener {
 
         Player plr = e.getEntity().getKiller();
         if (plr == null) return;
-        PlayerTemplate po = plugin.playerManager.getPlayerData(plr);
-        MobTemplate mo = MobManager.mobObjects.get(e.getEntity());
+        PlayerObject po = SkyblockRemastered.playerManager.getPlayerData(plr);
+        MobObject mo = MobManager.mobObjects.get(e.getEntity());
         if (mo == null) return;
 
         if (e.getEntityType() != EntityType.ENDER_DRAGON)
@@ -51,7 +52,7 @@ public class DeathEvents implements Listener {
 
         String entityName = e.getEntity().getPassenger().getCustomName();
 
-        /**
+        /*
          * Death Handler for mobs that die in public islands
          * This checks if the plugin should spawn more mobs or not.
          */
@@ -68,20 +69,20 @@ public class DeathEvents implements Listener {
                 plr.sendMessage(Utils.chat("&aA special &5Zealot &ahas spawned nearby. &7(" + po.getZealotKills() + ")"));
                 Location loc = e.getEntity().getLocation().add(Math.random() * 5, Math.random() * 2, Math.random() * 5);
                 Enderman enderman = (Enderman) e.getEntity().getWorld().spawnEntity(loc, EntityType.ENDERMAN);
-                plugin.mobManager.createMob(enderman, "Special Zealot");
+                SkyblockRemastered.mobManager.createMob(enderman, "Special Zealot");
                 po.resetZealotKills();
             }
         } else if (e.getEntityType() == EntityType.ENDERMAN && entityName.contains(Utils.chat("Special Zealot"))) {
             plr.sendMessage(Utils.chat("&6&lRARE DROP!&r &5Summoning Eye&7!"));
             PacketUtils.sendTitle(plr, 0, 15, 1, Utils.chat("&cSpecial Zealot!"), "");
-            e.getEntity().getWorld().dropItem(e.getEntity().getLocation(), NMSUtil.addString(plugin.miscs.SUMMONING_EYE, "UUID", UUID.randomUUID().toString()));
+            e.getEntity().getWorld().dropItem(e.getEntity().getLocation(), NMSUtil.addString(Miscs.SUMMONING_EYE, "UUID", UUID.randomUUID().toString()));
             plr.playSound(plr.getLocation(), Sound.SUCCESSFUL_HIT, 1F, .5F);
         }
 
-        if (plugin.health_indicator.containsKey(e.getEntity())) {
-            Entity armor_stand = plugin.health_indicator.get(e.getEntity());
+        if (SkyblockRemastered.health_indicator.containsKey(e.getEntity())) {
+            Entity armor_stand = SkyblockRemastered.health_indicator.get(e.getEntity());
             if (armor_stand != null) {
-                plugin.health_indicator.remove(e.getEntity());
+                SkyblockRemastered.health_indicator.remove(e.getEntity());
                 armor_stand.remove();
             }
         } else if (e.getEntity().getPassenger() == null) e.getEntity().getPassenger().remove();

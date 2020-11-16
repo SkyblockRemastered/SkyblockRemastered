@@ -28,7 +28,7 @@ public class ProfileViewer implements Listener {
         if (!Bukkit.getOnlinePlayers().contains(clicked)) return;
 
         if (!plr.isSneaking()) {
-            new xyz.apollo30.skyblockremastered.GUIs.ProfileViewer(SkyblockRemastered.getMenuUtility(plr), plr, clicked).open();
+            new xyz.apollo30.skyblockremastered.guis.ProfileViewer.ProfileViewer(SkyblockRemastered.getMenuUtility(plr), plr, clicked).open();
         }
     }
 }

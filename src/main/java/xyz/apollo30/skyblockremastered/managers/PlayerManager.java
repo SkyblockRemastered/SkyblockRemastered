@@ -5,7 +5,7 @@ import com.mongodb.client.FindIterable;
 import org.bson.Document;
 import org.bukkit.entity.Player;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
+import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.MongoUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -15,17 +15,14 @@ import java.util.Map;
 
 public class PlayerManager {
 
-    private final SkyblockRemastered plugin;
-
     public PlayerManager(final SkyblockRemastered plugin) {
-        this.plugin = plugin;
     }
 
-    public static HashMap<Player, PlayerTemplate> playerObjects = new HashMap<>();
+    public static HashMap<Player, PlayerObject> playerObjects = new HashMap<>();
 
     public static void savePlayerData(Player plr) {
 
-        PlayerTemplate po = playerObjects.get(plr);
+        PlayerObject po = playerObjects.get(plr);
         if (po == null) return;
 
         Document tempDoc;
@@ -234,7 +231,7 @@ public class PlayerManager {
         Document doc = findResult.first();
         if (doc == null || playerObjects.get(plr) != null) return;
 
-        PlayerTemplate po = new PlayerTemplate();
+        PlayerObject po = new PlayerObject();
 
         po.setIGN(plr.getName());
         po.setUUID(plr.getUniqueId().toString());
@@ -492,7 +489,7 @@ public class PlayerManager {
 
     }
 
-    public PlayerTemplate getPlayerData(Player plr) {
+    public PlayerObject getPlayerData(Player plr) {
         return playerObjects.get(plr);
     }
 

@@ -10,11 +10,11 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import xyz.apollo30.skyblockremastered.GUIs.GUIs;
+import xyz.apollo30.skyblockremastered.guis.GUIs;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.templates.MobTemplate;
+import xyz.apollo30.skyblockremastered.objects.MobObject;
 
 import java.util.*;
 
@@ -30,12 +30,12 @@ public class MobManager {
 
     World world = Bukkit.getWorld("hub");
 
-    public static HashMap<LivingEntity, MobTemplate> mobObjects = new HashMap<>();
+    public static HashMap<LivingEntity, MobObject> mobObjects = new HashMap<>();
     public HashSet<Location> zealotSpawnPoints = new HashSet<>();
 
     public void createMob(LivingEntity entity, String name) {
 
-        MobTemplate mo = new MobTemplate();
+        MobObject mo = new MobObject();
 
         // Custom Mobs
         if (name.equalsIgnoreCase("zombie villager")) {
@@ -284,52 +284,52 @@ public class MobManager {
             mo.setMaxHealth(50000000);
             mo.setLevel(69420);
             mo.setName("Celestial Dragon");
-            plugin.so.setEnderDragon(mo);
+            SkyblockRemastered.so.setEnderDragon(mo);
         } else if (name.equalsIgnoreCase("protector")) {
             mo.setMaxHealth(9000000);
             mo.setLevel(1000);
             mo.setName("Protector Dragon");
-            plugin.so.setEnderDragon(mo);
+            SkyblockRemastered.so.setEnderDragon(mo);
         } else if (name.equalsIgnoreCase("old")) {
             mo.setMaxHealth(15000000);
             mo.setLevel(1000);
             mo.setName("Old Dragon");
-            plugin.so.setEnderDragon(mo);
+            SkyblockRemastered.so.setEnderDragon(mo);
         } else if (name.equalsIgnoreCase("wise")) {
             mo.setMaxHealth(9000000);
             mo.setLevel(1000);
             mo.setName("Wise Dragon");
-            plugin.so.setEnderDragon(mo);
+            SkyblockRemastered.so.setEnderDragon(mo);
         } else if (name.equalsIgnoreCase("unstable")) {
             mo.setMaxHealth(9000000);
             mo.setLevel(1000);
             mo.setName("Unstable Dragon");
-            plugin.so.setEnderDragon(mo);
+            SkyblockRemastered.so.setEnderDragon(mo);
         } else if (name.equalsIgnoreCase("young")) {
             mo.setMaxHealth(7500000);
             mo.setLevel(1000);
             mo.setName("Young Dragon");
-            plugin.so.setEnderDragon(mo);
+            SkyblockRemastered.so.setEnderDragon(mo);
         } else if (name.equalsIgnoreCase("strong")) {
             mo.setMaxHealth(9000000);
             mo.setLevel(1000);
             mo.setName("Strong Dragon");
-            plugin.so.setEnderDragon(mo);
+            SkyblockRemastered.so.setEnderDragon(mo);
         } else if (name.equalsIgnoreCase("superior")) {
             mo.setMaxHealth(12000000);
             mo.setLevel(1000);
             mo.setName("Superior Dragon");
-            plugin.so.setEnderDragon(mo);
+            SkyblockRemastered.so.setEnderDragon(mo);
         } else if (name.equalsIgnoreCase("holy")) {
             mo.setMaxHealth(20000000);
             mo.setLevel(1000);
             mo.setName("Holy Dragon");
-            plugin.so.setEnderDragon(mo);
+            SkyblockRemastered.so.setEnderDragon(mo);
         } else if (name.equalsIgnoreCase("shitass")) {
             mo.setMaxHealth(1000000000);
             mo.setLevel(69420);
             mo.setName("shitass");
-            plugin.so.setEnderDragon(mo);
+            SkyblockRemastered.so.setEnderDragon(mo);
         } else {
             mo.setName(entity.getName());
             mo.setLocation("???");
@@ -352,7 +352,7 @@ public class MobManager {
         armorStand.setVisible(false);
         armorStand.setMarker(true);
         entity.setPassenger(armorStand);
-        plugin.health_indicator.put(entity, armorStand);
+        SkyblockRemastered.health_indicator.put(entity, armorStand);
         mobObjects.put(entity, mo);
     }
 }

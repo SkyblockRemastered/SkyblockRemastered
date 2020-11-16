@@ -16,7 +16,8 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
-import xyz.apollo30.skyblockremastered.GUIs.SkyblockMenu;
+import xyz.apollo30.skyblockremastered.guis.SkyblockMenu;
+import xyz.apollo30.skyblockremastered.guis.constructors.Menu;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
@@ -55,6 +56,7 @@ public class MiscEvents implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
+
         Player plr = e.getPlayer();
 
         Action action = e.getAction();
@@ -66,7 +68,7 @@ public class MiscEvents implements Listener {
 
             if (e.getItem() != null && e.getItem().hasItemMeta() && item.getItemMeta().getDisplayName() != null) {
                 if (item.getItemMeta().getDisplayName().equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
-                    SkyblockMenu.skyblockMenu(plr, plr.getUniqueId().toString(), plugin);
+                    new SkyblockMenu(SkyblockRemastered.getMenuUtility(plr), plr).open();
                     e.setCancelled(true);
                 }
             }
@@ -98,7 +100,7 @@ public class MiscEvents implements Listener {
                         plugin.dragonEvent.retrieveSummoningEye(e);
                     } else if (e.getItem() != null && e.getItem().hasItemMeta()) {
                         if (item.getItemMeta().getDisplayName().equals(Utils.chat("&aSkyBlock Menu &7(Right Click)"))) {
-                            SkyblockMenu.skyblockMenu(plr, plr.getUniqueId().toString(), plugin);
+                            new SkyblockMenu(SkyblockRemastered.getMenuUtility(plr), plr).open();
                             e.setCancelled(true);
                         } else if (item.getItemMeta().getDisplayName().contains(Utils.chat("Aspect of The End"))) {
                             plugin.weaponAbilities.aspect_of_the_end(plr);

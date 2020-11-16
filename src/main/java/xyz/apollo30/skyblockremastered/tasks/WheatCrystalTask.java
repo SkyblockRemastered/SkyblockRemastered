@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
+import xyz.apollo30.skyblockremastered.guis.GUIHelper;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
 import java.util.*;
@@ -98,8 +98,7 @@ public class WheatCrystalTask extends BukkitRunnable {
         this.setupSubTasks();
     }
 
-    private int normalizeYaw(int yaw)
-    {
+    private int normalizeYaw(int yaw) {
         int newYaw = yaw;
         while (newYaw <= -180) newYaw += 360;
         while (newYaw > 180) newYaw -= 360;

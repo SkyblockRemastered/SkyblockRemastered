@@ -2,6 +2,7 @@ package xyz.apollo30.skyblockremastered.utils;
 
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.Inventory;
@@ -13,9 +14,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
+import xyz.apollo30.skyblockremastered.managers.MobManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
+import xyz.apollo30.skyblockremastered.objects.MobObject;
+import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,6 +30,18 @@ public class Helper {
 
     public Helper(final SkyblockRemastered plugin) {
         this.plugin = plugin;
+    }
+
+    public static void damageMob(LivingEntity e, int d, String t) {
+        MobObject mo = MobManager.mobObjects.get(e);
+        if (mo == null) return;
+        e.damage(0.001);
+        mo.subtractHealth(d);
+        if (mo.getHealth() <= 0 && !e.isDead())
+            e.setHealth(0);
+        Utils.damageIndicator(e, d, t);
+        if (!e.isDead())
+            e.getPassenger().setCustomName(Utils.chat(Utils.getDisplayHP(mo.getLevel(), mo.getName(), mo.getHealth(), mo.getMaxHealth())));
     }
 
     public static boolean hasCustomName(ItemStack item) {
@@ -135,7 +150,7 @@ public class Helper {
     public static void deathHandler(SkyblockRemastered plugin, Player plr, String type) {
 
         plr.setHealth(plr.getMaxHealth());
-        PlayerTemplate po = PlayerManager.playerObjects.get(plr);
+        PlayerObject po = PlayerManager.playerObjects.get(plr);
         po.resetHealth();
 
         for (PotionEffect potionEffect : plr.getActivePotionEffects()) {

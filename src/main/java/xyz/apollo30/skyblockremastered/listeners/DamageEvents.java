@@ -13,11 +13,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.events.dragonHandler.CustomEnderDragon;
-import xyz.apollo30.skyblockremastered.events.dragonHandler.Dragon;
+import xyz.apollo30.skyblockremastered.events.dragonHandler.DragonEvent;
+import xyz.apollo30.skyblockremastered.items.Miscs;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.templates.MobTemplate;
-import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
+import xyz.apollo30.skyblockremastered.objects.MobObject;
+import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -37,7 +38,7 @@ public class DamageEvents implements Listener {
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
 
-        /**
+        /*
          * Detecting if a player threw another projectile to another player
          * If so check if theres pvp or not.
          */
@@ -52,11 +53,11 @@ public class DamageEvents implements Listener {
         if (projectiles.contains(e.getDamager().getType()) && e.getEntityType() == EntityType.PLAYER) {
             Projectile proj = (Projectile) e.getDamager();
             if (proj.getShooter() instanceof Player) {
-                if (!plugin.so.isPvp()) e.setCancelled(true);
+                if (!SkyblockRemastered.so.isPvp()) e.setCancelled(true);
             }
         }
 
-        /**
+        /*
          * Reworking on the enderman physics.
          * Disabling their teleportation when shot by an arrow, potion or projectile.
          */
@@ -67,7 +68,7 @@ public class DamageEvents implements Listener {
             }
         }
 
-        /**
+        /*
          * Ender Crystal Handler
          * Checks if an arrow shot by a player or a player hitting it
          * If so, we give them the crystal.
@@ -77,9 +78,9 @@ public class DamageEvents implements Listener {
                 plr.sendMessage(Utils.chat("&5❂ &d" + Helper.getRank((Player) e.getDamager(), false) + "&d broke an &5End Crystal&d!"));
                 plr.playSound(plr.getLocation(), Sound.EXPLODE, 1000F, 1F);
             }
-            ((Player) e.getDamager()).getInventory().addItem(plugin.miscs.CRYSTAL_FRAGMENT);
+            ((Player) e.getDamager()).getInventory().addItem(Miscs.CRYSTAL_FRAGMENT);
             e.getEntity().remove();
-            Dragon.endCrystals.remove(e.getEntity().getLocation());
+            DragonEvent.endCrystals.remove(e.getEntity().getLocation());
             CustomEnderDragon.endCrystals -= 1;
             return;
         } else if (e.getDamager().getType() == EntityType.ARROW) {
@@ -89,9 +90,9 @@ public class DamageEvents implements Listener {
                     plr.sendMessage(Utils.chat("&5❂ &d" + Helper.getRank((Player) arrow.getShooter(), false) + "&d broke an &5End Crystal&d!"));
                     plr.playSound(plr.getLocation(), Sound.EXPLODE, 1000F, 1F);
                 }
-                ((Player) ((Arrow) e.getDamager()).getShooter()).getInventory().addItem(plugin.miscs.CRYSTAL_FRAGMENT);
+                ((Player) ((Arrow) e.getDamager()).getShooter()).getInventory().addItem(Miscs.CRYSTAL_FRAGMENT);
                 e.getEntity().remove();
-                Dragon.endCrystals.remove(e.getEntity().getLocation());
+                DragonEvent.endCrystals.remove(e.getEntity().getLocation());
                 CustomEnderDragon.endCrystals -= 1;
                 return;
             }
@@ -111,8 +112,8 @@ public class DamageEvents implements Listener {
             LivingEntity target = (LivingEntity) e.getEntity();
 
             if (!(target instanceof Player)) {
-                PlayerTemplate po = PlayerManager.playerObjects.get(damager);
-                MobTemplate mo = MobManager.mobObjects.get(target);
+                PlayerObject po = PlayerManager.playerObjects.get(damager);
+                MobObject mo = MobManager.mobObjects.get(target);
 
                 if (po == null || mo == null) return;
 
@@ -157,21 +158,21 @@ public class DamageEvents implements Listener {
                 e.setDamage(0);
                 mo.setHealth((mo.getHealth() - final_damage));
 
-                if (e.getEntityType() == EntityType.ENDER_DRAGON && plugin.so.isDragonFight()) {
+                if (e.getEntityType() == EntityType.ENDER_DRAGON && SkyblockRemastered.so.isDragonFight()) {
                     // Utils.broadCast("[DEBUG] " + ((mo.getHealth() / (double) mo.getMaxHealth()) * target.getMaxHealth()));
                     if (target.getCustomName() != null && target.getCustomName().toLowerCase().contains("old")) {
                         final_damage = final_damage / 2;
                     }
 
                     target.setHealth(((mo.getHealth() / (double) mo.getMaxHealth()) * target.getMaxHealth() > 0 ? (mo.getHealth() / (double) mo.getMaxHealth()) * target.getMaxHealth() : 0));
-                    plugin.dragonEvent.playerDamage.put(damager, plugin.dragonEvent.playerDamage.get(damager) + (double) final_damage);
-                    plugin.so.setLastDragonHit(damager);
+                    SkyblockRemastered.dragonEvent.playerDamage.put(damager, SkyblockRemastered.dragonEvent.playerDamage.get(damager) + (double) final_damage);
+                    SkyblockRemastered.so.setLastDragonHit(damager);
                 }
 
                 if (mo.getHealth() <= 0 && !target.isDead())
                     target.setHealth(0);
 
-                Utils.damageIndicator(target, final_damage, type, plugin);
+                Utils.damageIndicator(target, final_damage, type);
                 if (!target.isDead())
                     e.getEntity().getPassenger().setCustomName(Utils.chat(Utils.getDisplayHP(mo.getLevel(), mo.getName(), mo.getHealth(), mo.getMaxHealth())));
             }
@@ -183,8 +184,8 @@ public class DamageEvents implements Listener {
             Player damager = (Player) e.getDamager();
             LivingEntity target = (LivingEntity) e.getEntity();
 
-            PlayerTemplate po = PlayerManager.playerObjects.get(damager);
-            MobTemplate mo = MobManager.mobObjects.get(target);
+            PlayerObject po = PlayerManager.playerObjects.get(damager);
+            MobObject mo = MobManager.mobObjects.get(target);
 
             if (po == null || mo == null) return;
 
@@ -224,16 +225,16 @@ public class DamageEvents implements Listener {
             e.setDamage(0);
             mo.setHealth((mo.getHealth() - final_damage));
 
-            if (e.getEntityType() == EntityType.ENDER_DRAGON && plugin.so.isDragonFight()) {
+            if (e.getEntityType() == EntityType.ENDER_DRAGON && SkyblockRemastered.so.isDragonFight()) {
                 target.setHealth(((mo.getHealth() / (double) mo.getMaxHealth()) * target.getMaxHealth() > 0 ? (mo.getHealth() / (double) mo.getMaxHealth()) * target.getMaxHealth() : 0));
-                plugin.dragonEvent.playerDamage.put(damager, plugin.dragonEvent.playerDamage.get(damager) + (double) final_damage);
-                plugin.so.setLastDragonHit(damager);
+                SkyblockRemastered.dragonEvent.playerDamage.put(damager, SkyblockRemastered.dragonEvent.playerDamage.get(damager) + (double) final_damage);
+                SkyblockRemastered.so.setLastDragonHit(damager);
             }
 
             if (mo.getHealth() <= 0 && !target.isDead())
                 target.setHealth(0);
 
-            Utils.damageIndicator(target, final_damage, type, plugin);
+            Utils.damageIndicator(target, final_damage, type);
             if (!target.isDead())
                 e.getEntity().getPassenger().setCustomName(Utils.chat(Utils.getDisplayHP(mo.getLevel(), mo.getName(), mo.getHealth(), mo.getMaxHealth())));
         }
@@ -243,8 +244,8 @@ public class DamageEvents implements Listener {
             Player target = (Player) e.getEntity();
             LivingEntity damager = (LivingEntity) e.getDamager();
 
-            PlayerTemplate po = PlayerManager.playerObjects.get(target);
-            MobTemplate mo = MobManager.mobObjects.get(damager);
+            PlayerObject po = PlayerManager.playerObjects.get(target);
+            MobObject mo = MobManager.mobObjects.get(damager);
 
             int damage = mo.getDamage() > 0 ? mo.getDamage() : (int) e.getDamage();
 
@@ -260,12 +261,12 @@ public class DamageEvents implements Listener {
             e.setDamage(0);
             po.subtractHealth(damage);
             if (po.getHealth() <= 0 && !target.isDead()) Helper.deathHandler(plugin, target, "other");
-            Utils.damageIndicator(target, mo.getDamage(), "normal", plugin);
+            Utils.damageIndicator(target, mo.getDamage(), "normal");
         }
         // Player (Melee) to Player
         else if (e.getDamager().getType().equals(EntityType.PLAYER) && e.getEntityType() == EntityType.PLAYER) {
 
-            if (!plugin.so.isPvp()) {
+            if (!SkyblockRemastered.so.isPvp()) {
                 e.setCancelled(true);
                 return;
             }
@@ -273,8 +274,8 @@ public class DamageEvents implements Listener {
             Player damager = (Player) e.getDamager();
             Player target = (Player) e.getEntity();
 
-            PlayerTemplate po = PlayerManager.playerObjects.get(damager);
-            PlayerTemplate po2 = PlayerManager.playerObjects.get(target);
+            PlayerObject po = PlayerManager.playerObjects.get(damager);
+            PlayerObject po2 = PlayerManager.playerObjects.get(target);
 
             // Defining the player's stats
             int strength = po.getStrength();
@@ -312,21 +313,21 @@ public class DamageEvents implements Listener {
             e.setDamage(0);
             po2.setHealth((po2.getHealth() - final_damage));
 
-            if (e.getEntityType() == EntityType.ENDER_DRAGON && plugin.so.isDragonFight()) {
+            if (e.getEntityType() == EntityType.ENDER_DRAGON && SkyblockRemastered.so.isDragonFight()) {
                 target.setHealth(((po2.getHealth() / (double) po2.getMaxHealth()) * target.getMaxHealth() > 0 ? (po2.getHealth() / (double) po2.getMaxHealth()) * target.getMaxHealth() : 0));
-                plugin.dragonEvent.playerDamage.put(damager, plugin.dragonEvent.playerDamage.get(damager) + (double) final_damage);
-                plugin.so.setLastDragonHit(damager);
+                SkyblockRemastered.dragonEvent.playerDamage.put(damager, SkyblockRemastered.dragonEvent.playerDamage.get(damager) + (double) final_damage);
+                SkyblockRemastered.so.setLastDragonHit(damager);
             }
 
             if (po2.getHealth() <= 0 && !target.isDead())
                 Helper.deathHandler(plugin, target, "other");
 
-            Utils.damageIndicator(target, final_damage, type, plugin);
+            Utils.damageIndicator(target, final_damage, type);
         }
         // Player (Projectile) to Player
         else if (e.getDamager().getType() == EntityType.ARROW && ((Arrow) e.getDamager()).getShooter() instanceof Player && e.getEntityType() == EntityType.PLAYER) {
 
-            if (!plugin.so.isPvp()) {
+            if (!SkyblockRemastered.so.isPvp()) {
                 e.setCancelled(true);
                 return;
             }
@@ -344,8 +345,8 @@ public class DamageEvents implements Listener {
                 return;
             }
 
-            PlayerTemplate po = PlayerManager.playerObjects.get(damager);
-            PlayerTemplate po2 = PlayerManager.playerObjects.get(target);
+            PlayerObject po = PlayerManager.playerObjects.get(damager);
+            PlayerObject po2 = PlayerManager.playerObjects.get(target);
 
             plr.playSound(plr.getLocation(), Sound.ORB_PICKUP, 1000F, .8F);
 
@@ -391,7 +392,7 @@ public class DamageEvents implements Listener {
             if (po2.getHealth() <= 0 && !target.isDead())
                 Helper.deathHandler(plugin, target, "other");
 
-            Utils.damageIndicator(target, final_damage, type, plugin);
+            Utils.damageIndicator(target, final_damage, type);
         }
     }
 
@@ -401,8 +402,8 @@ public class DamageEvents implements Listener {
         try {
 
             if ((e.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION || e.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK || e.getCause() == EntityDamageEvent.DamageCause.FIRE || e.getCause() == EntityDamageEvent.DamageCause.LAVA) && e.getEntityType() == EntityType.ENDERMAN) {
-                List<Location> locs = new ArrayList<>(plugin.endSpawnpoints.keySet());
-                Location loc = locs.get((int) Math.floor(Math.random() * plugin.endSpawnpoints.size()));
+                List<Location> locs = new ArrayList<>(SkyblockRemastered.endSpawnpoints.keySet());
+                Location loc = locs.get((int) Math.floor(Math.random() * SkyblockRemastered.endSpawnpoints.size()));
                 e.getEntity().setFireTicks(0);
                 e.getEntity().setFallDistance(100);
                 e.getEntity().teleport(loc);
@@ -450,7 +451,7 @@ public class DamageEvents implements Listener {
                 if (e.getEntity().getType() == EntityType.PLAYER) {
 
                     Player target = (Player) e.getEntity();
-                    PlayerTemplate po = PlayerManager.playerObjects.get(target);
+                    PlayerObject po = PlayerManager.playerObjects.get(target);
 
                     String type = "normal";
                     int damage = 5;
@@ -470,7 +471,7 @@ public class DamageEvents implements Listener {
                     }
 
                     // Shows the damage dealt using armor stands.
-                    Utils.damageIndicator(e.getEntity(), damage, type, plugin);
+                    Utils.damageIndicator(e.getEntity(), damage, type);
                     e.setDamage(0);
 
                     po.subtractHealth(damage);
@@ -479,7 +480,7 @@ public class DamageEvents implements Listener {
                 } else {
 
                     LivingEntity target = (LivingEntity) e.getEntity();
-                    MobTemplate mo = MobManager.mobObjects.get(target);
+                    MobObject mo = MobManager.mobObjects.get(target);
                     String type = "normal";
                     int damage = 5;
 
@@ -495,7 +496,7 @@ public class DamageEvents implements Listener {
                     }
 
                     // Shows the damage dealt using armor stands.
-                    Utils.damageIndicator(e.getEntity(), damage, type, plugin);
+                    Utils.damageIndicator(e.getEntity(), damage, type);
                     e.setDamage(0);
 
                     mo.subtractHealth(damage);
@@ -517,7 +518,7 @@ public class DamageEvents implements Listener {
         if (e.getEntityType() == EntityType.ENDER_DRAGON) {
             if (e.getRegainReason() == EntityRegainHealthEvent.RegainReason.CUSTOM || e.getRegainReason() == EntityRegainHealthEvent.RegainReason.ENDER_CRYSTAL) {
                 LivingEntity mob = (LivingEntity) e.getEntity();
-                MobTemplate mo = MobManager.mobObjects.get(mob);
+                MobObject mo = MobManager.mobObjects.get(mob);
                 e.setCancelled(true);
                 mo.setHealth(Math.min(mo.getHealth() + 22500, mo.getMaxHealth()));
                 mob.setHealth(((mo.getHealth() / (double) mo.getMaxHealth()) * mob.getMaxHealth()));

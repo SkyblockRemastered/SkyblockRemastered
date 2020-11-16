@@ -9,9 +9,9 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.templates.MobTemplate;
-import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
-import xyz.apollo30.skyblockremastered.GUIs.GUIs;
+import xyz.apollo30.skyblockremastered.objects.MobObject;
+import xyz.apollo30.skyblockremastered.objects.PlayerObject;
+import xyz.apollo30.skyblockremastered.guis.GUIs;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
 import java.time.LocalDateTime;
@@ -37,7 +37,7 @@ public class ScoreboardTask extends BukkitRunnable {
             String title = "&e&lSKYBLOCK";
             obj.setDisplayName(Utils.chat(title));
 
-            PlayerTemplate po = PlayerManager.playerObjects.get(plr);
+            PlayerObject po = PlayerManager.playerObjects.get(plr);
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
             DateTimeFormatter d = DateTimeFormatter.ofPattern("dd");
@@ -69,20 +69,20 @@ public class ScoreboardTask extends BukkitRunnable {
             contents.add(purse.length() > 40 ? purse.substring(0, 40) : purse);
             contents.add(bits);
 
-            if (plugin.so.isDragonFight()) {
+            if (SkyblockRemastered.so.isDragonFight()) {
                 if (!plr.getWorld().getName().equals("hub")) return;
-                MobTemplate mo = plugin.so.getEnderDragon();
+                MobObject mo = SkyblockRemastered.so.getEnderDragon();
                 if (mo != null) {
-                    if (plugin.dragonEvent.playerDamage.get(plr) != null) {
+                    if (SkyblockRemastered.dragonEvent.playerDamage.get(plr) != null) {
                         contents.add("&7&8 ");
                         contents.add("&fDragon HP: &a" + Utils.doubleFormat(mo.getHealth() < 0 ? (double) 0 : (double) mo.getHealth()) + " &c" + GUIs.getUnicode("heart"));
-                        contents.add("&fYour Damage: &c" + Utils.doubleFormat(plugin.dragonEvent.playerDamage.get(plr)));
-                    } else plugin.dragonEvent.playerDamage.put(plr, (double) 0);
+                        contents.add("&fYour Damage: &c" + Utils.doubleFormat(SkyblockRemastered.dragonEvent.playerDamage.get(plr)));
+                    } else SkyblockRemastered.dragonEvent.playerDamage.put(plr, (double) 0);
                 }
             }
 
             contents.add("&2&5");
-            contents.add(plugin.so.isHypixelip() ? "&ewww.hypixel.net" : "&eplay.apollo30.xyz");
+            contents.add(SkyblockRemastered.so.isHypixelip() ? "&ewww.hypixel.net" : "&eplay.apollo30.xyz");
 
             int cycle = contents.size();
             for (String list : contents) {

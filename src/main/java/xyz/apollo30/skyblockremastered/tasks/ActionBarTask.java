@@ -3,9 +3,9 @@ package xyz.apollo30.skyblockremastered.tasks;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.apollo30.skyblockremastered.GUIs.GUIs;
+import xyz.apollo30.skyblockremastered.guis.GUIs;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
+import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.PacketUtils;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
@@ -22,7 +22,7 @@ public class ActionBarTask extends BukkitRunnable {
     public void run() {
         for (Player plr : Bukkit.getOnlinePlayers()) {
 
-            PlayerTemplate po = PlayerManager.playerObjects.get(plr);
+            PlayerObject po = PlayerManager.playerObjects.get(plr);
             if (po == null) return;
 
             String hp = Integer.toString(po.getHealth() + po.getExtraHealth() + po.getAbsorptionHealth());

@@ -9,9 +9,9 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.Potion;
-import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
+import xyz.apollo30.skyblockremastered.guis.GUIHelper;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
+import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -33,7 +33,7 @@ public class PotionBag implements Listener {
         Player plr = (Player) e.getView().getPlayer();
         String title = e.getInventory().getTitle();
 
-        PlayerTemplate po = plugin.playerManager.getPlayerData(plr);
+        PlayerObject po = plugin.playerManager.getPlayerData(plr);
 
         if (title.equals("Potion Bag")) {
             if (e.getInventory().getSize() == 18) {
@@ -68,7 +68,7 @@ public class PotionBag implements Listener {
 
         Player plr = (Player) e.getPlayer();
         String title = e.getInventory().getTitle();
-        PlayerTemplate po = plugin.playerManager.getPlayerData(plr);
+        PlayerObject po = plugin.playerManager.getPlayerData(plr);
 
         if (title.equals("Potion Bag")) {
             po.setPotionBag(Helper.inventoryToString(e.getInventory()));

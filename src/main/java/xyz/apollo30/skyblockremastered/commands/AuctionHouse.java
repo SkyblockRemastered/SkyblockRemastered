@@ -6,7 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import xyz.apollo30.skyblockremastered.GUIs.ItemBrowser.ItemBrowser;
+import xyz.apollo30.skyblockremastered.guis.ItemBrowser.ItemBrowser;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 

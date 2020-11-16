@@ -15,11 +15,7 @@ import java.util.*;
 
 public class EnchantEvents extends BukkitRunnable implements Listener {
 
-    private final SkyblockRemastered plugin;
-
     public EnchantEvents(SkyblockRemastered plugin) {
-        this.plugin = plugin;
-
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 

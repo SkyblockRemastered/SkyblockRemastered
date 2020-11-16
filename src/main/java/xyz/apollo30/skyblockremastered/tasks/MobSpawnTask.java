@@ -23,7 +23,7 @@ public class MobSpawnTask extends BukkitRunnable {
     @Override
     public void run() {
 
-        if (plugin.endSpawnpoints.size() == 0) return;
+        if (SkyblockRemastered.endSpawnpoints.size() == 0) return;
 
         entities.removeIf(Entity::isDead);
 
@@ -31,30 +31,30 @@ public class MobSpawnTask extends BukkitRunnable {
         int foundWatchers = (int) entities.stream().filter(entity -> !entity.isDead() && entity.getPassenger() != null && !entity.getPassenger().getCustomName().isEmpty() && entity.getPassenger().getCustomName().contains(Utils.chat("&cWatcher"))).count();
         int foundObsidianDefenders = (int) entities.stream().filter(entity -> !entity.isDead() && entity.getPassenger() != null && !entity.getPassenger().getCustomName().isEmpty() && entity.getPassenger().getCustomName().contains(Utils.chat("&cObsidian Defender"))).count();
 
-        List<Location> locs = new ArrayList<>(plugin.endSpawnpoints.keySet());
+        List<Location> locs = new ArrayList<>(SkyblockRemastered.endSpawnpoints.keySet());
 
         while (foundZealots < 25) {
-            Location loc = locs.get((int) Math.floor(Math.random() * plugin.endSpawnpoints.size()));
+            Location loc = locs.get((int) Math.floor(Math.random() * SkyblockRemastered.endSpawnpoints.size()));
             Enderman enderman = (Enderman) loc.getWorld().spawnEntity(loc.add(0, 3, 0), EntityType.ENDERMAN);
-            plugin.mobManager.createMob(enderman, "Zealot");
+            SkyblockRemastered.mobManager.createMob(enderman, "Zealot");
             entities.add(enderman);
             foundZealots++;
         }
 
         while (foundWatchers < 17) {
-            Location loc = locs.get((int) Math.floor(Math.random() * plugin.endSpawnpoints.size()));
+            Location loc = locs.get((int) Math.floor(Math.random() * SkyblockRemastered.endSpawnpoints.size()));
             Skeleton skeleton = (Skeleton) loc.getWorld().spawnEntity(loc.add(0, 3, 0), EntityType.SKELETON);
-            plugin.mobManager.createMob(skeleton, "Watcher");
+            SkyblockRemastered.mobManager.createMob(skeleton, "Watcher");
             entities.add(skeleton);
             foundWatchers++;
         }
 
         while (foundObsidianDefenders < 17) {
-            Location loc = locs.get((int) Math.floor(Math.random() * plugin.endSpawnpoints.size()));
+            Location loc = locs.get((int) Math.floor(Math.random() * SkyblockRemastered.endSpawnpoints.size()));
             Skeleton witherSkeleton = (Skeleton) loc.getWorld().spawnEntity(loc.add(0, 3, 0), EntityType.SKELETON);
             witherSkeleton.setSkeletonType(Skeleton.SkeletonType.WITHER);
             witherSkeleton.getEquipment().setItemInHand(new ItemStack(Material.AIR));
-            plugin.mobManager.createMob(witherSkeleton, "Obsidian Defender");
+            SkyblockRemastered.mobManager.createMob(witherSkeleton, "Obsidian Defender");
             entities.add(witherSkeleton);
             foundObsidianDefenders++;
         }

@@ -5,7 +5,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.apollo30.skyblockremastered.GUIs.GUIs;
+import xyz.apollo30.skyblockremastered.guis.GUIs;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class LagPreventerTask extends BukkitRunnable {
 
-    private SkyblockRemastered plugin;
+    private final SkyblockRemastered plugin;
 
     public LagPreventerTask(final SkyblockRemastered plugin) {
         this.plugin = plugin;
@@ -44,8 +44,8 @@ public class LagPreventerTask extends BukkitRunnable {
                 }
             }
         }
-        if (plugin.indicator.size() != 0) {
-            for (Map.Entry<Entity, Long> entities : plugin.indicator.entrySet()) {
+        if (SkyblockRemastered.indicator.size() != 0) {
+            for (Map.Entry<Entity, Long> entities : SkyblockRemastered.indicator.entrySet()) {
                 if ((new Date().getTime() - entities.getValue()) > 2000) {
                     entities.getKey().remove();
                 }

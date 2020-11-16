@@ -13,11 +13,11 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
+import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
-import xyz.apollo30.skyblockremastered.templates.MobTemplate;
+import xyz.apollo30.skyblockremastered.objects.MobObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -200,7 +200,7 @@ public class CustomEnderDragon extends EntityEnderDragon {
                  * Because the code above doesn't fucking work.
                  */
                 LivingEntity entity = (LivingEntity) getBukkitEntity();
-                MobTemplate mo = MobManager.mobObjects.get(entity);
+                MobObject mo = MobManager.mobObjects.get(entity);
                 if (mo.getHealth() <= 0) return;
 
                 if (Math.random() > .5) {
@@ -240,7 +240,7 @@ public class CustomEnderDragon extends EntityEnderDragon {
                             for (Player plr : getBukkitEntity().getWorld().getPlayers()) {
                                 int damage = (int) Helper.triangularDistribution(700, 1100, 1500);
                                 plr.getWorld().strikeLightningEffect(plr.getLocation());
-                                PlayerTemplate po = PlayerManager.playerObjects.get(plr);
+                                PlayerObject po = PlayerManager.playerObjects.get(plr);
                                 po.subtractHealth(damage);
                                 if (po.getHealth() <= 0 && !plr.isDead())
                                     Helper.deathHandler(JavaPlugin.getPlugin(SkyblockRemastered.class), plr, "other");
@@ -357,7 +357,7 @@ public class CustomEnderDragon extends EntityEnderDragon {
             if (entity.getType() == EntityType.ENDER_CRYSTAL) return;
         }
         Entity endCrystal = loc.getWorld().spawnEntity(loc, EntityType.ENDER_CRYSTAL);
-        Dragon.endCrystals.add(endCrystal.getLocation());
+        DragonEvent.endCrystals.add(endCrystal.getLocation());
         for (Player player : getBukkitEntity().getWorld().getPlayers()) {
             player.sendMessage(Utils.chat("&5❂ &dAn Ender Crystal has respawned!"));
         }

@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
+import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 
 public class RegenerationTask extends BukkitRunnable {
 
@@ -15,7 +15,7 @@ public class RegenerationTask extends BukkitRunnable {
     public void run() {
         for (Player plr : Bukkit.getOnlinePlayers()) {
 
-            PlayerTemplate po = PlayerManager.playerObjects.get(plr);
+            PlayerObject po = PlayerManager.playerObjects.get(plr);
 
             // Health Regeneration
             if ((po.getHealth()) < po.getMaxHealth()) {

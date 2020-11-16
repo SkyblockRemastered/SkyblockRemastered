@@ -6,10 +6,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import xyz.apollo30.skyblockremastered.GUIs.GUIs;
-import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
+import xyz.apollo30.skyblockremastered.guis.Bank.BankMenu;
+import xyz.apollo30.skyblockremastered.guis.GUIs;
+import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 import xyz.apollo30.skyblockremastered.utils.ResponsesUtils;
+
+import java.nio.channels.SelectionKey;
 
 public class SkyblockRemastered implements CommandExecutor {
 
@@ -45,7 +48,7 @@ public class SkyblockRemastered implements CommandExecutor {
 
         Player plr = (Player) sender;
 
-        PlayerTemplate player_data = plugin.playerManager.getPlayerData(plr);
+        PlayerObject player_data = plugin.playerManager.getPlayerData(plr);
         //if (!plr.isOp()) return false;
         String prefix = "&6Skyblock &8» &7";
 
@@ -166,7 +169,7 @@ public class SkyblockRemastered implements CommandExecutor {
             plugin.so.setHypixelip(!plugin.so.isHypixelip());
             plr.sendMessage(Utils.chat("IP has been changed!"));
         } else if (args[0].equalsIgnoreCase("bank")) {
-            GUIs.bankMenu(plr, plr.getUniqueId().toString(), plugin);
+            new BankMenu(xyz.apollo30.skyblockremastered.SkyblockRemastered.getMenuUtility(plr), plr).open();
         } else if (args[0].equalsIgnoreCase("dialogs")) {
             if (args[1].equalsIgnoreCase("clerk")) {
                 ResponsesUtils.villagerDialog(plr, plugin, "&e[NPC] Clerk Seraphine:", "&fOh hello! You're here for the mayor elections?", "&fWell, this server ain't pay to win, &c&lGET OUTTA HERE!");

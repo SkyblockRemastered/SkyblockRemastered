@@ -11,10 +11,11 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import xyz.apollo30.skyblockremastered.GUIs.GUIHelper;
+import xyz.apollo30.skyblockremastered.guis.GUIHelper;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
+import xyz.apollo30.skyblockremastered.items.Miscs;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
-import xyz.apollo30.skyblockremastered.templates.PlayerTemplate;
+import xyz.apollo30.skyblockremastered.objects.PlayerObject;
 import xyz.apollo30.skyblockremastered.utils.Helper;
 import xyz.apollo30.skyblockremastered.utils.Utils;
 
@@ -50,7 +51,7 @@ public class PlayerEvents implements Listener {
             plr.setGameMode(GameMode.SURVIVAL);
         }
 
-        ItemStack nether_star = plugin.miscs.SKYBLOCK_MENU;
+        ItemStack nether_star = Miscs.SKYBLOCK_MENU;
         plr.getInventory().remove(nether_star);
 
         GUIHelper.addItem(plr.getInventory(), nether_star, 9);
@@ -84,7 +85,7 @@ public class PlayerEvents implements Listener {
 
         if (!(e.getEntity().getShooter() instanceof Player)) return;
         Player plr = (Player) e.getEntity().getShooter();
-        PlayerTemplate po = plugin.playerManager.getPlayerData(plr);
+        PlayerObject po = plugin.playerManager.getPlayerData(plr);
         if (po == null) return;
 
         int arrows = 0;
@@ -137,7 +138,7 @@ public class PlayerEvents implements Listener {
     @EventHandler
     public void playerMove(PlayerMoveEvent e) {
         Player plr = e.getPlayer();
-        PlayerTemplate po = plugin.playerManager.getPlayerData(plr);
+        PlayerObject po = plugin.playerManager.getPlayerData(plr);
         if (po == null) return;
 
         // Island Border

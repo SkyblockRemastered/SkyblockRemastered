@@ -11,7 +11,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.apollo30.skyblockremastered.GUIs.constructor.MenuUtility;
+import xyz.apollo30.skyblockremastered.guis.constructors.MenuUtility;
 import xyz.apollo30.skyblockremastered.abilities.Miscs;
 import xyz.apollo30.skyblockremastered.abilities.Weapons;
 import xyz.apollo30.skyblockremastered.commands.*;
@@ -19,8 +19,8 @@ import xyz.apollo30.skyblockremastered.events.bagHandler.AccessoryBag;
 import xyz.apollo30.skyblockremastered.events.bagHandler.PotionBag;
 import xyz.apollo30.skyblockremastered.events.bagHandler.QuiverBag;
 import xyz.apollo30.skyblockremastered.events.dragonHandler.CustomEnderDragon;
-import xyz.apollo30.skyblockremastered.events.dragonHandler.DragLootStructure;
-import xyz.apollo30.skyblockremastered.events.dragonHandler.Dragon;
+import xyz.apollo30.skyblockremastered.events.dragonHandler.lootTable.DragLootStructure;
+import xyz.apollo30.skyblockremastered.events.dragonHandler.DragonEvent;
 import xyz.apollo30.skyblockremastered.events.playerHandler.ProfileViewer;
 import xyz.apollo30.skyblockremastered.events.playerHandler.TradeMenu;
 import xyz.apollo30.skyblockremastered.items.*;
@@ -28,7 +28,7 @@ import xyz.apollo30.skyblockremastered.listeners.*;
 import xyz.apollo30.skyblockremastered.managers.MobManager;
 import xyz.apollo30.skyblockremastered.managers.PlayerManager;
 import xyz.apollo30.skyblockremastered.tasks.*;
-import xyz.apollo30.skyblockremastered.templates.ServerTemplate;
+import xyz.apollo30.skyblockremastered.objects.ServerObject;
 import xyz.apollo30.skyblockremastered.utils.MongoUtils;
 import xyz.apollo30.skyblockremastered.utils.NMSUtil;
 
@@ -37,20 +37,20 @@ import java.util.HashMap;
 public class SkyblockRemastered extends JavaPlugin {
 
     public static HashMap<Player, Location> frozenPlayers = new HashMap<>();
-    public HashMap<Entity, Entity> health_indicator = new HashMap<>();
-    public PlayerManager playerManager;
-    public MobManager mobManager;
-    public HashMap<Entity, Long> indicator = new HashMap<>();
-    public Miscs miscAbilities;
-    public Weapons weaponAbilities;
-    public Dragon dragonEvent;
-    public DragLootStructure dragon;
-    public ServerTemplate so = new ServerTemplate();
-    public NMSUtil nmsu = new NMSUtil();
+    public static HashMap<Entity, Entity> health_indicator = new HashMap<>();
+    public static PlayerManager playerManager;
+    public static MobManager mobManager;
+    public static HashMap<Entity, Long> indicator = new HashMap<>();
+    public static Miscs miscAbilities;
+    public static Weapons weaponAbilities;
+    public static DragonEvent dragonEvent;
+    public static DragLootStructure dragon;
+    public static ServerObject so = new ServerObject();
+    public static NMSUtil nmsu = new NMSUtil();
     public MobSpawnTask mobSpawnTask = new MobSpawnTask(this);
 
     // Spawnpoints
-    public HashMap<Location, Block> endSpawnpoints = new HashMap<>();
+    public static HashMap<Location, Block> endSpawnpoints = new HashMap<>();
 
     // ItemStack Defining
     public xyz.apollo30.skyblockremastered.items.Weapons weapons = new xyz.apollo30.skyblockremastered.items.Weapons(this);
@@ -83,7 +83,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new SpawnEvents(this);
         new EnchantEvents(this);
         new TradeMenu(this);
-        new ItemAbilityEvents(this);
+        new ItemEvents(this);
         new DeathEvents(this);
         new PotionBag(this);
         new QuiverBag(this);
@@ -102,13 +102,13 @@ public class SkyblockRemastered extends JavaPlugin {
         new API(this);
 
         // Abilities
-        this.miscAbilities = new Miscs(this);
-        this.weaponAbilities = new Weapons(this);
-        this.dragonEvent = new Dragon(this);
+        miscAbilities = new Miscs(this);
+        weaponAbilities = new Weapons(this);
+        dragonEvent = new DragonEvent(this);
 
         // Managers
-        this.playerManager = new PlayerManager(this);
-        this.mobManager = new MobManager(this);
+        playerManager = new PlayerManager(this);
+        mobManager = new MobManager(this);
 
         // When reloaded and the players still exist, it just recreates their database again.
         for (Player plr : Bukkit.getOnlinePlayers()) {
@@ -148,7 +148,7 @@ public class SkyblockRemastered extends JavaPlugin {
         new WheatCrystalTask(this).runTaskTimer(this, 1, 1);
         new LagPreventerTask(this).runTaskTimer(this, 0, 20);
         new EnchantEvents(this).runTaskTimer(this, 0, 1);
-        new ConstantTask(this).runTaskTimer(this, 0, 1);
+        new ConstantTask().runTaskTimer(this, 0, 1);
         mobSpawnTask.runTaskTimer(this, 0, 20 * 15);
 
     }
