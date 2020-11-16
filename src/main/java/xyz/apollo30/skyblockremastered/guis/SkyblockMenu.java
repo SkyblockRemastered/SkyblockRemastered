@@ -139,7 +139,7 @@ public class SkyblockMenu extends Menu {
         int petluck = po.getPetLuck();
         int ferocity = po.getFerocity();
 
-        GUIHelper.addItem(inv, 130, 1, 26, "&aEnderChest", "&7Store global items that you want",
+        GUIHelper.addItem(inv, 130, 1, 26, "&aEnderchest", "&7Store global items that you want",
                 "&7to access at any time from", "&7anywhere right here.", " ", "&eClick to open!");
         GUIHelper.addItem(inv, 276, 1, 20, "&aYour Skills", "&7View your Skill progression", "&7rewards.", " ",
                 "&eClick to view!");
