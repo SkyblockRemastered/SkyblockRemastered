@@ -40,3 +40,7 @@ commands:
   API:
     description: generate yourself a new API key
     aliases: [apikey]
+  stats:
+    description: admin only
+  verify:
+    description: idiotic people can only run this.
