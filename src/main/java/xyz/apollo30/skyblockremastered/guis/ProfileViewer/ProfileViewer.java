@@ -65,6 +65,12 @@ public class ProfileViewer extends Menu {
     @Override
     public void setMenuItems() {
 
+        if (!SkyblockRemastered.so.isProfileViewer()) {
+            plr.sendMessage(Utils.chat("&cThe Profile Viewer is disabled"));
+            plr.closeInventory();
+            return;
+        }
+
         PlayerObject po = PlayerManager.playerObjects.get(target);
         if (po == null) {
             plr.sendMessage(Utils.chat("&cCouldn't load " + target.getName() + "'s Profile! Please try again later!"));

@@ -223,6 +223,11 @@ public class DamageEvents implements Listener {
             }
 
             e.setDamage(0);
+
+            if (damager.getItemInHand() != null && Helper.hasCustomName(damager.getItemInHand()) && Helper.getCustomName(damager.getItemInHand()).equals(Utils.chat("&6Mage Beam"))) {
+                final_damage = (int) ((final_damage * 0.4) + (po.getBaseIntelligence() * 0.9));
+            }
+
             mo.setHealth((mo.getHealth() - final_damage));
 
             if (e.getEntityType() == EntityType.ENDER_DRAGON && SkyblockRemastered.so.isDragonFight()) {
@@ -260,7 +265,7 @@ public class DamageEvents implements Listener {
 
             e.setDamage(0);
             po.subtractHealth(damage);
-            if (po.getHealth() <= 0 && !target.isDead()) Helper.deathHandler(plugin, target, "other");
+            if (po.getHealth() <= 0 && !target.isDead()) Helper.deathHandler(plugin, target, "other", null);
             Utils.damageIndicator(target, mo.getDamage(), "normal");
         }
         // Player (Melee) to Player
@@ -320,7 +325,7 @@ public class DamageEvents implements Listener {
             }
 
             if (po2.getHealth() <= 0 && !target.isDead())
-                Helper.deathHandler(plugin, target, "other");
+                Helper.deathHandler(plugin, target, "mob", damager);
 
             Utils.damageIndicator(target, final_damage, type);
         }
@@ -390,7 +395,7 @@ public class DamageEvents implements Listener {
             po2.setHealth((po2.getHealth() - final_damage));
 
             if (po2.getHealth() <= 0 && !target.isDead())
-                Helper.deathHandler(plugin, target, "other");
+                Helper.deathHandler(plugin, target, "mob", damager);
 
             Utils.damageIndicator(target, final_damage, type);
         }
@@ -458,14 +463,16 @@ public class DamageEvents implements Listener {
 
                     if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) return;
                     else if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                        if (e.getEntityType() == EntityType.PLAYER) Helper.deathHandler(plugin, target, "other");
+                        if (e.getEntityType() == EntityType.PLAYER) Helper.deathHandler(plugin, target, "void", null);
                     }
 
+                    String ca = "";
                     // Checks if the damage cause was unique to have its own custom color.
                     for (EntityDamageEvent.DamageCause cause : uniqueCauses) {
                         if (e.getCause() == cause) {
                             type = cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.LAVA ? "fire" : cause == EntityDamageEvent.DamageCause.DROWNING ? "water" : cause == EntityDamageEvent.DamageCause.WITHER ? "wither" : cause == EntityDamageEvent.DamageCause.POISON ? "poison" : "normal";
                             damage = cause == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION || cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION ? 200 : cause == EntityDamageEvent.DamageCause.LAVA ? 20 : cause == EntityDamageEvent.DamageCause.WITHER ? 25 : 5;
+                            ca = cause.name();
                             break;
                         }
                     }
@@ -476,7 +483,7 @@ public class DamageEvents implements Listener {
 
                     po.subtractHealth(damage);
                     int health = po.getHealth();
-                    if (health <= 0 && !target.isDead()) Helper.deathHandler(plugin, target, "other");
+                    if (health <= 0 && !target.isDead()) Helper.deathHandler(plugin, target, ca, null);
                 } else {
 
                     LivingEntity target = (LivingEntity) e.getEntity();

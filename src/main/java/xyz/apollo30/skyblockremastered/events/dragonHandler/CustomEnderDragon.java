@@ -2,6 +2,7 @@ package xyz.apollo30.skyblockremastered.events.dragonHandler;
 
 import net.minecraft.server.v1_8_R3.EntityEnderDragon;
 import net.minecraft.server.v1_8_R3.World;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
@@ -22,7 +23,9 @@ import xyz.apollo30.skyblockremastered.objects.MobObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class CustomEnderDragon extends EntityEnderDragon {
 
@@ -37,40 +40,61 @@ public class CustomEnderDragon extends EntityEnderDragon {
     private boolean onRandomPath = false;
     private Location destinationLoc = null;
     private long cooldown = 0;
-    private boolean canAbility = false;
 
-    // Ender Crystals
-    public static int endCrystals = 0;
+    public static int endCrystals = 0; // Ender Crystals
 
-    // Dragon Stopping
-    public boolean dragonStop = false;
-    private int stopsLeft = 3;
+    public boolean dragonStop = false; // Dragon Stopping
+    private final boolean finalBattle = false; // Final Battle
+    public boolean isFireball = false; // Fireball
+    public boolean isLightningStrike = false; // Lightning Strike
 
-    // Final Battle
-    private final boolean finalBattle = false;
-    private final int finalBattleLeft = 1;
+    private final SkyblockRemastered plugin = JavaPlugin.getPlugin(SkyblockRemastered.class);
 
-    // Fireball
-    public boolean isFireball = false;
-    private int fireballsLeft = 2;
+    /**
+     * Calculates for another location
+     * @param start lowest x, lowest y, lowest z
+     * @param end highest x, highest y, highest z
+     * @return new Location inside that cuboid
+     */
+    private Location getRandomLocation(Location start, Location end) {
 
-    // Lightning Strike
-    public boolean isLightningStrike = false;
-    private int lightningStrikeLeft = 2;
-    private boolean a = false;
+        int maxX = Math.max(start.getBlockX(), end.getBlockX());
+        int maxY = Math.max(start.getBlockY(), end.getBlockY());
+        int maxZ = Math.max(start.getBlockZ(), end.getBlockZ());
 
-    public void updateLocation() {
+        int minX = Math.min(start.getBlockX(), end.getBlockX());
+        int minY = Math.min(start.getBlockY(), end.getBlockY());
+        int minZ = Math.min(start.getBlockZ(), end.getBlockZ());
+
+        return new Location(start.getWorld(), nextInt(minX, maxX), nextInt(minY, maxY), nextInt(minZ, maxZ));
+    }
+
+    private int nextInt(int min, int max) {
+        Random rnd = new Random();
+        return rnd.nextInt(max - min) + max;
+    }
+
+    /**
+     * Updates the current location of the dragon
+     */
+    private void updateCurrentLocation() {
         currentLoc = getBukkitEntity().getLocation();
         currentLocX = currentLoc.getX();
         currentLocY = currentLoc.getY();
         currentLocZ = currentLoc.getZ();
-        destinationLoc = getRandomLocation(getBukkitEntity().getLocation(), new Location(getBukkitEntity().getWorld(), -24, 9, -33), new Location(getBukkitEntity().getWorld(), 32, 50, 29));
+    }
+
+    /**
+     * Updates the destination of the dragon.
+     */
+    private void updateLocation() {
+        destinationLoc = getRandomLocation(new Location(getBukkitEntity().getWorld(), -24, 9, -33), new Location(getBukkitEntity().getWorld(), 32, 50, 29));
     }
 
     public CustomEnderDragon(World world) {
         super(world);
 
-        /**
+        /*
          * This handles the dragon's custom pathfinder,
          * so the dragon won't fly out of the dragons nest.
          * Cooldown of 2-5 Seconds.
@@ -82,42 +106,30 @@ public class CustomEnderDragon extends EntityEnderDragon {
             public void run() {
                 if (getBukkitEntity().isDead()) this.cancel();
 
-                // I know I can combine the 4 abilities but it makes it more easier to read.
-
-                /**
+                /*
                  * Executes if the dragon has reached its stopping position.
                  * Keeps it in place for 3-7 seconds using triangular distribution as usual.
-                 */
-                if (dragonStop && destinationLoc != null) {
-                    setPositionRotation(destinationLoc.getX(), destinationLoc.getY(), destinationLoc.getZ(), destinationLoc.getYaw(), destinationLoc.getPitch());
-                }
-
-                /**
+                 *
                  * Executes if the dragon wants to do a lightning strike.
                  * Keeps it in place for 5 seconds?
-                 */
-                else if (isLightningStrike && destinationLoc != null) {
-                    setPositionRotation(destinationLoc.getX(), destinationLoc.getY(), destinationLoc.getZ(), destinationLoc.getYaw(), destinationLoc.getPitch());
-                }
-
-                /**
+                 *
                  * Executes if the dragon wants to face to a random player and fireball them.
                  * 1/2 second interval of each fireball for 8-10 seconds.
                  */
-                else if (isFireball && destinationLoc != null) {
+                if (dragonStop && destinationLoc != null || isLightningStrike && destinationLoc != null || isFireball && destinationLoc != null) {
                     setPositionRotation(destinationLoc.getX(), destinationLoc.getY(), destinationLoc.getZ(), destinationLoc.getYaw(), destinationLoc.getPitch());
                 }
 
-                /**
+                /*
                  * After the dragon has reached its path and the cooldown is done
                  * It chooses a random path inside the dragon's nest.
                  */
-                else if (destinationLoc == null && !onRandomPath && cooldown < new Date().getTime()) {
-                    if (dragonStop) return;
+                if (destinationLoc == null && !onRandomPath && cooldown < new Date().getTime()) {
                     updateLocation();
                     onRandomPath = true;
                 } else {
-                    /**
+
+                    /*
                      * Checking if the dragon is out of the dragon's nest
                      * Then it chooses a new location.
                      */
@@ -125,7 +137,7 @@ public class CustomEnderDragon extends EntityEnderDragon {
                         updateLocation();
                         targetingPlayer = false;
                     }
-                    /**
+                    /*
                      * If all arguments haven't passed, we shall give them
                      * a random location to force the dragon to fly to against its will.
                      */
@@ -146,7 +158,7 @@ public class CustomEnderDragon extends EntityEnderDragon {
                         currentLocY += (destinationLocY - currentLocY) > 0 ? dragonSpeed : -dragonSpeed;
                         currentLocZ += (destinationLocZ - currentLocZ) > 0 ? dragonSpeed : -dragonSpeed;
 
-                        /**
+                        /*
                          * Checking if the dragon has already passed its destination
                          */
                         if (currentLocX + 3 >= destinationLocX && currentLocY + 3 >= destinationLocY && currentLocZ + 3 >= destinationLocZ) {
@@ -156,10 +168,8 @@ public class CustomEnderDragon extends EntityEnderDragon {
                             cooldown = new Date().getTime() + 1000;
 
                             // A simple variable switch to see if the dragon can do an ability or not.
-                            canAbility = true;
-                            JavaPlugin.getProvidingPlugin(SkyblockRemastered.class).getServer().getScheduler().scheduleSyncDelayedTask(JavaPlugin.getProvidingPlugin(SkyblockRemastered.class), () -> canAbility = false, 20 * 10);
                         }
-                        /**
+                        /*
                          * Else we shall force the dragon against its will
                          * To move to the desired location.
                          */
@@ -177,25 +187,21 @@ public class CustomEnderDragon extends EntityEnderDragon {
         new BukkitRunnable() {
             @Override
             public void run() {
-
-                if (a) return;
-                a = true;
-
                 if (getBukkitEntity().isDead()) this.cancel();
 
-                /**
+                /*
                  * Spawning ender crystals around the dragons nest
                  * The little there are, the higher chance
                  * it spawns in the map!
                  */
                 if (Math.random() > (endCrystals / 5F)) respawnCrystal();
 
-                /**
+                /*
                  * Determines whether if the dragon
                  * should stop and do one of the 4 abilities.
                  */
 
-                /**
+                /*
                  * BUT! We check if the dragon is already dead.
                  * Because the code above doesn't fucking work.
                  */
@@ -204,22 +210,20 @@ public class CustomEnderDragon extends EntityEnderDragon {
                 if (mo.getHealth() <= 0) return;
 
                 if (Math.random() > .5) {
-                    if (stopsLeft > 0 && Math.random() > .75) {
-                        /**
+                    if (Math.random() > .75) {
+                        /*
                          * Randomly Stopping the Dragon
                          */
-                        stopsLeft--;
                         dragonStop = true;
                         destinationLoc = getBukkitEntity().getLocation();
                         JavaPlugin.getProvidingPlugin(SkyblockRemastered.class).getServer().getScheduler().scheduleSyncDelayedTask(JavaPlugin.getProvidingPlugin(SkyblockRemastered.class), () -> {
                             dragonStop = false;
                             destinationLoc = null;
                         }, (long) (20 * Helper.triangularDistribution(3, 5, 7)));
-                    } else if (lightningStrikeLeft > 0 && Math.random() > .75) {
-                        /**
+                    } else if (Math.random() > .75) {
+                        /*
                          * Stopping the Dragon to execute lightnings
                          */
-                        lightningStrikeLeft--;
                         isLightningStrike = true;
                         destinationLoc = getBukkitEntity().getLocation();
                         JavaPlugin.getProvidingPlugin(SkyblockRemastered.class).getServer().getScheduler().scheduleSyncDelayedTask(JavaPlugin.getProvidingPlugin(SkyblockRemastered.class), () -> {
@@ -237,21 +241,20 @@ public class CustomEnderDragon extends EntityEnderDragon {
                         }
 
                         JavaPlugin.getProvidingPlugin(SkyblockRemastered.class).getServer().getScheduler().scheduleSyncDelayedTask(JavaPlugin.getProvidingPlugin(SkyblockRemastered.class), () -> {
-                            for (Player plr : getBukkitEntity().getWorld().getPlayers()) {
+                            for (Player plr : getBukkitEntity().getWorld().getPlayers().stream().filter(p -> Utils.isInZone(p.getLocation(), new Location(p.getWorld(), -64, 101, -68), new Location(p.getWorld(), 72, 1, 67))).collect(Collectors.toList())) {
                                 int damage = (int) Helper.triangularDistribution(700, 1100, 1500);
                                 plr.getWorld().strikeLightningEffect(plr.getLocation());
                                 PlayerObject po = PlayerManager.playerObjects.get(plr);
                                 po.subtractHealth(damage);
                                 if (po.getHealth() <= 0 && !plr.isDead())
-                                    Helper.deathHandler(JavaPlugin.getPlugin(SkyblockRemastered.class), plr, "other");
+                                    Helper.deathHandler(JavaPlugin.getPlugin(SkyblockRemastered.class), plr, "mob", (LivingEntity) getBukkitEntity());
                                 if (!getBukkitEntity().getCustomName().isEmpty())
                                     plr.sendMessage(Utils.chat("&5❂ &c" + getBukkitEntity().getCustomName().replaceAll("&[0-9a-zA-z]", "") + " &dused &eLightning Strike &don you for &c" + damage + " damage"));
                             }
                         }, 60L);
                     }
                     // Fireball
-                    else if (fireballsLeft > 0 && Math.random() > .75) {
-                        fireballsLeft--;
+                    else if (Math.random() > .75) {
                         List<Fireball> fireballs = new ArrayList<>();
                         Player plr = getBukkitEntity().getWorld().getPlayers().get((int) Math.floor(Math.random() * getBukkitEntity().getWorld().getPlayers().size()));
                         Location plrLoc = plr.getLocation();

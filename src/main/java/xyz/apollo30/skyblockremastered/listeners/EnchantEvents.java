@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import xyz.apollo30.skyblockremastered.SkyblockRemastered;
@@ -19,13 +20,13 @@ public class EnchantEvents extends BukkitRunnable implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    List<Arrow> arrows = new ArrayList<>();
+    public static List<Arrow> arrows = new ArrayList<>();
 
     @EventHandler
     public void onShoot(EntityShootBowEvent e) {
         Arrow arrow = (Arrow) e.getProjectile();
         updateArrow(arrow);
-        arrows.add(arrow);
+        arrowAdd(arrow);
     }
 
     @EventHandler
@@ -45,7 +46,8 @@ public class EnchantEvents extends BukkitRunnable implements Listener {
             for (Entity e : arrow.getNearbyEntities(i, 3, i)) {
                 if (e != arrow.getShooter()) {
                     if (e.getType().isAlive() && e instanceof LivingEntity) {
-                        if (e.getType() == EntityType.PLAYER || e.getType() == EntityType.ARMOR_STAND || e.getType() == EntityType.ENDERMAN) return;
+                        if (e.getType() == EntityType.PLAYER || e.getType() == EntityType.ARMOR_STAND || e.getType() == EntityType.ENDERMAN)
+                            return;
                         Location from = arrow.getLocation();
                         Location to = e.getLocation().add(0, 2, 0);
                         Vector vFrom = from.toVector();
@@ -64,5 +66,11 @@ public class EnchantEvents extends BukkitRunnable implements Listener {
         for (Arrow arrow : arrows) {
             updateArrow(arrow);
         }
+    }
+
+    public static void arrowAdd(Arrow arrow) {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(SkyblockRemastered.class), () -> {
+            arrows.add(arrow);
+        }, 30);
     }
 }

@@ -312,6 +312,9 @@ public class PlayerManager {
         po.setTamingTotal(getDouble(doc, "skills.taming.totalXP"));
         po.setTamingExtra(getInteger(doc, "skills.taming.extraLevel"));
 
+        po.resetHealth();
+        po.resetIntelligence();
+
         playerObjects.put(plr, po);
     }
 
@@ -341,7 +344,6 @@ public class PlayerManager {
         };
 
         Document tempDoc;
-        Document tempDoc2 = null;
         Document doc = new Document("UUID", plr.getUniqueId().toString());
         doc.append("IGN", plr.getName());
         tempDoc = new Document("health", 100)
@@ -486,28 +488,10 @@ public class PlayerManager {
         }
         doc.append("collections", doc2);
         MongoUtils.getInstance().getPlayerCollection().insertOne(doc);
-
     }
 
     public PlayerObject getPlayerData(Player plr) {
         return playerObjects.get(plr);
-    }
-
-    private static Object get(Document document, String dots)
-            throws MongoException {
-
-        String[] keys = dots.split("\\.");
-        Document doc = document;
-
-        for (int i = 0; i < keys.length - 1; i++) {
-            Object o = doc.get(keys[i]);
-            if (!(o instanceof Document)) {
-                throw new MongoException(String.format("Field '%s' does not exist or s not a Document", keys[i]));
-            }
-            doc = (Document) o;
-        }
-
-        return doc.get(keys[keys.length - 1]);
     }
 
     private static Integer getInteger(Document document, String dots)

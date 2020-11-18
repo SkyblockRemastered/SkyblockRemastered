@@ -12,10 +12,7 @@ import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
 public class Gamemode implements CommandExecutor {
 
-    private final SkyblockRemastered plugin;
-
     public Gamemode(SkyblockRemastered plugin) {
-        this.plugin = plugin;
         plugin.getCommand("gamemode").setExecutor(this);
     }
 

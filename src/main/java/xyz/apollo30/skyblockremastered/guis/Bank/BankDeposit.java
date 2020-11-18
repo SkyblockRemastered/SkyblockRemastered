@@ -78,6 +78,8 @@ public class BankDeposit extends Menu {
 
                 // Refreshing the Page
                 new BankDeposit(SkyblockRemastered.getMenuUtility(plr), plr).open();
+            } else if (itemName.equalsIgnoreCase(Utils.chat("&cClose"))) {
+                plr.closeInventory();
             }
         }
     }
@@ -87,12 +89,10 @@ public class BankDeposit extends Menu {
         PlayerObject po = PlayerManager.playerObjects.get(plr);
         double purse = po.getPurse();
         double bank = po.getBank();
-        Inventory inv = Bukkit.createInventory(plr, 36, Utils.chat("Bank Deposit"));
         GUIHelper.addGlass(inv, "STAINED_GLASS_PANE", 15, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36);
         GUIHelper.addItem(inv, 54, 64, 12, "&aYour whole purse", "&8Bank deposit", "", "&7Current balance: &6" + String.format("%,.0f", bank), "&7Amount to deposit: &6" + String.format("%,.1f", purse), "", "&eClick to deposit coins!");
         GUIHelper.addItem(inv, 54, 32, 14, "&aHalf your purse", "&8Bank deposit", "", "&7Current balance: &6" + String.format("%,.0f", bank), "&7Amount to deposit: &6" + String.format("%,.1f", purse / 2), "", "&eClick to deposit coins!");
         GUIHelper.addItem(inv, 323, 0, 1, 16, "&aSpecific amount", "&7Current balance: &6" + String.format("%,.1f", bank), "", "&eClick to deposit coins!");
         GUIHelper.addItem(inv, 166, 1, 32, "&cClose");
-        plr.openInventory(inv);
     }
 }

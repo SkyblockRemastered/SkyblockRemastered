@@ -11,10 +11,7 @@ import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
 public class Build implements CommandExecutor {
 
-    private final SkyblockRemastered plugin;
-
     public Build(SkyblockRemastered plugin) {
-        this.plugin = plugin;
         plugin.getCommand("build").setExecutor(this);
     }
 

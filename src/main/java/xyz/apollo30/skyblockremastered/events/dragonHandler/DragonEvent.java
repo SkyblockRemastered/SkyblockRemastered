@@ -200,7 +200,7 @@ public class DragonEvent implements Listener {
                     playerDamage.put(plr, (double) 0);
                 }
 
-                if (dragonName.equalsIgnoreCase(Utils.chat("&c&lshitass"))) {
+                if (dragonName.contains("shitass")) {
                     JavaPlugin.getProvidingPlugin(SkyblockRemastered.class).getServer().getScheduler().scheduleSyncDelayedTask(JavaPlugin.getProvidingPlugin(SkyblockRemastered.class), () -> {
                         Utils.broadCast("&c[BOSS] shitass&7: &c&lYou are challenge me? The ultimate &ka &r&c&l&nSHITASS!? &ka");
                     }, 20);
@@ -215,8 +215,8 @@ public class DragonEvent implements Listener {
 
                 ((CraftEnderDragon) enderDragon).getHandle().getNavigation().a(49, 33, 2);
 
-                plugin.mobManager.createMob(enderDragon, type.toLowerCase());
-                plugin.so.setDragonName(type.toUpperCase());
+                SkyblockRemastered.mobManager.createMob(enderDragon, type.toLowerCase());
+                SkyblockRemastered.so.setDragonName(type.toUpperCase());
                 CustomEnderDragon.endCrystals = spawnCrystals(e);
 
                 enderDragon.setNoDamageTicks(0);
@@ -376,7 +376,7 @@ public class DragonEvent implements Listener {
 
     private void getLoot(Player plr, int position) {
 
-        int placedEyes = plugin.dragonEvent.placedPlayerEyes.getOrDefault(plr, 0);
+        int placedEyes = SkyblockRemastered.dragonEvent.placedPlayerEyes.getOrDefault(plr, 0);
         int weight = 0;
 
         // default to 3 frags if weight is >= 22 but there isn't enough weight to fulfill other prizes. Subtract weight once loot is chosen, then divide the remaining weight by 22. Give player that amount of frags.
@@ -408,7 +408,7 @@ public class DragonEvent implements Listener {
         else weight += placedEyes * 100;
 
         // Position
-        if (plugin.dragonEvent.playerDamage.get(plr) != 0) {
+        if (SkyblockRemastered.dragonEvent.playerDamage.get(plr) != 0) {
             if (position == 1) weight += 300;
             else if (position == 2) weight += 250;
             else if (position == 3) weight += 200;
@@ -417,7 +417,7 @@ public class DragonEvent implements Listener {
             else if (position >= 16) weight += 75;
         }
 
-        getItem(weight, plr, plugin.so.getDragonName(), placedEyes);
+        getItem(weight, plr, SkyblockRemastered.so.getDragonName(), placedEyes);
     }
 
     private void getItem(int weight, Player plr, String dragon, int eyesPlaced) {

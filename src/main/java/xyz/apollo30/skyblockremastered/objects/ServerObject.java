@@ -8,7 +8,6 @@ import xyz.apollo30.skyblockremastered.utils.Utils;
 @Getter
 @Setter
 public class ServerObject {
-
     // Database
     String prefix = Utils.chat("&6SBR &8» ");
     boolean pvp = false;
@@ -21,4 +20,11 @@ public class ServerObject {
     Player lastDragonHit = null;
     String dragonName = null;
     String riggedDragon = null;
+
+    // Disablable Things
+    boolean isSkyblockMenu = true;
+    boolean isProfileViewer = true;
+    boolean isDragonEyePlace = true;
+    boolean isAuctionHouse = true;
+    boolean isBazaar = true;
 }

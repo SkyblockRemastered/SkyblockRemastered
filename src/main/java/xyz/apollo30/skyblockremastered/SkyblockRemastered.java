@@ -100,6 +100,9 @@ public class SkyblockRemastered extends JavaPlugin {
         new Debug(this);
         new Mob(this);
         new API(this);
+        new Island(this);
+        new Stats(this);
+        new Verify(this);
 
         // Abilities
         miscAbilities = new Miscs(this);
@@ -136,7 +139,6 @@ public class SkyblockRemastered extends JavaPlugin {
                     }
                 }
             }
-
         } catch (Exception err) {
             System.out.println("[ERROR] Spawnpoints of the dragon's nest did not load.");
         }

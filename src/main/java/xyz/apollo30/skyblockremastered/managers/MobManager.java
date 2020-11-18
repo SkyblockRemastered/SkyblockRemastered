@@ -338,6 +338,10 @@ public class MobManager {
             mo.setLevel(2147483647);
         }
 
+        if (entity.getType() == EntityType.ENDERMAN) {
+            Enderman enderman = (Enderman) entity;
+
+        }
         entity.getEquipment().setBootsDropChance(0F);
         entity.getEquipment().setHelmetDropChance(0F);
         entity.getEquipment().setChestplateDropChance(0F);

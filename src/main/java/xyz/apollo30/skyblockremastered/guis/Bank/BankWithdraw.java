@@ -96,6 +96,8 @@ public class BankWithdraw extends Menu {
 
                 // Refreshing the Page
                 new BankWithdraw(SkyblockRemastered.getMenuUtility(plr), plr).open();
+            } else if (itemName.equalsIgnoreCase(Utils.chat("&cClose"))) {
+                plr.closeInventory();
             }
         }
     }

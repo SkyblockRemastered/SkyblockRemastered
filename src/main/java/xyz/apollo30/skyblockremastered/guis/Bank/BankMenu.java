@@ -43,6 +43,8 @@ public class BankMenu extends Menu {
                     new BankDeposit(SkyblockRemastered.getMenuUtility(plr), plr).open();
                 } else if (itemName.equalsIgnoreCase(Utils.chat("&aWithdraw Coins"))) {
                     new BankWithdraw(SkyblockRemastered.getMenuUtility(plr), plr).open();
+                } else if (itemName.equalsIgnoreCase(Utils.chat("&cClose"))) {
+                    plr.closeInventory();
                 }
             }
         }

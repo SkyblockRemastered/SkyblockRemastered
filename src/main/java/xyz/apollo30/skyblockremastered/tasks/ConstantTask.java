@@ -397,21 +397,20 @@ public class ConstantTask extends BukkitRunnable {
         Random random = new Random();
         int randomNum = random.nextInt((10 - 3) + 1) + 3;
 
-        ArrayList<PacketPlayOutWorldParticles> particles = new ArrayList<>();
+        // ArrayList<PacketPlayOutWorldParticles> particles = new ArrayList<>();
 
         for (int i = 0; i < randomNum; i++) {
             float randomPos = (float) (.1 + random.nextFloat() * (1.75f - .1));
             float randomPos1 = (float) (.1 + random.nextFloat() * (1.5f - .1));
             float randomPos2 = (float) (.1 + random.nextFloat() * (1.75f - .1));
 
-            PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(EnumParticle.REDSTONE, true, (float) location.getX() - randomPos + 1f, (float) location.getY() + randomPos1, (float) location.getZ() - randomPos2 + 1f, r / 255, g / 255, b / 255, 0, 1);
-            particles.add(packet);
+            location.getWorld().spigot().playEffect(location, Effect.COLOURED_DUST, 0, 1, (float) (location.getX() - randomPos + 1f), (float) location.getY() + randomPos1, (float) location.getZ() - randomPos2 + 1f, 1, 0, 64);
         }
 
-        for (Player online : Bukkit.getOnlinePlayers()) {
-            for (PacketPlayOutWorldParticles packetPlayOut : particles) {
-                ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packetPlayOut);
-            }
-        }
+//        for (Player online : Bukkit.getOnlinePlayers()) {
+//            for (PacketPlayOutWorldParticles packetPlayOut : particles) {
+//                ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packetPlayOut);
+//            }
+//        }
     }
 }

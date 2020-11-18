@@ -31,6 +31,7 @@ public class ItemEvents implements Listener {
 
     private final SkyblockRemastered plugin;
 
+    final Map<UUID, Long> bowFireMap = new HashMap<>();
     public static HashMap<Player, ArmorStand> orbs = new HashMap<>();
 
     public ItemEvents(SkyblockRemastered plugin) {
@@ -53,88 +54,17 @@ public class ItemEvents implements Listener {
                         if (e.getAction() == Action.RIGHT_CLICK_AIR && en instanceof LivingEntity) {
                             LivingEntity entity = (LivingEntity) en;
                             shootBeam(plr.getLocation(), entity.getLocation());
-                            int damage = (int) (0.2 * po.getBaseIntelligence());
-                            Helper.damageMob(entity, damage, "normal");
+                            entity.damage(0, plr);
                         }
                     }
-                } else if ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) && Helper.getCustomName(e.getItem()).equals(Utils.chat("&aRadiant Power Orb"))) {
-
-                    if (orbs.containsKey(plr)) {
-                        ArmorStand orb = orbs.get(plr);
-                        if (orb == null) return;
-                        plr.sendMessage(Utils.chat("&aYour previous power orb has been removed!"));
-                        if (orb.getPassenger() != null) orb.getPassenger().remove();
-                        orb.remove();
-                        orbs.remove(plr);
-                    }
-
-                    Location location = plr.getLocation();
-
-                    // Armor Stand with the Skull
-                    ArmorStand orb = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
-                    orb.setGravity(true);
-                    orb.setVisible(false);
-                    orb.setHelmet(GUIHelper.addSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2FiNGM0ZDZlZTY5YmMyNGJiYTJiOGZhZjY3YjlmNzA0YTA2YjAxYWE5M2YzZWZhNmFlZjdhOTY5NmM0ZmVlZiJ9fX0="));
-
-                    // Armor Stand with the name;
-                    ArmorStand name = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
-                    name.setGravity(true);
-                    name.setCustomNameVisible(true);
-                    name.setVisible(false);
-                    name.setMarker(true);
-                    name.setCustomName(Utils.chat("&aRadiant Power Orb"));
-
-                    // Setting the name to the skull
-                    orb.setPassenger(name);
-                    plr.playSound(plr.getLocation(), Sound.WOOD_CLICK, 100F, 1F);
-                    orbs.put(plr, orb);
-                    ArrayList<Object> list = new ArrayList<>();
-                    list.add(orb);
-                    list.add(orb.getLocation().getY());
-                    ConstantTask.orbs.put(orb, list);
-                }
-            }
-        }
-    }
-
-    public static Entity getNearestEntityInSight(Player player, int range) {
-        ArrayList<Entity> entities = (ArrayList<Entity>) player.getNearbyEntities(range, range, range);
-        entities = entities.stream().filter(x -> x.getType() != EntityType.ARMOR_STAND).collect(Collectors.toCollection(ArrayList::new));
-        Set<Material> hs = new HashSet<>();
-        hs.add(Material.AIR);
-        hs.add(Material.WATER);
-        hs.add(Material.STATIONARY_WATER);
-        hs.add(Material.SIGN);
-        hs.add(Material.LAVA);
-        hs.add(Material.STATIONARY_LAVA);
-        ArrayList<Block> sightBlock = (ArrayList<Block>) player.getLineOfSight(hs, range);
-        ArrayList<Location> sight = new ArrayList<>();
-        for (Block block : sightBlock) sight.add(block.getLocation());
-        for (Location location : sight) {
-            for (Entity entity : entities) {
-                if (Math.abs(entity.getLocation().getX() - location.getX()) < 1.3) {
-                    if (Math.abs(entity.getLocation().getY() - location.getY()) < 1.5) {
-                        if (Math.abs(entity.getLocation().getZ() - location.getZ()) < 1.3) {
-                            return entity;
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    private void shootBeam(Location loc1, Location loc2) {
-        Location newLocVec = loc1.clone();
-
-        newLocVec.setYaw((float) this.getSelectedYaw(loc1, loc2));
-        newLocVec.setPitch((float) this.getSelectedPitch(loc1, loc2));
-
-        for (Vector clonedLoc : this.traverse(loc1.toVector(), newLocVec.getDirection())) {
-            PacketPlayOutWorldParticles particle = new PacketPlayOutWorldParticles(EnumParticle.FIREWORKS_SPARK, true, (float) clonedLoc.getX(), (float) clonedLoc.getY(), (float) clonedLoc.getZ(), 0, 0, 0, 0, 1);
-
-            for (Player online : Bukkit.getOnlinePlayers()) {
-                ((CraftPlayer) online).getHandle().playerConnection.sendPacket(particle);
+                } else if ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) && Helper.getCustomName(e.getItem()).equals(Utils.chat("&aRadiant Power Orb")))
+                    createOrb(plr, PlayerManager.playerObjects.get(plr), "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2FiNGM0ZDZlZTY5YmMyNGJiYTJiOGZhZjY3YjlmNzA0YTA2YjAxYWE5M2YzZWZhNmFlZjdhOTY5NmM0ZmVlZiJ9fX0=", "&aRadiant Power Orb", 30);
+                else if ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) && Helper.getCustomName(e.getItem()).equals(Utils.chat("&6Plasmaflux Power Orb")))
+                    createOrb(plr, PlayerManager.playerObjects.get(plr), "ewogICJ0aW1lc3RhbXAiIDogMTYwMzIzMDc4NTkzNiwKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODNlZDRjZTIzOTMzZTY2ZTA0ZGYxNjA3MDY0NGY3NTk5ZWViNTUzMDdmN2VhZmU4ZDkyZjQwZmIzNTIwODYzYyIKICAgIH0KICB9Cn0=", "&6Plasmaflux Power Orb", 80);
+                else if ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) && Helper.getCustomName(e.getItem()).equals(Utils.chat("&9Mana Flux Power Orb")))
+                    createOrb(plr, PlayerManager.playerObjects.get(plr), "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODJhZGExYzdmY2M4Y2YzNWRlZmViOTQ0YTRmOGZmYTlhOWQyNjA1NjBmYzdmNWY1ODI2ZGU4MDg1NDM1OTY3YyJ9fX0=", "&9Mana Flux Power Orb", 45);
+                else if ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) && Helper.getCustomName(e.getItem()).equals(Utils.chat("&5Overflux Power Orb")))
+                    createOrb(plr, PlayerManager.playerObjects.get(plr), "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODQ4NTlkMGFkZmM5M2JlMTliYjQ0MWU2ZWRmZDQzZjZiZmU2OTEyNzIzMDMzZjk2M2QwMDlhMTFjNDgyNDUxMCJ9fX0=", "&5Overflux Power Orb", 60);
             }
         }
     }
@@ -213,35 +143,32 @@ public class ItemEvents implements Listener {
          */
         if (itemInHand != null && itemInHand.hasItemMeta() && !itemInHand.getItemMeta().getDisplayName().isEmpty()) {
             if (itemInHand.getItemMeta().getDisplayName().contains(Utils.chat("&6Runaan's Bow"))) {
+                // THANKS TO DKM !!!
                 if (plr == null || !plr.getItemInHand().getType().equals(Material.BOW)) return;
-//                Arrow arrow1 = plr.getWorld().spawn(plr.getEyeLocation(), Arrow.class);
-//                arrow1.setShooter(plr);
-//
-//                Arrow arrow2 = plr.getWorld().spawn(plr.getEyeLocation(), Arrow.class);
-//                arrow2.setShooter(plr);
-//
-//                new BukkitRunnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        if (arrow1.isDead() && arrow2.isDead()) this.cancel();
-//
-//                        // Arrow 1
-//                        if (!arrow1.isDead()) {
-//                            Location projLoc = projectile.getLocation();
-//                            projLoc.setYaw(projLoc.getYaw() - 7);
-//                            arrow1.setVelocity(projLoc.toVector());
-//                        }
-//
-//                        // Arrow 2
-//                        if (!arrow2.isDead()) {
-//                            Location projLoc = projectile.getLocation();
-//                            projLoc.setYaw(projLoc.getYaw() + 7);
-//                            arrow1.setVelocity(projLoc.toVector());
-//                        }
-//
-//                    }
-//                }.runTaskTimer(JavaPlugin.getProvidingPlugin(SkyblockRemastered.class), 0L, 1L);
+                if (!(e.getEntity() instanceof Arrow)) return;
+                if (!(e.getEntity().getShooter() instanceof Player)) return;
+
+                Player p = (Player) e.getEntity().getShooter();
+                Arrow arrow = (Arrow) e.getEntity();
+                if (System.currentTimeMillis() < bowFireMap.getOrDefault(p.getUniqueId(), 0L))
+                    return;
+                bowFireMap.put(p.getUniqueId(), System.currentTimeMillis() + 100);
+                double angleBetweenArrows = 22.5 * Math.PI / 180D;
+                double pitch = (p.getLocation().getPitch() + 90F) * Math.PI / 180D;
+                double yaw = (p.getLocation().getYaw() + 90F - 11F) * Math.PI / 180D;
+                double sZ = Math.cos(pitch);
+                for (int i = 0; i < 2; ++i) {
+                    double nX = Math.sin(pitch) * Math.cos(yaw + angleBetweenArrows * i);
+                    double nY = Math.sin(pitch) * Math.sin(yaw + angleBetweenArrows * i);
+                    Vector newDir = new Vector(nX, sZ, nY);
+                    Arrow newArrow = p.launchProjectile(Arrow.class);
+                    newArrow.setShooter(p);
+                    newArrow.setVelocity(newDir.normalize().multiply(arrow.getVelocity().length()));
+                    newArrow.setFireTicks(arrow.getFireTicks());
+                    newArrow.setKnockbackStrength(arrow.getKnockbackStrength());
+                    newArrow.setCritical(arrow.isCritical());
+                    EnchantEvents.arrowAdd(arrow);
+                }
             }
         }
 
@@ -304,6 +231,78 @@ public class ItemEvents implements Listener {
         }
     }
 
+
+    /**
+     * Creates a power orb.
+     *
+     * @param p Creator of the orb
+     * @param po Creator's PlayerObject
+     * @param t Texture id of the orb
+     * @param n Name of the orb
+     * @param time How long the orb will last.
+     */
+    private void createOrb(Player p, PlayerObject po, String t, String n, int time) {
+        if (po == null) {
+            p.sendMessage(Utils.chat("&cThere was an error when loading your profile, please try again later."));
+            return;
+        }
+
+        if (po.getIntelligence() < (po.getBaseIntelligence() / 2)) {
+            p.sendMessage(Utils.chat("&cYou don't have enough mana to place down an orb."));
+            p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 100F, .5F);
+            return;
+        }
+
+        if (orbs.containsKey(p)) {
+            ArmorStand orb = orbs.get(p);
+            if (orb == null) return;
+            p.sendMessage(Utils.chat("&aYour previous power orb has been removed!"));
+            if (orb.getPassenger() != null) orb.getPassenger().remove();
+            orb.remove();
+            orbs.remove(p);
+        }
+
+        Location location = p.getLocation();
+
+        // Armor Stand with the Skull
+        ArmorStand orb = (ArmorStand) location.getWorld().spawnEntity(location.add(0, .5, 0), EntityType.ARMOR_STAND);
+        orb.setGravity(true);
+        orb.setVisible(false);
+        orb.setHelmet(GUIHelper.addSkull(t));
+
+        // Armor Stand with the name;
+        ArmorStand name = (ArmorStand) location.getWorld().spawnEntity(location.add(0, .5, 0), EntityType.ARMOR_STAND);
+        name.setGravity(true);
+        name.setCustomNameVisible(true);
+        name.setVisible(false);
+        name.setMarker(true);
+        name.setCustomName(Utils.chat(n + " &e" + time + "s"));
+
+        // Setting the name to the skull
+        orb.setPassenger(name);
+        p.playSound(p.getLocation(), Sound.WOOD_CLICK, 100F, 1F);
+        orbs.put(p, orb);
+        ArrayList<Object> list = new ArrayList<>();
+        list.add(orb);
+        list.add(orb.getLocation().getY());
+        ConstantTask.orbs.put(orb, list);
+
+        for (int i = 0; i < time; i++) {
+            int finalI = i;
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                if (!name.isDead()) {
+                    if (finalI == (time - 1)) {
+                        orb.getWorld().playEffect(orb.getLocation(), Effect.SMOKE, 2);
+                        name.remove();
+                        orb.remove();
+                        orbs.remove(p);
+                        p.sendMessage(Utils.chat("&aYour previous power orb has expired."));
+                    } else name.setCustomName(Utils.chat(n + " &e" + ((time - 1) - finalI) + "s"));
+                }
+            }, 20 * i);
+        }
+    }
+
     private double getSelectedYaw(Location loc1, Location loc2) {
         double z = loc1.getZ() - loc2.getZ();
         double x = loc1.getX() - loc2.getX();
@@ -345,5 +344,50 @@ public class ItemEvents implements Listener {
 
     private Vector getPosition(Vector origin, Vector direction, double dist) {
         return origin.clone().add(direction.clone().multiply(dist));
+    }
+
+    public static Entity getNearestEntityInSight(Player player, int range) {
+        ArrayList<Entity> entities = (ArrayList<Entity>) player.getNearbyEntities(range, range, range);
+        ArrayList<EntityType> filter = new ArrayList<>();
+        filter.add(EntityType.ARMOR_STAND);
+        filter.add(EntityType.PLAYER);
+        entities = entities.stream().filter(x -> x instanceof LivingEntity && !filter.contains(x.getType())).collect(Collectors.toCollection(ArrayList::new));
+        Set<Material> hs = new HashSet<>();
+        hs.add(Material.AIR);
+        hs.add(Material.WATER);
+        hs.add(Material.STATIONARY_WATER);
+        hs.add(Material.SIGN);
+        hs.add(Material.LAVA);
+        hs.add(Material.STATIONARY_LAVA);
+        ArrayList<Block> sightBlock = (ArrayList<Block>) player.getLineOfSight(hs, range);
+        ArrayList<Location> sight = new ArrayList<>();
+        for (Block block : sightBlock) sight.add(block.getLocation());
+        for (Location location : sight) {
+            for (Entity entity : entities) {
+                if (Math.abs(entity.getLocation().getX() - location.getX()) < 1.3) {
+                    if (Math.abs(entity.getLocation().getY() - location.getY()) < 1.5) {
+                        if (Math.abs(entity.getLocation().getZ() - location.getZ()) < 1.3) {
+                            return entity;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private void shootBeam(Location loc1, Location loc2) {
+        Location newLocVec = loc1.clone();
+
+        newLocVec.setYaw((float) this.getSelectedYaw(loc1, loc2));
+        newLocVec.setPitch((float) this.getSelectedPitch(loc1, loc2));
+
+        for (Vector clonedLoc : this.traverse(loc1.toVector(), newLocVec.getDirection())) {
+            PacketPlayOutWorldParticles particle = new PacketPlayOutWorldParticles(EnumParticle.FIREWORKS_SPARK, true, (float) clonedLoc.getX(), (float) clonedLoc.getY(), (float) clonedLoc.getZ(), 0, 0, 0, 0, 1);
+
+            for (Player online : Bukkit.getOnlinePlayers()) {
+                ((CraftPlayer) online).getHandle().playerConnection.sendPacket(particle);
+            }
+        }
     }
 }

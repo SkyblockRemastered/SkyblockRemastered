@@ -32,19 +32,16 @@ public class PlayerEvents implements Listener {
     @EventHandler
     public void playerLeave(PlayerQuitEvent e) {
         e.setQuitMessage("");
-
         Player plr = e.getPlayer();
-
         PlayerManager.savePlayerData(plr);
         PlayerManager.playerObjects.remove(plr);
-        plugin.dragonEvent.playerDamage.remove(plr);
+        SkyblockRemastered.dragonEvent.playerDamage.remove(plr);
     }
 
     @EventHandler
     public void playerJoin(PlayerJoinEvent e) {
 
         Player plr = e.getPlayer();
-
         e.setJoinMessage("");
 
         if (!plr.isOp()) {
@@ -59,11 +56,8 @@ public class PlayerEvents implements Listener {
         // Create section for them
         PlayerManager.createPlayerData(plr);
 
-        // Give the player a temporary database.
-        if (plugin.playerManager.getPlayerData(plr) == null) PlayerManager.createPlayerData(plr);
-
         // If a player joins during a dragon fight
-        plugin.dragonEvent.playerDamage.computeIfAbsent(plr, k -> (double) 0);
+        SkyblockRemastered.dragonEvent.playerDamage.computeIfAbsent(plr, k -> (double) 0);
 
         // Load the Private Island
         World clone = Bukkit.getServer().createWorld(new WorldCreator("private_island_template"));
@@ -75,6 +69,7 @@ public class PlayerEvents implements Listener {
 
         // Define Variables
         World island = Bukkit.getServer().getWorld("playerislands/" + plr.getUniqueId().toString());
+
         // Teleport them
         Location loc = new Location(island, island.getSpawnLocation().getX(), island.getSpawnLocation().getY(), island.getSpawnLocation().getZ());
         plr.teleport(loc);
@@ -82,10 +77,9 @@ public class PlayerEvents implements Listener {
 
     @EventHandler
     public void playerShootArrow(ProjectileLaunchEvent e) {
-
         if (!(e.getEntity().getShooter() instanceof Player)) return;
         Player plr = (Player) e.getEntity().getShooter();
-        PlayerObject po = plugin.playerManager.getPlayerData(plr);
+        PlayerObject po = SkyblockRemastered.playerManager.getPlayerData(plr);
         if (po == null) return;
 
         int arrows = 0;
@@ -111,11 +105,13 @@ public class PlayerEvents implements Listener {
                 for (ItemStack arrow : inv.getContents()) {
                     if (arrow != null) {
                         if (arrow.getType() == Material.MAGMA_CREAM) {
-                            arrow.setAmount(arrow.getAmount() - 1);
+                            if (arrow.getAmount() - 1 == 0) inv.removeItem(arrow);
+                            else arrow.setAmount(arrow.getAmount() - 1);
                             po.setQuiverBag(Helper.inventoryToString(inv));
                             return;
                         } else if (arrow.getType() == Material.ARROW) {
-                            arrow.setAmount(arrow.getAmount() - 1);
+                            if (arrow.getAmount() - 1 == 0) inv.removeItem(arrow);
+                            else arrow.setAmount(arrow.getAmount() - 1);
                             po.setQuiverBag(Helper.inventoryToString(inv));
                             return;
                         }
@@ -125,7 +121,8 @@ public class PlayerEvents implements Listener {
                 for (ItemStack arrow : inv.getContents()) {
                     if (arrow != null) {
                         if (arrow.getType() == Material.ARROW) {
-                            arrow.setAmount(arrow.getAmount() - 1);
+                            if (arrow.getAmount() - 1 == 0) inv.removeItem(arrow);
+                            else arrow.setAmount(arrow.getAmount() - 1);
                             po.setQuiverBag(Helper.inventoryToString(inv));
                             return;
                         }
@@ -138,7 +135,7 @@ public class PlayerEvents implements Listener {
     @EventHandler
     public void playerMove(PlayerMoveEvent e) {
         Player plr = e.getPlayer();
-        PlayerObject po = plugin.playerManager.getPlayerData(plr);
+        PlayerObject po = SkyblockRemastered.playerManager.getPlayerData(plr);
         if (po == null) return;
 
         // Island Border
@@ -154,7 +151,7 @@ public class PlayerEvents implements Listener {
         if (plr.getLocation().getY() <= -5) {
             Location loc = plr.getWorld().getSpawnLocation();
             plr.teleport(loc);
-            Helper.deathHandler(plugin, plr, "void");
+            Helper.deathHandler(plugin, plr, "void", null);
         }
 
         // Portal Mechanism.

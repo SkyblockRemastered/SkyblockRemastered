@@ -10,10 +10,7 @@ import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
 public class Visit implements CommandExecutor {
 
-    private final SkyblockRemastered plugin;
-
     public Visit(SkyblockRemastered plugin) {
-        this.plugin = plugin;
         plugin.getCommand("visit").setExecutor(this);
     }
 

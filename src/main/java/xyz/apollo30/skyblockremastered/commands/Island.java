@@ -10,10 +10,7 @@ import xyz.apollo30.skyblockremastered.SkyblockRemastered;
 
 public class Island implements CommandExecutor {
 
-    private final SkyblockRemastered plugin;
-
     public Island(SkyblockRemastered plugin) {
-        this.plugin = plugin;
         plugin.getCommand("island").setExecutor(this);
     }
 

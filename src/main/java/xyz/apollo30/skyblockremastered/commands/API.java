@@ -22,10 +22,7 @@ import java.util.UUID;
 
 public class API implements CommandExecutor {
 
-    private final SkyblockRemastered plugin;
-
     public API(SkyblockRemastered plugin) {
-        this.plugin = plugin;
         plugin.getCommand("api").setExecutor(this);
     }
 

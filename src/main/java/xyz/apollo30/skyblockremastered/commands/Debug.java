@@ -11,15 +11,14 @@ import xyz.apollo30.skyblockremastered.utils.Utils;
 
 public class Debug implements CommandExecutor {
 
-    private final SkyblockRemastered plugin;
-
     public Debug(SkyblockRemastered plugin) {
-        this.plugin = plugin;
         plugin.getCommand("debug").setExecutor(this);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+
+        if (!sender.isOp()) return false;
 
         if (args.length == 0) {
             sender.sendMessage(Utils.chat("&cUsage: /debug [reload] [player]"));

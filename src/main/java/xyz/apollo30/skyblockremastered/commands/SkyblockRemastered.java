@@ -32,7 +32,7 @@ public class SkyblockRemastered implements CommandExecutor {
                 for (int i = 1; i < args.length; i++) {
                     announcement.append(args[i]).append(" ");
                 }
-                Utils.broadCast(Utils.chat(announcement.toString()));
+                Utils.broadCast(announcement.toString());
             } else if (args[0].equalsIgnoreCase("plrannounce")) {
                 String uuid = Utils.getUuid(args[1]);
                 Player plr = Bukkit.getPlayer(uuid);
@@ -48,8 +48,8 @@ public class SkyblockRemastered implements CommandExecutor {
 
         Player plr = (Player) sender;
 
-        PlayerObject player_data = plugin.playerManager.getPlayerData(plr);
-        //if (!plr.isOp()) return false;
+        PlayerObject po = xyz.apollo30.skyblockremastered.SkyblockRemastered.playerManager.getPlayerData(plr);
+        if (!plr.isOp()) return false;
         String prefix = "&6Skyblock &8» &7";
 
         if (args[0].equalsIgnoreCase("set")) {
@@ -59,7 +59,7 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 500"));
                     return true;
                 }
-                player_data.setBaseSpeed(Integer.parseInt(args[2]));
+                po.setBaseSpeed(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Speed set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("health") || args[1].equalsIgnoreCase("hp")) {
@@ -68,8 +68,8 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
-                player_data.setBaseHealth(Integer.parseInt(args[2]));
-                player_data.resetHealth();
+                po.setBaseHealth(Integer.parseInt(args[2]));
+                po.resetHealth();
                 plr.sendMessage(Utils.chat(prefix + "Health set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("defense") || args[1].equalsIgnoreCase("def")) {
@@ -78,7 +78,7 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
-                player_data.setBaseDefense(Integer.parseInt(args[2]));
+                po.setBaseDefense(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Defense set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("cd") || args[1].equalsIgnoreCase("critdamage")) {
@@ -87,7 +87,7 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
-                player_data.setBaseCritDamage(Integer.parseInt(args[2]));
+                po.setBaseCritDamage(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Crit Damage set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("cc") || args[1].equalsIgnoreCase("critchance")) {
@@ -96,7 +96,7 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 100"));
                     return true;
                 }
-                player_data.setBaseCritChance(Integer.parseInt(args[2]));
+                po.setBaseCritChance(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Crit Chance set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("intel") || args[1].equalsIgnoreCase("intelligence") || args[1].equalsIgnoreCase("mana")) {
@@ -105,8 +105,8 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
-                player_data.setBaseIntelligence(Integer.parseInt(args[2]));
-                player_data.resetIntelligence();
+                po.setBaseIntelligence(Integer.parseInt(args[2]));
+                po.resetIntelligence();
                 plr.sendMessage(Utils.chat(prefix + "Intelligence set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("mf") || args[1].equalsIgnoreCase("magicfind")) {
@@ -115,7 +115,7 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 200"));
                     return true;
                 }
-                player_data.setBaseMagicFind(Integer.parseInt(args[2]));
+                po.setBaseMagicFind(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Magic Find set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("str") || args[1].equalsIgnoreCase("strength")) {
@@ -124,7 +124,7 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
-                player_data.setBaseStrength(Integer.parseInt(args[2]));
+                po.setBaseStrength(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Strength set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("absorption") || args[1].equalsIgnoreCase("abs")) {
@@ -133,40 +133,40 @@ public class SkyblockRemastered implements CommandExecutor {
                     plr.sendMessage(Utils.chat("You cannot go over 10000"));
                     return true;
                 }
-                player_data.setAbsorptionHealth(Integer.parseInt(args[2]));
+                po.setAbsorptionHealth(Integer.parseInt(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Absorption set to " + args[2]));
 
             } else if (args[1].equalsIgnoreCase("purse")) {
                 if (!plr.isOp()) return true;
-                player_data.setPurse(Double.parseDouble(args[2]));
+                po.setPurse(Double.parseDouble(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Purse set to " + args[2]));
             } else if (args[1].equalsIgnoreCase("bank")) {
                 if (!plr.isOp()) return true;
-                player_data.setPurse(Double.parseDouble(args[2]));
+                po.setPurse(Double.parseDouble(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Bank set to " + args[2]));
             } else if (args[1].equalsIgnoreCase("bits")) {
                 if (!plr.isOp()) return true;
-                player_data.setBits(Double.parseDouble(args[2]));
+                po.setBits(Double.parseDouble(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Bits set to " + args[2]));
             } else if (args[1].equalsIgnoreCase("addcoins")) {
                 if (!plr.isOp()) return true;
-                player_data.setCoins_gained(Double.parseDouble(args[2]));
+                po.setCoins_gained(Double.parseDouble(args[2]));
                 plr.sendMessage(Utils.chat(prefix + "Added " + args[2] + " coins."));
             } else if (args[1].equalsIgnoreCase("dragon")) {
                 if (!plr.isOp()) return true;
-                plugin.so.setRiggedDragon(args[2].toUpperCase());
+                xyz.apollo30.skyblockremastered.SkyblockRemastered.so.setRiggedDragon(args[2].toUpperCase());
                 plr.sendMessage(Utils.chat("&aRigged the next dragon to spawn as a &d" + WordUtils.capitalizeFully(args[2]) + "&a dragon!"));
             }
         } else if (args[0].equalsIgnoreCase("pvp")) {
             if (!plr.isOp()) return false;
-            plugin.so.setPvp(!plugin.so.isPvp());
+            xyz.apollo30.skyblockremastered.SkyblockRemastered.so.setPvp(!xyz.apollo30.skyblockremastered.SkyblockRemastered.so.isPvp());
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.playSound(player.getLocation(), Sound.NOTE_PLING, 100F, 1F);
-                player.sendMessage(Utils.chat("&7PVP has been " + (plugin.so.isPvp() ? "&aEnabled&7!" : "&cDisabled&7!")));
+                player.sendMessage(Utils.chat("&7PVP has been " + (xyz.apollo30.skyblockremastered.SkyblockRemastered.so.isPvp() ? "&aEnabled&7!" : "&cDisabled&7!")));
             }
         } else if (args[0].equalsIgnoreCase("ip")) {
             if (!plr.isOp()) return false;
-            plugin.so.setHypixelip(!plugin.so.isHypixelip());
+            xyz.apollo30.skyblockremastered.SkyblockRemastered.so.setHypixelip(!xyz.apollo30.skyblockremastered.SkyblockRemastered.so.isHypixelip());
             plr.sendMessage(Utils.chat("IP has been changed!"));
         } else if (args[0].equalsIgnoreCase("bank")) {
             new BankMenu(xyz.apollo30.skyblockremastered.SkyblockRemastered.getMenuUtility(plr), plr).open();

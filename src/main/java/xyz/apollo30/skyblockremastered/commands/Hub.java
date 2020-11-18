@@ -10,10 +10,7 @@ import xyz.apollo30.skyblockremastered.utils.Utils;
 
 public class Hub implements CommandExecutor {
 
-    private final SkyblockRemastered plugin;
-
     public Hub(SkyblockRemastered plugin) {
-        this.plugin = plugin;
         plugin.getCommand("hub").setExecutor(this);
     }
 
@@ -26,7 +23,7 @@ public class Hub implements CommandExecutor {
 
         Player plr = (Player) sender;
 
-        if (plr.getWorld().getName().equals("playerislands/" + plr.getUniqueId().toString())) {
+        if (!plr.getWorld().getName().equals("playerislands/" + plr.getUniqueId().toString())) {
             plr.sendMessage(Utils.chat("You are already at the hub."));
             return true;
         } else {

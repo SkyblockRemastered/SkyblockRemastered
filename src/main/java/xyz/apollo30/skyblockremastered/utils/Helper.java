@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -147,7 +148,41 @@ public class Helper {
         return rarity;
     }
 
-    public static void deathHandler(SkyblockRemastered plugin, Player plr, String type) {
+    public static void deathHandler(Player p, String damager) {
+
+        p.setHealth(p.getMaxHealth());
+        PlayerObject po = PlayerManager.playerObjects.get(p);
+        po.resetHealth();
+
+        for (PotionEffect potionEffect : p.getActivePotionEffects()) {
+            p.removePotionEffect(potionEffect.getType());
+        }
+
+        Bukkit.getScheduler().runTask(JavaPlugin.getPlugin(SkyblockRemastered.class), () -> p.setFireTicks(0));
+        JavaPlugin.getPlugin(SkyblockRemastered.class).getServer().getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(SkyblockRemastered.class), () -> p.setVelocity(new Vector()), 1L);
+
+        for (ItemStack content : p.getInventory().getContents()) {
+            if (content != null && content.hasItemMeta() && content.getItemMeta().getDisplayName() != null) {
+                if (!p.getWorld().getName().startsWith("playerislands/") && Utils.isInZone(p.getLocation(), new Location(p.getWorld(), -112, 255, -107), new Location(p.getWorld(), 213, 29, 127))) {
+                    if (content.getItemMeta().getDisplayName().contains("Remnant of the Eye")) {
+                        if (p.getLastDamageCause().getCause().equals(EntityDamageEvent.DamageCause.VOID)) {
+                            p.sendMessage(Utils.chat("&5Your Remnant of the Eye saved you from certain death! You were safely teleported back to spawn!"));
+                            p.teleport(new Location(p.getWorld(), 173.5, 101, -3));
+                        } else {
+                            p.sendMessage(Utils.chat("&5Your Remnant of the Eye saved you from certain death!"));
+                        }
+                        po.resetHealth();
+                        p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1.25F);
+                        p.getInventory().removeItem(content);
+                        return;
+                    }
+                }
+            }
+        }
+
+    }
+
+    public static void deathHandler(SkyblockRemastered plugin, Player plr, String type, LivingEntity damager) {
 
         plr.setHealth(plr.getMaxHealth());
         PlayerObject po = PlayerManager.playerObjects.get(plr);
@@ -179,13 +214,23 @@ public class Helper {
             }
         }
 
-        if (type.equals("void")) {
+        if (damager == null && !type.equals("mob")) {
+            plr.playSound(plr.getLocation(), Sound.ANVIL_LAND, 1F, 10F);
+            double purse = po.getPurse();
+            po.setPurse(po.getPurse() / 2);
+            Utils.broadCast("&c☠ " + plr.getName() + (type.equals("wither") ? " withered away." : type.equals("poison") ? " felt sick." : type.equals("suffocate") ? " suffocated to death." : type.equals("fire") ? " burnt to death." : type.equals("lava") ? " tried to swim in lava." : " died."));
+            plr.sendMessage(Utils.chat("&cYou died and lost " + String.format("%,.0f", purse / 2) + " coins!"));
+        } else if (type.equals("void")) {
             if (!plr.getWorld().getName().startsWith("playerislands/")) {
                 plr.playSound(plr.getLocation(), Sound.ANVIL_LAND, 1F, 10F);
                 double purse = po.getPurse();
                 po.setPurse(po.getPurse() / 2);
+                Utils.broadCast("&c☠ " + plr.getName() + " fell into the void.");
                 plr.sendMessage(Utils.chat("&cYou died and lost " + String.format("%,.0f", purse / 2) + " coins!"));
-            } else plr.sendMessage(Utils.chat("&cYou fell into the void"));
+            } else {
+                Utils.broadCast("&c☠ " + plr.getName() + " fell into the void.");
+                plr.sendMessage(Utils.chat("&cYou fell into the void"));
+            }
         } else {
             double purse = po.getPurse();
             po.setPurse(po.getPurse() / 2);
@@ -195,6 +240,21 @@ public class Helper {
             loc.setYaw(90);
             plr.teleport(loc);
 
+            if (plr.getLastDamageCause().getEntity() != null) {
+                if (plr.getLastDamageCause().getEntity() instanceof Player) {
+                    Player p = (Player) plr.getLastDamageCause().getEntity();
+                    Utils.broadCast("&c☠ " + plr.getName() + " was killed by &e" + p.getName());
+                } else {
+                    LivingEntity mob = (LivingEntity) plr.getLastDamageCause().getEntity();
+                    MobObject mo = MobManager.mobObjects.get(mob);
+                    if (mo == null) {
+                        mob.getPassenger().remove();
+                        mob.remove();
+                        return;
+                    }
+                    Utils.broadCast("&c☠ " + plr.getName() + " was killed by a &e" + mo.getName());
+                }
+            }
             plr.sendMessage(Utils.chat("&cYou died and lost " + String.format("%,.0f", purse / 2) + " coins!"));
             plr.playSound(plr.getLocation(), Sound.ANVIL_LAND, 1F, 10F);
         }
