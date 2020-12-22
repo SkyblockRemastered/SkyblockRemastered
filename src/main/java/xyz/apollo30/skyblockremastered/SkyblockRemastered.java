@@ -66,7 +66,7 @@ public class SkyblockRemastered extends JavaPlugin {
     public void onEnable() {
 
         new MongoUtils(
-                "mongodb+srv://console:t3rk1reyaseocmdb2skel@skyblockremastered.olzwn.mongodb.net/constants?retryWrites=true&w=majority",
+                "terminated url",
                 "constants",
                 "playerData",
                 "apiKeys");
